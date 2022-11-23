@@ -1,1 +1,8 @@
 /* This is the theme of the hole website */
+
+/* reuse this color template in ejs template engine */
+:root {
+    --primary-color:#FFD93D   ;
+    --secondary-color : #4D96FF;
+    --tertiary-color :  #FF6B6B;
+}

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const AppString = require('../common/app_string');
+const AppString = require('../../common/app_string');
 
 const Schema = mongoose.Schema;
 

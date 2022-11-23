@@ -3,6 +3,7 @@ var path = require('path');
 let express = require('express');
 const database = require('./database/mongodb');
 var bodyParser = require('body-parser')
+const { baseRespond } = require('./common/functions')
 let port = process.env.PORT || 3000;
 
 let app = express();
