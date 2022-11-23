@@ -2,7 +2,132 @@
 
 /* reuse this color template in ejs template engine */
 :root {
-    --primary-color:#FFD93D   ;
-    --secondary-color : #4D96FF;
-    --tertiary-color :  #FF6B6B;
+    --primary-color: #FFD93D;
+    --primary-color-lighter: #FFE477;
+    --primary-color-darker: #FFD21B;
+    --secondary-color: #4D96FF;
+    --tertiary-color: #FF6B6B;
+    /* Monochrome */
+    --white-color: #FAFAFA;
+    --light-gray-color: #f2f2f2;
+    --gray-color: #E3E3E3;
+    --dark-gray-color: #B2B2B2;
+    --black-color: #323232;
+    --heading1-font-size: 48px;
+    --heading1-font-weight: 600;
+    --heading2-font-size: 36px;
+    --heading2-font-weight: 600;
+    --heading3-font-size: 24px;
+    --heading3-font-weight: 600;
+    --heading4-font-size: 20px;
+    --heading4-font-weight: 600;
+    --heading5-font-size: 16px;
+    --heading5-font-weight: 600;
+    --heading6-font-size: 14px;
+    --heading6-font-weight: 600;
 }
+/* Heading style */
+h1 {
+    font-size: var(--heading1-font-size);
+    font-weight: var(--heading1-font-weight);
+}
+
+h2 {
+    font-size: var(--heading2-font-size);
+    font-weight: var(--heading2-font-weight);
+}
+
+h3 {
+    font-size: var(--heading3-font-size);
+    font-weight: var(--heading3-font-weight);
+}
+
+h4 {
+    font-size: var(--heading4-font-size);
+    font-weight: var(--heading4-font-weight);
+}
+
+h5 {
+    font-size: var(--heading5-font-size);
+    font-weight: var(--heading5-font-weight);
+}
+
+h6 {
+    font-size: var(--heading6-font-size);
+    font-weight: var(--heading6-font-weight);
+}
+
+.btn {
+    border-radius: 23px;
+    padding: 13.5px 34px;
+    font-size: var(--heading5-font-size);
+    font-weight: var(--heading5-font-weight);
+}
+/* Button style */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--black-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-color-lighter);
+    border-color: var(--primary-color-lighter);
+    color: var(--black-color);
+
+}
+
+.btn-primary:active {
+    background-color: var(--primary-color-darker) !important;
+    border-color: var(--primary-color-darker) !important;
+    color: var(--black-color) !important;
+
+}
+
+.btn-outline-primary {
+    background-color: var(--white-color);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--white-color);
+    border-color: var(--primary-color-lighter);
+    color: var(--primary-color);
+}
+
+.btn-outline-primary:active {
+    background-color: var(--gray-color) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.btn-light {
+    background-color: var(--white-color) !important;
+    color: var(--black-color);
+}
+
+.btn-light:hover {
+    background-color: var(--light-gray-color) !important;
+    border-color: var(--light-gray-color) !important;
+    color: var(--black-color);
+
+}
+
+.btn-light:active {
+    background-color: var(--gray-color) !important;
+    border-color: var(--gray-color) !important;
+    color: var(--black-color) !important;
+
+}
+/* Navlink style */
+/* Link style */
+/* Sellecty ammount button */
+/* Checkbox */
+/* Ratio */
+/* Switch */
+/* Input */
+/* Chips */
+/* Progress bar */
+/* Floating action button */
+/* Dropdown */
