@@ -1,5 +1,21 @@
 /* This is the theme of the hole website */
 
+*{
+    font-family: 'Inter' , sans-serif;
+}
+
+a{
+    text-decoration: none;
+}
+
+.text-color-primary{
+    color: var(--primary-color);
+}
+
+.text-color-white{
+    color: var(--white-color);
+}
+
 /* reuse this color template in ejs template engine */
 :root {
     --primary-color: #FFD93D;
@@ -25,10 +41,12 @@
     --heading5-font-weight: 600;
     --heading6-font-size: 14px;
     --heading6-font-weight: 600;
+    --paragraph-font-size: 20px;
+    --paragraph-font-weight: 400;
 }
 /* Heading style */
 h1 {
-    font-size: var(--heading1-font-size);
+    font-size: var(--heading1-font-size)!important;
     font-weight: var(--heading1-font-weight);
 }
 
@@ -57,9 +75,12 @@ h6 {
     font-weight: var(--heading6-font-weight);
 }
 
+
 .btn {
     border-radius: 23px;
-    padding: 13.5px 34px;
+    /* height: 46px; */
+    width: auto;
+    padding: 11px 34px;
     font-size: var(--heading5-font-size);
     font-weight: var(--heading5-font-weight);
 }
@@ -123,11 +144,81 @@ h6 {
 /* Navlink style */
 /* Link style */
 /* Sellecty ammount button */
+
 /* Checkbox */
 /* Ratio */
 /* Switch */
 /* Input */
+.input-box {
+    /* height: 46px; */
+    border-radius: 23px;
+    background-color: var(--white-color);
+}
+
+
+
 /* Chips */
 /* Progress bar */
 /* Floating action button */
 /* Dropdown */
+
+/* Header */
+.navbar{
+    background-color: var(--primary-color);
+}
+.navbar .nav-link {
+    color: black;
+}
+
+
+.navbar .navbar-brand{
+    color: var(--tertiary-color);
+}
+
+.navbar .image-brand{
+    border: 2px solid var(--gray-color);
+    border-radius: 50%;
+}
+
+.navbar p{
+    margin-bottom: 0;
+}
+
+.navbar .nav-icon {
+    text-align: center;
+    text-decoration: none;
+}
+
+.navbar .nav-icon i{
+    color: var(--black-color)
+}
+
+.navbar .nav-search{
+    background-color: var(--light-gray-color);
+    border-radius: 23px;
+}
+
+.navbar .input-box{
+    border: 0;
+    background-color: var(--light-gray-color);
+}
+
+.navbar .hovered{
+    background-color: var(--dark-gray-color);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+.shopping-cart svg {
+    margin-right: 0 !important;
+}
+
+/* Footer */
+footer{
+    background-color: var(--black-color);
+    color: var(--white-color);
+}
+
+.footer-icon{
+    color: var(--primary-color);
+}
