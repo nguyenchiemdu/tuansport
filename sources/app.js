@@ -4,6 +4,7 @@ let express = require('express');
 const database = require('./database/mongodb');
 var bodyParser = require('body-parser')
 const { baseRespond } = require('./common/functions')
+var methodOverride = require('method-override')
 let port = process.env.PORT || 3000;
 let KiotVietToken = require('./common/kiotviet_token');
 let app = express();
@@ -20,6 +21,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 // static path setup
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 
 app.listen(port);

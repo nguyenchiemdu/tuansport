@@ -25,5 +25,8 @@ class AppString {
     static updateUserInforSuccess = 'Cập nhật thông tin người dùng thành công!'
     static updateUserPasswordSuccess = 'Cập nhật mật khẩu thành công!'
     static partnerNotFound = 'Không tìm thấy đối tác'
+    static createCtvSuccess = 'Tạo công tác viên thành công!'
+    static deleteSuccess = 'Xoá dữ liệu thành công!'
+    static error = 'Đã có lỗi xảy ra!'
 }
 module.exports = AppString

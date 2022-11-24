@@ -38,6 +38,68 @@ class AdminController {
         let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req,mongoUser, {findCondition: {"username" : {$regex : username}}})
         res.render("admin/admin_ctv", { route: route, page: currentPage,total: pages*pageSize,data: docs,pageSize:pageSize, query: query,username: username })
     }
+    // GET /admin/ctv/:id
+    async editCtv(req, res,next) {
+        let route = req.route.path;
+        let id = req.params.id
+        let ctv = await mongoUser.findById(id)
+        if (ctv!=null) {
+            res.render("admin/admin_edit_ctv",{itemData : ctv,route: route, notification: ''})
+        } else {
+            res.status(400)
+            next(AppString.dataNotFound)
+        }
+    }
+    // PUT /admin/ctv/:id
+    async updateCtv(req, res,next) {
+        let route = req.route.path;
+        let id = req.params.id
+        let ctv = await  mongoUser.findOneAndUpdate({
+            _id : id
+        }, req.body)
+        ctv = await mongoUser.findById(id)
+        if (ctv!=null) {
+            res.render("admin/admin_edit_ctv",{itemData : ctv,route: route,notification: AppString.updateUserInforSuccess})
+        } else {
+            res.status(400)
+            next(AppString.dataNotFound)
+        }
+    }
+    // DELETE /admin/ctv/:id
+    async deleteCtv(req, res,next) {
+       try {
+        let id = req.params.id
+        await mongoUser.deleteOne({
+            _id : id
+        })
+        res.json(baseRespond(true,AppString.deleteSuccess))
+       } catch (err) {
+        console.log(err)
+        res.status(400)
+        next(AppString.dataNotFound)
+       }
+        
+    }
+    
+    // GET /admin/ctv/create
+    async createCtv(req, res,next) {
+        let route = req.route.path;
+        res.render("admin/admin_create_ctv",{route: route, notification: ''})
+        
+    }
+    // POST /admin/ctv/create
+    async postCreateCtv(req, res,next) {
+        try {
+            let route = req.route.path;
+        let ctv = await  mongoUser.create(req.body)
+        res.render("admin/admin_create_ctv",{route: route, notification: AppString.createCtvSuccess})
+        } catch (err) {
+            console.log(err)
+            res.status(400)
+            next(AppString.error)
+        }
+        
+    }
     // POST /sync-product
     async syncProductPost(req, res) {
         try {

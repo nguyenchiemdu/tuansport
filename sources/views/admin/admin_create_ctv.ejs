@@ -1,0 +1,66 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin</title>
+    <%- include ('../common/lib/bootstrap_css')%>
+        <link rel="stylesheet" href="/assets/css/admin.css">
+
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <%- include ('admin_navbar')%>
+            <!-- Page Content  -->
+            <div id="content">
+                <div class="container mt-5" style="text-align: left">
+                    <a type="button" href="/admin/ctv/" class="btn btn-secondary mb-2">Trở lại</a>
+                    <h3>Thêm cộng tác viên </h3>
+
+                    <div class="container mt-5">
+                        <form method="POST" action="">
+                            <% mapTitle={ 'username' :'Tên đăng nhập', 'password' :'Mật khẩu', 'isActive' : 'Đã kích hoạt' } 
+                            itemData = {
+                                'username': '','password':'','isActive':''
+                            }
+                            %>
+                                <% for (let key in itemData) { if
+                                    (['username','password','isActive'].includes(key)) { %>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">
+                                            <%=mapTitle[key]%>
+                                        </label>
+                                        <%if (key=='isActive' ) {%>
+                                            <select name='<%=key%>' class="form-select my-1 mr-sm-2" id="inlineFormCustomSelect">
+                                                <option value="true">Đúng</option>
+                                                <option value="false">Sai</option>
+                                            </select>
+                                            <%} else {%>
+                                                <input class="form-control" name='<%=key%>'/>
+                                                <%}%>
+
+                                    </div>
+                                    <%}}%>
+                                    <% if (notification.length >0) {%>
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                <%= notification %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        <%}%>
+
+                                        <button type="submit" class="btn btn-primary">Tạo</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- /#wrapper -->
+</body>
+
+<%- include ('../common/lib/bootstrap_js')%>
+    <%- include ('../common/lib/jquery')%>
+
+</html>
