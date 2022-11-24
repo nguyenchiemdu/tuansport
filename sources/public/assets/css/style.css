@@ -8,6 +8,9 @@ a{
     text-decoration: none;
 }
 
+.text-color-tertiary{
+    color: var(--tertiary-color);
+}
 .text-color-primary{
     color: var(--primary-color);
 }
