@@ -8,7 +8,7 @@ const getTableDataWithPagination = async (
     findCondition = {}}= {}
 ) => {
     let currentPage = req.query.page || 1
-    let pageSize = req.query.pageSize || 15
+    let pageSize = req.query.pageSize || 20
     return await Table.find(findCondition)
         .sort(`${sortCondition}`)
         .skip(pageSize * (currentPage - 1))

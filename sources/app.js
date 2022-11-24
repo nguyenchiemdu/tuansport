@@ -5,10 +5,12 @@ const database = require('./database/mongodb');
 var bodyParser = require('body-parser')
 const { baseRespond } = require('./common/functions')
 let port = process.env.PORT || 3000;
-
+let KiotVietToken = require('./common/kiotviet_token');
 let app = express();
 // Connect to DB
 database.connect();
+// Get KiotvietToken
+KiotVietToken.getAccessToken()
 // Middleware
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))

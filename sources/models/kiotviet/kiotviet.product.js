@@ -1,59 +1,28 @@
-class Product {
-    createdDate;
-    id;
-    retailerId;
-    code;
-    barCode;
-    name;
-    fullName;
-    categoryId;
-    categoryName;
-    allowsSale;
-    type;
-    hasVariants;
-    basePrice;
-    weight;
-    conversionValue;
-    modifiedDate;
-    isActive
-    isLotSerialControl
-    isBatchExpireControl
-    attributes
-    images
-    constructor(json) {
-        this.createdDate = json.createdDate
-        this.id = json.id
-        this.retailerId = json.retailerId
-        this.code = json.code
-        this.barCode = json.barCode
-        this.name = json.name
-        this.fullName = json.fullName
-        this.categoryId = json.categoryId
-        this.categoryId = json.categoryId
-        this.categoryName = json.categoryName
-        this.fullName = json.fullName
-        this.allowsSale = json.allowsSale
-        this.type = json.type
-        this.hasVariants = json.hasVariants
-        this.basePrice = json.basePrice
-        this.weight = json.weight
-        this.conversionValue = json.conversionValue
-        this.modifiedDate = json.modifiedDate
-        this.isActive = json.isActive
-        this.isLotSerialControl = json.isLotSerialControl
-        this.isBatchExpireControl = json.isBatchExpireControl
-        this.attributes = json.attributes.map(attribute => new Attribute(attribute))
-        this.images = json.images
+const { default: axios } = require("axios");
+const ApiUrl = require("../../common/api_url");
+const KiotvietToken = require("../../common/kiotviet_token");
+var qs = require('qs');
+
+class KiotVietProduct {
+    // Get products
+    static async getProducts(params) {
+        try {
+            let accessToken = await KiotvietToken.token();
+            let response = await axios({
+                method: "get",
+                url: ApiUrl.getProducts,
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    Retailer: process.env.RETAILER
+                },
+                params: params
+
+            }).then(response => response.data)
+            return response;
+        } catch (err) { 
+            console.log(err)
+            throw err
+        }
     }
 }
-class Attribute {
-    productId
-    attributeName
-    attributeValue
-    constructor(json) {
-        this.productId = json.productId
-        this.attributeName = json.attributeName
-        this.attributeValue = json.attributeValue
-    }
-}
-module.exports = Product;
+module.exports = KiotVietProduct;

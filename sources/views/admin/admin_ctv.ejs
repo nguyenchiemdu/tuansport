@@ -1,0 +1,72 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin</title>
+  <%- include ('../common/lib/bootstrap_css')%>
+
+      <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+</head>
+
+<body>
+  <div class="wrapper">
+    <!-- Sidebar  -->
+    <%- include ('admin_navbar')%>
+    <script src="/assets/js/admin/ctv.js"></script>
+      <!-- Page Content  -->
+      <div id="content">
+        <div class="container" style="text-align: center">
+          <h3>Danh sách cộng tác viên </h3>
+          <div class="row justify-content-end">
+            <div class="col-md-4 col-sm-12">
+              <div class="input-group mb-3">
+                <input type="text" id='search-text' value="<%=username%>" class="form-control" placeholder="Tìm kiếm cộng tác viên"
+                  aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-primary" type="button" id="search-btn" onclick="searchCtv()">Tìm
+                  kiếm</button>
+              </div>
+            </div>
+          </div>
+          <div class="h-75 overflow-auto">
+            <table class="table table-bordered table-striped table-hover">
+              <thead class="table-dark ">
+                <tr>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên đăng nhập</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Trạng thái</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% for (let i in data) { delete data[i]['description']; %>
+                  <tr>
+                    <th>
+                      <%= pageSize*(page-1) +Number(i)+1%>
+                    </th>
+                    <th>
+                      <%=data[i].username%>
+                    </th>
+                    <th>
+                      <%if(data[i].isActive){%>
+                        Đang khả dụng
+                        <% } else { %> Bị khoá <% } %> 
+                    </th>
+                    
+                  </tr>
+                  <%} %>
+              </tbody>
+            </table>
+          </div>
+          <div class="pt-5">
+            <%- include ('pagination')%>
+
+          </div>
+        </div>
+      </div>
+  </div>
+  <!-- /#wrapper -->
+</body>
+<%- include ('../common/lib/bootstrap_js')%>
+  <%- include ('../common/lib/jquery')%>
+</html>
