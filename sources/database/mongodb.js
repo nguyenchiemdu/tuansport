@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const User = require('../models/mongo/mongo.user')
+const Category = require('../models/mongo/mongo.category')
+let {importCategories} = require('../common/sync_data')
 async function connect() {
 
     try {        
@@ -9,6 +10,11 @@ async function connect() {
             // useCreateIndex: true
         });
         console.log('Connect to Mongo DB successfully!');
+        // importCategories(793639)
+        // Category.create({
+        //     _id: 7,
+        //     categoryName: 'Dụng cụ TDTT',
+        // })
     } catch (error) {
         console.log('Connect Mongo DB failure!');
         console.log('Error: ',error)

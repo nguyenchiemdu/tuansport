@@ -35,7 +35,7 @@ class AdminController {
         let query = AdminController.getQueryString(req)
         // let page = req.query.page ?? 1
         // let pageSize = req.query.pageSize ?? 20
-        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req,mongoUser, {findCondition: {"username" : {$regex : username}}})
+        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req,mongoUser, {findCondition: {"username" : {$regex : username},'role':'Cộng tác viên' }})
         res.render("admin/admin_ctv", { route: route, page: currentPage,total: pages*pageSize,data: docs,pageSize:pageSize, query: query,username: username })
     }
     // GET /admin/ctv/:id

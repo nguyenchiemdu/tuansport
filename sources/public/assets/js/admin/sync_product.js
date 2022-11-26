@@ -6,7 +6,8 @@ async function syncProduct(product) {
         name: product.name,
         price: product.basePrice,
         ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
-        images: product.images
+        images: product.images,
+        categoryId: product.categoryId
     };
     await fetch('/admin/sync-product',{
         headers: {

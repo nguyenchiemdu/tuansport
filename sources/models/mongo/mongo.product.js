@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const AppString = require('../../common/app_string');
 
 const Schema = mongoose.Schema;
 
@@ -8,7 +7,8 @@ const Product = new Schema({
     skuCode: { type: String, required: true },
     price: { type: Number, required: true },
     ctvPrice: { type: Number, required: true },
-    images: { type: Array, required: true }
+    images: { type: Array, required: true },
+    categoryId : {type: Number,required: true, ref: 'Category'},
 }, {
     timestamps: true,
 }, { collection: 'products' }
