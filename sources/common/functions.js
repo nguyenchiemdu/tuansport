@@ -33,13 +33,12 @@ function findTable(tableName) {
     if (targetTable == null) throw AppString.tableNotFound
     return targetTable
 }
-function generateJWT(user, loginType, role) {
+function generateJWT(user) {
     let accessToken = jwt.sign(
         {
             id: user._id,
-            email: user.email,
-            loginType: loginType,
-            role: role
+            username: user.username,
+            role: user.role
 
         },
         process.env.JWT_SECRET

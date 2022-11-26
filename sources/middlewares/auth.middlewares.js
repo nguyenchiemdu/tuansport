@@ -7,13 +7,13 @@ class AuthMiddleware {
         //Check token
         let payload
         try {
-        let accessToken = req.headers['authorization'].split(' ')[1]
+
+            let accessToken = req.cookies.token
             payload = jwt.verify(accessToken, process.env.JWT_SECRET)
         }
         catch (error) {
             console.log(AppString.invalidAccessToken)
-            res.status(401)
-            return res.json(baseRespond(false, AppString.invalidAccessToken))
+            next()
         }
         req.headers['userInfor'] = payload;
         // req.body.email = payload.email
@@ -23,12 +23,12 @@ class AuthMiddleware {
         next()
     }
     checkPermission(req, res, next) {
-       if (req.headers['userInfor'].role == 'Operator')  {
-        next()
-       } else {
-        res.status(400)
-       next(AppString.noPermission)
-       }
+        if (req.headers['userInfor'].role == 'Admin') {
+            next()
+        } else {
+            res.status(400)
+            next(AppString.noPermission)
+        }
     }
 }
 
