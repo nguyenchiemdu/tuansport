@@ -27,6 +27,7 @@ async function submit() {
           })
           document.getElementById('form-message').innerText = result.message
       } else {
+        document.cookie='token='+result.data.token
         window.location.href = '/'
         inputBoxes.forEach(inputBox =>{
           inputBox.classList.remove('is-invalid')
@@ -48,19 +49,19 @@ loginBtn.addEventListener('click', (event) => {
     event.preventDefault();
     submit();
 })
-
-// Show the password 
-
-    const iconShowPassword = document.querySelector('#show-hidden-icon')
-    iconShowPassword.addEventListener('click', () => {
-      
-        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password'
-        passwordInput.setAttribute('type', type)
-
-        const svg = document.getElementsByTagName('svg')[0]
-        if (type === 'text') {
-          $(svg).replaceWith(feather.icons['eye'].toSvg())
-        } else {
-          $(svg).replaceWith(feather.icons['eye-off'].toSvg())
-        }
-    })
+// Show hide password
+    function password_show_hide() {
+      var x = document.getElementById("password");
+      var show_eye = document.getElementById("show_eye");
+      var hide_eye = document.getElementById("hide_eye");
+      hide_eye.classList.remove("d-none");
+      if (x.type === "password") {
+        x.type = "text";
+        show_eye.style.display = "none";
+        hide_eye.style.display = "block";
+      } else {
+        x.type = "password";
+        show_eye.style.display = "block";
+        hide_eye.style.display = "none";
+      }
+    }

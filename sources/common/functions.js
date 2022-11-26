@@ -37,7 +37,7 @@ function generateJWT(user) {
     let accessToken = jwt.sign(
         {
             id: user._id,
-            email: user.email,
+            username: user.username,
             role: user.role
 
         },
