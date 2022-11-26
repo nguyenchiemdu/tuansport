@@ -23,7 +23,7 @@ class AuthMiddleware {
         next()
     }
     checkPermission(req, res, next) {
-       if (req.headers['userInfor'].role == 'Operator')  {
+       if (req.headers['userInfor'].role == 'Admin')  {
         next()
        } else {
         res.status(400)

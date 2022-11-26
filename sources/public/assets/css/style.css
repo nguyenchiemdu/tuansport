@@ -193,7 +193,16 @@ h6 {
 }
 
 .navbar .nav-icon i{
-    color: var(--black-color)
+    color: var(--black-color);
+}
+
+.feather-46{
+    width: 46px;
+    height: 46px;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
 }
 
 .navbar .nav-search{
@@ -215,6 +224,17 @@ h6 {
 .shopping-cart svg {
     margin-right: 0 !important;
 }
+/* Login Page */
+
+.show-hidden-icon{
+    border-radius: 23px;
+    top: 7px
+}
+
+.show-hidden-icon:hover{
+    cursor: pointer;
+}
+
 
 /* Footer */
 footer{
