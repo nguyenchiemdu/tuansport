@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 
 const { baseRespond } = require('./common/functions')
 var methodOverride = require('method-override')
+const authMiddlewares = require("./middlewares/auth.middlewares");
 let port = process.env.PORT || 3000;
 let KiotVietToken = require('./common/kiotviet_token');
 let app = express();
@@ -28,6 +29,8 @@ app.use(methodOverride('_method'));
 
 
 app.listen(port);
+// Authentication
+app.use(authMiddlewares.authenticateUser)
 //Router
 route(app);
 // error handler

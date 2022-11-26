@@ -6,10 +6,10 @@ var loginRouter = require("./login");
 const authMiddlewares = require("../middlewares/auth.middlewares");
 
 function route(app) {
-  app.use("/",authMiddlewares.authenticateUser,homeController.home)
-  app.use("/admin",authMiddlewares.authenticateUser, authMiddlewares.checkPermission ,adminRouter)
+  app.use("/admin", authMiddlewares.checkPermission ,adminRouter)
   app.use("/login",loginRouter)
   app.use("/api", apiRouter);
+  app.use("/",homeController.home)
   
 }
 
