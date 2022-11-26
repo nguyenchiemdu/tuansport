@@ -9,7 +9,7 @@ async function submit() {
     username: loginForm['username'].value,
     password: loginForm['password'].value
   }
-  await fetch('http://localhost:3001/login', 
+  await fetch('http://localhost:3000/login', 
     {
       method: 'POST',
       headers: {
