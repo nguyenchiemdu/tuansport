@@ -6,8 +6,8 @@ const mongoUser = require("../models/mongo/mongo.user")
 class LoginController {
     // GET 
     async home (req,res) {
-        res.json(req.headers.userInfor)
-        // res.render("home/home")
+        // res.json(req.headers.userInfor)
+        res.render("home/home")
     }
 }
 

@@ -6,6 +6,9 @@ const mongoUser = require("../models/mongo/mongo.user")
 class LoginController {
     // GET 
     async login (req,res) {
+        if (req.headers['userInfor']!= null) 
+            res.redirect('/')
+        else
         res.render("login/login")
     }
     // POST
