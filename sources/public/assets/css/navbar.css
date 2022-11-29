@@ -1,0 +1,146 @@
+/* Header */
+.navbar{
+    background-color: var(--primary-color);
+}
+.navbar .nav-link {
+    color: black;
+}
+
+
+.navbar .navbar-brand{
+    color: var(--tertiary-color);
+}
+
+.navbar .image-brand{
+    border: 2px solid var(--gray-color);
+    border-radius: 50%;
+}
+
+.navbar p{
+    margin-bottom: 0;
+}
+
+.navbar .nav-icon {
+    text-align: center;
+    text-decoration: none;
+}
+
+.navbar .nav-icon i{
+    color: var(--black-color);
+}
+
+.feather-46{
+    width: 46px;
+    height: 46px;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.feather-24{
+    width: 24px;
+    height: 24px;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.navbar .nav-search{
+    background-color: var(--light-gray-color);
+    border-radius: 23px;
+}
+
+.navbar .input-box{
+    border: 0;
+    background-color: var(--light-gray-color);
+}
+
+.shopping-cart svg {
+    margin-right: 0 !important;
+}
+
+.navbar .avatar-user{
+    border-radius: 50%;
+    border: 1px solid var(--black-color);
+}
+
+.navbar .search-box {
+    padding: 10px 0;
+    display: none
+}
+
+.navbar .dropdown-toggle::after{
+    content: none
+}
+
+.dropdown-menu li {
+    position: relative;
+    }
+
+.toggle-icon:hover{
+    cursor: pointer;
+}
+
+.toggle-submenu{
+    display: none;
+}
+.dropdown-menu .dropdown-submenu-left {
+    right: 100%;
+    left: auto;
+}
+
+.progress-bar{
+    background-color: var(--primary-color);
+}
+
+.dropdown-menu .dropdown-submenu {
+    display: none;
+}
+/* .navbar .dropdown-menu > li:hover > .dropdown-submenu{
+    display: block;
+    position: absolute;
+    left: 100%;
+    top: -7px;
+} */
+
+@media screen and (min-width: 1200px) {
+    .navbar .dropdown-menu > li:hover > .dropdown-submenu{
+        display: block;
+        position: absolute;
+        left: 100%;
+        top: -7px;
+    }   
+
+    .dropdown-toggle:hover > .progress >.progress-bar{
+        background-color: var(--black-color);
+    }
+}
+@media screen and (max-width: 1199px) {
+    .toggle-submenu{
+        display: inline-block;
+        right: 0;
+        text-align: right;
+    }
+
+    .progress-bar{
+        background-color: var(--dark-gray-color);
+    }
+
+    .dropdown-item{
+        border-bottom: 1px solid var(--gray-color);
+    }   
+    
+    .navbar .dropdown-menu > li > .dropdown-submenu{
+        position: static;
+        left: 100%;
+        top: -7px;
+    }
+
+    .dropdown-menu{
+        border: 0;
+    }
+}
+
+
