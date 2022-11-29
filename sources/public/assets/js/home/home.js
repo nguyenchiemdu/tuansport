@@ -2,7 +2,7 @@ $(document).ready(function () {
     $(".product-category").owlCarousel({
         items: 4,
         loop: true,
-        margin: 40,
+        // margin: 40,
         responsive: {
             1024: {
                 items: 4
@@ -27,7 +27,7 @@ $(document).ready(function () {
     $(".policy-row").owlCarousel({
         items: 4,
         loop: true,
-        margin: 30,
+        // margin: 30,
         mouseDrag: false,
         touchDrag: false,
         autoHeight: false,
@@ -50,6 +50,36 @@ $(document).ready(function () {
             },
             100: {
                 items: 1,
+                mouseDrag: true,
+                touchDrag: true,
+                autoplay: true
+            },
+        }
+    });
+    $(".newest-product").owlCarousel({
+        items: 5,
+        // remove this 
+        loop: true,
+        // margin: 30,
+        responsive: {
+            1024: {
+                items: 5,
+            },
+            800: {
+                items: 3,
+                mouseDrag: true,
+                touchDrag: true,
+                autoplay: true
+            },
+            600: {
+                items: 2,
+                mouseDrag: true,
+                touchDrag: true,
+                autoplay: true
+
+            },
+            100: {
+                items: 2,
                 mouseDrag: true,
                 touchDrag: true,
                 autoplay: true

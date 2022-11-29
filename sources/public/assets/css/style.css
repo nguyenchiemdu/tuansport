@@ -245,3 +245,22 @@ footer{
 .footer-icon{
     color: var(--primary-color);
 }
+/* limit number of lines at 2 */
+.short-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+            line-clamp: 2; 
+    -webkit-box-orient: vertical;
+ }
+
+.hover-bigger:hover {
+    /* -webkit-transform: scale(1.1); */
+    transform: scale(1.1);
+}
+.hover-bigger {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+

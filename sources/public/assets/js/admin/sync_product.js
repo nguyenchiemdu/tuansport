@@ -4,10 +4,12 @@ async function syncProduct(product) {
     let body = {
         skuCode: product.code,
         name: product.name,
+        fullName: product.fullName,
         price: product.basePrice,
         ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
         images: product.images,
-        categoryId: product.categoryId
+        categoryId: product.categoryId,
+        isSynced : product.isSynced
     };
     await fetch('/admin/sync-product',{
         headers: {

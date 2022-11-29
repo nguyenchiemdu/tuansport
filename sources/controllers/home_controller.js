@@ -1,14 +1,19 @@
 const { json, response } = require("express");
 const AppString = require("../common/app_string");
 const { isValidateEmail, baseRespond, generateJWT } = require("../common/functions");
+const { getTableDataWithPagination } = require("../common/pagination");
 const mongoUser = require("../models/mongo/mongo.user")
+const mongoProduct = require("../models/mongo/mongo.product")
 
-class LoginController {
+class HomeController {
     // GET 
     async home (req,res) {
         // res.json(req.headers.userInfor)
-        res.render("home/home")
+        let { docs } = await getTableDataWithPagination(req,mongoProduct)
+        res.render("home/home", {
+            data: docs
+        })
     }
 }
 
-module.exports = new LoginController();
+module.exports = new HomeController();
