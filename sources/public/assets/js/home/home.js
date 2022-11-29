@@ -6,34 +6,26 @@ $(document).ready(function(){
     });
   });
 
-// $(document).ready(function () {
-//     $(".dropdown-submenu a.submenu").on("click", function (e) {
-//         console.log($(this))
-//       $(this).next("ul").toggle();
-//       e.preventDefault();
-//       e.stopPropagation();
-//       var index = e.target.dataset.index
-//     })
-//     $(".dropdown-submenu a.submenu").on('click', function closeMenu (e){
-//         console.log($(this))
-
-//         if($(".dropdown-submenu a.submenu").has(e.target).length === 0){
-//             $(this).next("ul").removeClass('show');
-//         } else {
-//             $(document).one('click', closeMenu);
-//         }
-//     });
-//   });
-
 $(document).ready(function() {
     $(".toggle-submenu").on('click', function(e) {
+        
+        var dropdown = $(this).siblings('ul')
+        var openMenu = document.querySelectorAll('.open-menu')
+        var closeMenu = document.querySelectorAll('.close-menu')
         e.preventDefault();
         e.stopPropagation();
-        var dropdown = $(this).siblings('ul')
         dropdown.toggle()
-        dropdown.css({
-                "position": "static",
-        });
+        dropdown.toggleClass('show')
+        if (dropdown.hasClass('show')) {
+            openMenu[e.target.dataset.index].style.display = 'none'
+            closeMenu[e.target.dataset.index].style.display = 'block'
+        } else {
+            openMenu[e.target.dataset.index].style.display = 'block'
+            closeMenu[e.target.dataset.index].style.display = 'none'
+        }
     })
 })
+
+
+
 

@@ -19,6 +19,7 @@ a{
     color: var(--white-color)!important;
 }
 
+
 /* reuse this color template in ejs template engine */
 :root {
     --primary-color: #FFD93D;
@@ -186,4 +187,10 @@ footer{
 
 .footer-icon{
     color: var(--primary-color);
+}
+
+@media screen and (max-width: 1199px) {
+footer .element{
+        border-bottom: 1px solid var(--dark-gray-color)!important;
+    }
 }
