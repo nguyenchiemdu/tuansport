@@ -95,6 +95,10 @@
     background-color: var(--primary-color);
 }
 
+.navbar .dropdown-item:hover{   
+    background-color: var(--primary-color);
+}
+
 .dropdown-menu .dropdown-submenu {
     display: none;
 }
@@ -111,6 +115,7 @@
         position: absolute;
         left: 100%;
         top: -7px;
+        transform: translateX(1px);
     }   
 
     .dropdown-toggle:hover > .progress >.progress-bar{
