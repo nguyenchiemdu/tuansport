@@ -2,6 +2,8 @@ const { default: axios } = require("axios");
 const ApiUrl = require("./api_url");
 const KiotvietToken = require("../common/kiotviet_token");
 const mongoCategory = require("../models/mongo/mongo.category")
+const mongoAttribute = require("../models/mongo/mongo.attribute")
+const mongoAttributeValue = require("../models/mongo/mongo.attribute_value")
 
 async function importCategories(categoryId) {
     let params = {
@@ -42,5 +44,33 @@ async function importCategories(categoryId) {
         }
     })
 }
+async function importAttributes() {
+    try {
+        let accessToken = await KiotvietToken.token();
+        let attributes = await axios({
+            method: "get",
+            url: ApiUrl.getAttributes,
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+                Retailer: process.env.RETAILER
+            },
+        })
+        for (let attribute of attributes.data) {
+           await  mongoAttribute.create({
+                _id: attribute.id,
+                name: attribute.name
+            });
+            for (let attributeValue of attribute.attributeValues) {
+                mongoAttributeValue.create({
+                    attributeId: attribute.id,
+                    value: attributeValue.value
+                }).then(res=>console.log(res));
+            }
+        }
+    } catch (e) {
+        console.log(e);
+     };
+}
 
 module.exports.importCategories = importCategories
+module.exports.importAttributes = importAttributes

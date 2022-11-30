@@ -9,7 +9,9 @@ class HomeController {
     // GET 
     async home (req,res) {
         // res.json(req.headers.userInfor)
-        let { docs } = await getTableDataWithPagination(req,mongoProduct)
+        let { docs } = await getTableDataWithPagination(req,mongoProduct, {findCondition : {
+            masterProductId : null
+        }})
         res.render("home/home", {
             data: docs
         })

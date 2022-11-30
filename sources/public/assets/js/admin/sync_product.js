@@ -2,6 +2,7 @@
 async function syncProduct(product) {
     product = JSON.parse(product)
     let body = {
+        _id : product.id,
         skuCode: product.code,
         name: product.name,
         fullName: product.fullName,
@@ -9,7 +10,9 @@ async function syncProduct(product) {
         ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
         images: product.images,
         categoryId: product.categoryId,
-        isSynced : product.isSynced
+        isSynced : product.isSynced,
+        masterProductId: product.masterProductId?? null,
+        attributes : product.attributes
     };
     await fetch('/admin/sync-product',{
         headers: {

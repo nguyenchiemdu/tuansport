@@ -19,13 +19,13 @@ class AuthMiddleware {
             next()
         }
         catch (error) {
-            console.log(AppString.invalidAccessToken)
+            // console.log(AppString.invalidAccessToken)
             next()
         }
 
     }
     checkPermission(req, res, next) {
-        if (req.headers['userInfor'].role == 'Admin') {
+        if (req.headers['userInfor']?.role == 'Admin') {
             next()
         } else {
             res.status(400)
