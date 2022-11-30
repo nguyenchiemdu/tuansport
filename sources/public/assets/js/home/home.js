@@ -59,7 +59,7 @@ $(document).ready(function () {
     $(".newest-product").owlCarousel({
         items: 5,
         // remove this 
-        loop: true,
+        // loop: true,
         // margin: 30,
         responsive: {
             1024: {

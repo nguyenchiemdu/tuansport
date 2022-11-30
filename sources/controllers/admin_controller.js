@@ -7,6 +7,9 @@ const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
 const mongoProduct = require("../models/mongo/mongo.product");
 const mongoUser = require("../models/mongo/mongo.user")
+const mongoAttribute = require("../models/mongo/mongo.attribute")
+const mongoAttributeValue = require("../models/mongo/mongo.attribute_value")
+const mongoProductAttribute = require("../models/mongo/mongo.product_attribute")
 class AdminController {
     // GET  /products
     async products(req, res) {
@@ -18,7 +21,8 @@ class AdminController {
         let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true, name: name })
         response.data = await Promise.all(response.data.map(async product => {
             let syncProduct = await mongoProduct.find({
-                skuCode: product.code
+                skuCode: product.code,
+                isSynced: true
             })
             if (syncProduct.length > 0) {
                 product.isSynced = true
@@ -35,70 +39,70 @@ class AdminController {
         let query = AdminController.getQueryString(req)
         // let page = req.query.page ?? 1
         // let pageSize = req.query.pageSize ?? 20
-        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req,mongoUser, {findCondition: {"username" : {$regex : username},'role':'Cộng tác viên' }})
-        res.render("admin/admin_ctv", { route: route, page: currentPage,total: pages*pageSize,data: docs,pageSize:pageSize, query: query,username: username })
+        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoUser, { findCondition: { "username": { $regex: username }, 'role': 'Cộng tác viên' } })
+        res.render("admin/admin_ctv", { route: route, page: currentPage, total: pages * pageSize, data: docs, pageSize: pageSize, query: query, username: username })
     }
     // GET /admin/ctv/:id
-    async editCtv(req, res,next) {
+    async editCtv(req, res, next) {
         let route = req.route.path;
         let id = req.params.id
         let ctv = await mongoUser.findById(id)
-        if (ctv!=null) {
-            res.render("admin/admin_edit_ctv",{itemData : ctv,route: route, notification: ''})
+        if (ctv != null) {
+            res.render("admin/admin_edit_ctv", { itemData: ctv, route: route, notification: '' })
         } else {
             res.status(400)
             next(AppString.dataNotFound)
         }
     }
     // PUT /admin/ctv/:id
-    async updateCtv(req, res,next) {
+    async updateCtv(req, res, next) {
         let route = req.route.path;
         let id = req.params.id
-        let ctv = await  mongoUser.findOneAndUpdate({
-            _id : id
+        let ctv = await mongoUser.findOneAndUpdate({
+            _id: id
         }, req.body)
         ctv = await mongoUser.findById(id)
-        if (ctv!=null) {
-            res.render("admin/admin_edit_ctv",{itemData : ctv,route: route,notification: AppString.updateUserInforSuccess})
+        if (ctv != null) {
+            res.render("admin/admin_edit_ctv", { itemData: ctv, route: route, notification: AppString.updateUserInforSuccess })
         } else {
             res.status(400)
             next(AppString.dataNotFound)
         }
     }
     // DELETE /admin/ctv/:id
-    async deleteCtv(req, res,next) {
-       try {
-        let id = req.params.id
-        await mongoUser.deleteOne({
-            _id : id
-        })
-        res.json(baseRespond(true,AppString.deleteSuccess))
-       } catch (err) {
-        console.log(err)
-        res.status(400)
-        next(AppString.dataNotFound)
-       }
-        
+    async deleteCtv(req, res, next) {
+        try {
+            let id = req.params.id
+            await mongoUser.deleteOne({
+                _id: id
+            })
+            res.json(baseRespond(true, AppString.deleteSuccess))
+        } catch (err) {
+            console.log(err)
+            res.status(400)
+            next(AppString.dataNotFound)
+        }
+
     }
-    
+
     // GET /admin/ctv/create
-    async createCtv(req, res,next) {
+    async createCtv(req, res, next) {
         let route = req.route.path;
-        res.render("admin/admin_create_ctv",{route: route, notification: ''})
-        
+        res.render("admin/admin_create_ctv", { route: route, notification: '' })
+
     }
     // POST /admin/ctv/create
-    async postCreateCtv(req, res,next) {
+    async postCreateCtv(req, res, next) {
         try {
             let route = req.route.path;
-        let ctv = await  mongoUser.create(req.body)
-        res.render("admin/admin_create_ctv",{route: route, notification: AppString.createCtvSuccess})
+            let ctv = await mongoUser.create(req.body)
+            res.render("admin/admin_create_ctv", { route: route, notification: AppString.createCtvSuccess })
         } catch (err) {
             console.log(err)
             res.status(400)
             next(AppString.error)
         }
-        
+
     }
     // POST /sync-product
     async syncProductPost(req, res) {
@@ -106,21 +110,49 @@ class AdminController {
             let product = req.body;
             // upsert creates a document if not finds a document
             let options = { upsert: true, new: true, setDefaultsOnInsert: true }
+            let resProduct = await mongoProduct.find({
+                skuCode: product.skuCode
+            })
             let response
-            if (product.isSynced) {
-                response = await mongoProduct.deleteOne({
+            if (resProduct.length > 0) {
+
+                response = await mongoProduct.updateOne({
                     skuCode: product.skuCode
+                }, {
+                    $set: { isSynced: !product.isSynced }
                 })
-            } else {
+            }
+            else {
                 response
                     = await mongoProduct.findOneAndUpdate(
                         {
                             skuCode: product.skuCode
                         }, product, options
-                    )
+                    );
+                if (product.attributes != null)
+                    for (let attribute of product.attributes) {
+                        let resAttribute = await mongoAttribute.findOne({
+                            name: attribute.attributeName
+                        })
+                        let resValue = await mongoAttributeValue.findOne({
+                            attributeId: resAttribute._id,
+                            value: attribute.attributeValue
+                        })
+                        if (resValue == null) {
+                            resValue = await mongoAttributeValue.create({
+                                attributeId: resAttribute._id,
+                                value: attribute.attributeValue
+                            })
+                        }
+                        await mongoProductAttribute.create({
+                            productId: product._id,
+                            attributeValueId: resValue._id
+                        })
+                    }
             }
             res.json(baseRespond(true, AppString.ok, response))
         } catch (e) {
+            console.log(e)
             res.status(400)
             res.json(baseRespond(false, AppString.error, e))
         }

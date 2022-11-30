@@ -4,5 +4,6 @@ class ApiUrl {
     static getCategoryById(id) {
         return `https://public.kiotapi.com/categories/${id}?hierachicalData=true`;
     }
+    static getAttributes = 'https://public.kiotapi.com/attributes/allwithdistinctvalue';
 }
 module.exports = ApiUrl

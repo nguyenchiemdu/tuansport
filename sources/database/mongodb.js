@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Category = require('../models/mongo/mongo.category')
-let {importCategories} = require('../common/sync_data')
+let {importCategories,importAttributes} = require('../common/sync_data')
 async function connect() {
 
     try {        
@@ -9,6 +9,7 @@ async function connect() {
             useUnifiedTopology: true,
             // useCreateIndex: true
         });
+        // importAttributes();
         console.log('Connect to Mongo DB successfully!');
         // importCategories(793639)
         // Category.create({
