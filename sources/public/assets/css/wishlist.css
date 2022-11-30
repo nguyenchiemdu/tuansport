@@ -1,0 +1,45 @@
+#wishlist > .breadcrumb-item > a {
+    color: var(--light-gray-color)
+}
+
+
+
+#wishlist .breadcrumb-item.active{
+    color: var(--primary-color)
+}
+
+#wishlist > li.breadcrumb-item > a:hover{
+    color: var(--black-color)!important;
+}
+
+#wishlist .icon-wishlist{
+    border-radius: 50%;
+    padding: 11px 14px;
+    font-size:24px;
+}
+
+#wishlist .add-item-list{
+    padding: 11px 9.5px;
+}
+
+#wishlist .icon-wishlist:hover{
+    cursor: pointer;
+}
+#wishlist .add-item-list{
+    background-color: var(--primary-color);
+}
+#wishlist .remove-item-list{
+    background-color: var(--tertiary-color);
+}
+
+#wishlist .status{
+    border-radius: 16px;
+}
+
+#wishlist .is-avaliable{
+    background-color: #00FFD1;
+}
+
+#wishlist .is-unavaliable{
+    background-color: var(--tertiary-color);
+}

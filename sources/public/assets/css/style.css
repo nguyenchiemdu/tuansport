@@ -19,6 +19,10 @@ a{
     color: var(--white-color)!important;
 }
 
+.text-color-dark-gray{
+    color: var(--dark-gray-color);
+}
+
 
 /* reuse this color template in ejs template engine */
 :root {
@@ -216,7 +220,7 @@ footer{
 }
 
 
-@media screen and (max-width: 1199px) {
+@media screen and (max-width: 1399px) {
 footer .element{
         border-bottom: 1px solid var(--dark-gray-color)!important;
     }

@@ -16,6 +16,10 @@ class HomeController {
             data: docs
         })
     }
+
+    async wishlist(req,res) {
+        res.render("wishlist/wishlist")
+    }
 }
 
 module.exports = new HomeController();
