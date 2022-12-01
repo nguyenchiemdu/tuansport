@@ -1,0 +1,25 @@
+.product-detail h5.field-name {
+    color: var(--dark-gray-color);
+}
+.product-detail h5.field-name  span {
+    color: var(--black-color);
+}
+
+input {
+    border-radius: 23px!important;
+}
+.sale-price {
+    font-weight: 400;
+    font-size: 16;
+    color: var(--dark-gray-color);
+}
+
+#description p {
+    color: var(--dark-gray-color);
+    font-weight: 400;
+    font-size: 20px;
+
+}
+.description-tab.active {
+    border-radius: 23px 23px 0 0 !important;
+}

@@ -112,6 +112,10 @@ $(document).ready(function() {
             closeMenu[e.target.dataset.index].style.display = 'none'
         }
     })
+    $(".product-item").on('click', function(e){
+        let skuCode = ($(this).attr('code'))
+        window.location.href = '/san-pham/'+skuCode;
+    })
 })
 
 
