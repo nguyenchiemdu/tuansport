@@ -51,32 +51,32 @@ a{
 /* Heading style */
 h1 {
     font-size: var(--heading1-font-size)!important;
-    font-weight: var(--heading1-font-weight);
+    font-weight: var(--heading1-font-weight)!important;
 }
 
 h2 {
     font-size: var(--heading2-font-size);
-    font-weight: var(--heading2-font-weight);
+    font-weight: var(--heading2-font-weight)!important;
 }
 
 h3 {
     font-size: var(--heading3-font-size);
-    font-weight: var(--heading3-font-weight);
+    font-weight: var(--heading3-font-weight)!important;
 }
 
 h4 {
     font-size: var(--heading4-font-size);
-    font-weight: var(--heading4-font-weight);
+    font-weight: var(--heading4-font-weight)!important;
 }
 
 h5 {
     font-size: var(--heading5-font-size);
-    font-weight: var(--heading5-font-weight);
+    font-weight: var(--heading5-font-weight)!important;
 }
 
 h6 {
     font-size: var(--heading6-font-size);
-    font-weight: var(--heading6-font-weight);
+    font-weight: var(--heading6-font-weight)!important;
 }
 
 
@@ -86,7 +86,7 @@ h6 {
     width: auto;
     padding: 11px 34px;
     font-size: var(--heading5-font-size);
-    font-weight: var(--heading5-font-weight);
+    font-weight: var(--heading5-font-weight)!important;
 }
 /* Button style */
 .btn-primary {
@@ -122,19 +122,19 @@ h6 {
 }
 
 .btn-outline-primary:active {
-    background-color: var(--gray-color) !important;
+    background-color: var(--primary-color) !important;
     border-color: var(--primary-color) !important;
-    color: var(--primary-color) !important;
+    color: var(--white-color) !important;
 }
 
 .btn-light {
-    background-color: var(--white-color) !important;
+    background-color: var(--light-gray-color) !important;
     color: var(--black-color);
 }
 
 .btn-light:hover {
     background-color: var(--light-gray-color) !important;
-    border-color: var(--light-gray-color) !important;
+    border-color: var(--dark-gray-color) !important;
     color: var(--black-color);
 
 }
@@ -144,6 +144,14 @@ h6 {
     border-color: var(--gray-color) !important;
     color: var(--black-color) !important;
 
+}
+/* focus */
+.btn:focus-visible {
+    color: var(--bs-btn-hover-color);
+    background-color: var(--primary-color)!important;
+    border-color: var(--primary-color-darker)!important;
+    outline: 0;
+    box-shadow: var(--primary-color-lighter)!important;
 }
 /* Navlink style */
 /* Link style */

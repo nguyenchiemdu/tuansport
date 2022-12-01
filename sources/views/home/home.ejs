@@ -7,13 +7,14 @@
         <%- include ('../common/lib/font_css')%>
                 <%- include ('../common/lib/feather_icon_css')%>
                         <%- include ('../common/lib/bootstrap_css')%>
-                        <%- include ('../common/lib/font_awesome_css')%>
+                                <%- include ('../common/lib/font_awesome_css')%>
 
 
-                                <%- include ('../common/css/style')%>
+                                        <%- include ('../common/css/style')%>
 
-                                        <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/logo.png">
-                                        <%- include ('../common/css/owl_carousel')%>
+                                                <link rel="icon" type="image/png" sizes="16x16"
+                                                        href="/assets/images/logo.png">
+                                                <%- include ('../common/css/owl_carousel')%>
 
 </head>
 
@@ -243,7 +244,8 @@
                                         <div class="owl-carousel newest-product mt-3">
                                                 <% for (let item of data){ %>
                                                         <div class="p-3">
-                                                                <div class="hover-bigger">
+                                                                <div code='<%=item.skuCode%>'
+                                                                        class=" product-item hover-bigger">
                                                                         <div class="rounded-4 ratio ratio-1x1"
                                                                                 style="background-image: url('<%=item.images[0]%>')">
                                                                                 <div class="d-float">
@@ -321,7 +323,8 @@
                                         <div id="list-all-products"
                                                 class="row row-cols-2 row-cols-md-4 row-cols-lg-5  row-cols-sm-3 gx-4 gy-4 mt-3 mb-3">
                                                 <% for (let item of data) {%>
-                                                        <div class="col hover-bigger">
+                                                        <div code='<%=item.skuCode%> '
+                                                                class="product-item col hover-bigger">
                                                                 <div class="rounded-4 ratio ratio-1x1"
                                                                         style="background-image: url('<%=item.images[0]%>')">
                                                                         <div class="d-float">
@@ -380,13 +383,11 @@
                 </div>
                 <%- include ('../common/component/footer')%>
 </body>
-        <%- include ('../common/lib/bootstrap_js')%>
+<%- include ('../common/lib/bootstrap_js')%>
         <%- include ('../common/lib/jquery')%>
-        <%- include ('../common/lib/feather_icon_js')%>
-
-        <%- include ('../common/js/index')%>
-        <%- include ('../common/js/home')%>
-
-
+                <%- include ('../common/lib/feather_icon_js')%>
+                        <%- include ('../common/js/index')%>
+                                <%- include ('../common/js/owl_carousel')%>
+                                        <script src="/assets/js/home/home.js"></script>
 
 </html>
