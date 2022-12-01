@@ -1,16 +1,4 @@
-#wishlist > .breadcrumb-item > a {
-    color: var(--light-gray-color)
-}
 
-
-
-#wishlist .breadcrumb-item.active{
-    color: var(--primary-color)
-}
-
-#wishlist > li.breadcrumb-item > a:hover{
-    color: var(--black-color)!important;
-}
 
 #wishlist .icon-wishlist{
     border-radius: 23px;
@@ -19,9 +7,7 @@
     transition: transform .2s; 
 }
 
-#wishlist .icon-wishlist:hover{
-    transform: scale(1.1);
-}
+
 #wishlist .add-item-list{
     padding: 11px 9.5px;
 }
@@ -31,9 +17,6 @@
 }
 #wishlist .add-item-list{
     background-color: var(--primary-color);
-}
-#wishlist .remove-item-list{
-    background-color: var(--tertiary-color);
 }
 
 #wishlist .status{
