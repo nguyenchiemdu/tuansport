@@ -51,7 +51,8 @@ class ProductController {
         }
         let { docs } = await getTableDataWithPagination(req, mongoProduct, {
             findCondition: {
-                masterProductId: null
+                masterProductId: null,
+                isSynced : true
             }
         })
         // res.json(baseRespond(true,AppString.ok,product))

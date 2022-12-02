@@ -171,7 +171,7 @@
                                                                                         <ul class="nav nav-tabs">
                                                                                                 <li class="nav-item ">
                                                                                                         <a class="nav-link active description-tab"
-                                                                                                                aria-current="page">
+                                                                                                                aria-current="page" style="background-color: var(--white-color)">
                                                                                                                 <h4>Mô tả
                                                                                                                         sản
                                                                                                                         phẩm
@@ -258,7 +258,7 @@
                                                                 <div code='<%=item.skuCode%>'
                                                                         class=" product-item hover-bigger">
                                                                         <div class="rounded-4 ratio ratio-1x1"
-                                                                                style="background-image: url('<%=item.images[0]%>')">
+                                                                                style="background-image: url('<%=item.images[0]%>');background-size:cover">
                                                                                 <div class="d-float">
                                                                                         <div
                                                                                                 class="float-end mt-3 me-3">
@@ -320,8 +320,6 @@
 <script>
         var mappedProductAttributes =JSON.parse(`<%-JSON.stringify(mappedProductAttributes)%>`) ;
         var mapAttributes =JSON.parse(`<%-JSON.stringify(mapAttributes)%>`) ;
-        console.log(mappedProductAttributes)
-        console.log(mapAttributes)
 </script>
 <%- include ('../common/lib/bootstrap_js')%>
         <%- include ('../common/lib/jquery')%>

@@ -11,8 +11,19 @@ $(document).ready(function () {
             attributeId: attributeId,
             value: value
         }
+        // get available attributes with new selected value
+        let mapAvailableAttr = getAvailableOtherAttributesValue(newValue)
+
         // condition to reduce spam
         let isNew = !(JSON.stringify(newValue) == JSON.stringify(selecedAttributes[attributeId]))
+        // remove selected attributes if they are not available
+        for (let key in selecedAttributes) {
+            let attribute = selecedAttributes[key]
+            if (mapAvailableAttr[key] != null && !mapAvailableAttr[key].includes(attribute.value)) {
+                delete selecedAttributes[key]
+            }
+        }
+        updateSelectedAttributeButton(this, mapAvailableAttr)
         selecedAttributes[attributeId] = newValue
         // check if use choose all attributes to call api and show products left
         if (Object.keys(selecedAttributes).length == Object.keys(mapAttributes).length && isNew) {
@@ -35,8 +46,6 @@ $(document).ready(function () {
                 }
             }
             if (targetKey != null) {
-                updateSelectedAttributeButton(this)
-                console.log(targetKey)
                 res = await fetch('/api/product/' + targetKey)
                     .then(res => res.json())
                 if (res.success) {
@@ -44,14 +53,16 @@ $(document).ready(function () {
                 } else {
                     alert(res.message);
                 }
+            } else {
+                removeOnHandTag()
             }
-        } else if (Object.keys(selecedAttributes).length != Object.keys(mapAttributes).length){
-            updateSelectedAttributeButton(this)
+        } else if (Object.keys(selecedAttributes).length != Object.keys(mapAttributes).length) {
+            removeOnHandTag()
         }
     })
-    $(".product-item").on('click', function(e){
+    $(".product-item").on('click', function (e) {
         let skuCode = ($(this).attr('code'))
-        window.location.href = '/san-pham/'+skuCode;
+        window.location.href = '/san-pham/' + skuCode;
     })
 });
 
@@ -124,14 +135,94 @@ function updateSelectedProduct(product) {
     <span>Còn ${product.inventories[0].onHand} sản
                     phẩm</span>`)
 }
-function updateSelectedAttributeButton(button){
+function removeOnHandTag() {
+    $('#product-status').addClass('d-none')
+}
+function updateSelectedAttributeButton(button, mapAvailableAttr) {
+    let allAttrBtn = $('.attribute-button');
+    for (let btn of allAttrBtn) {
+        $(btn).addClass('d-none')
 
+        // if ($(btn).hasClass('btn-primary')) {
+        // $(btn).removeClass('btn-primary')
+        // $(btn).addClass('btn-light')
+        // }
+
+    }
+    for (let key in mapAvailableAttr) {
+        let AttrBtns = $('.attribute-button.' + key);
+        for (let btn of AttrBtns) {
+            let value = $(btn).attr('value')
+            if (mapAvailableAttr[key].includes(value)) {
+                $(btn).removeClass('d-none')
+
+            } else {
+                if ($(btn).hasClass('btn-primary')) {
+                    $(btn).removeClass('btn-primary')
+                    $(btn).addClass('btn-light')
+                }
+            }
+            // if ($(btn).hasClass('btn-primary')) {
+            // $(btn).removeClass('btn-primary')
+            // $(btn).addClass('btn-light')
+            // }
+
+        }
+    }
     let attributeId = parseInt($(button).attr('attributeId'))
-    let listBtn = $('.attribute-button.'+attributeId);
+    let listBtn = $('.attribute-button.' + attributeId);
     for (let btn of listBtn) {
-        $(btn).removeClass('btn-primary')
+        if ($(btn).hasClass('btn-primary')) {
+            $(btn).removeClass('btn-primary')
+            $(btn).addClass('btn-light')
+        }
+
     }
     $(button).removeClass('btn-light')
-
     $(button).addClass('btn-primary')
+}
+
+function getAvailableOtherAttributesValue(newAtrribute) {
+    var mapAvailableAttr = {}
+    let selecedAttributeName
+    for (let name in mapAttributes) {
+        if (mapAttributes[name][0].attributeId == newAtrribute.attributeId) {
+            selecedAttributeName = name;
+            break
+        }
+    }
+    for (let attribute of mapAttributes[selecedAttributeName]) {
+        if (mapAvailableAttr[attribute.attributeId] == null) {
+            mapAvailableAttr[attribute.attributeId] = []
+        }
+        if (
+            !mapAvailableAttr[attribute.attributeId].includes(attribute.value)) {
+            mapAvailableAttr[attribute.attributeId].push(attribute.value)
+        }
+    }
+    for (let key in mappedProductAttributes) {
+        let isOk = true
+        let listAttr = mappedProductAttributes[key]
+        listAttr = listAttr.map(attr => JSON.stringify(attr))
+        let stringAttr = JSON.stringify(newAtrribute)
+        if (!listAttr.includes(stringAttr)) {
+            isOk = false;
+        }
+        if (isOk) {
+            listAttr = listAttr.map(attr => JSON.parse(attr))
+
+            for (attribute of listAttr) {
+                if (mapAvailableAttr[attribute.attributeId] == null) {
+                    mapAvailableAttr[attribute.attributeId] = []
+                }
+                if (
+                    !mapAvailableAttr[attribute.attributeId].includes(attribute.value)) {
+                    mapAvailableAttr[attribute.attributeId].push(attribute.value)
+                }
+            }
+
+        }
+    }
+    // console.log(mapAvailableAttr)
+    return mapAvailableAttr;
 }
