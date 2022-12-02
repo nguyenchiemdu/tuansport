@@ -207,7 +207,7 @@ li.breadcrumb-item > a:hover{
 /* Footer */
 footer{
     background-color: var(--black-color);
-    color: var(--white-color);
+    color: var(--white-color)!  important;
 }
 
 .footer-icon{
@@ -241,9 +241,9 @@ footer{
 }
 
 @media screen and (max-width: 1399px) {
-footer .element{
+/* footer .element{
         border-bottom: 1px solid var(--dark-gray-color)!important;
-    }
+    } */
 }
 
 /* Wishlist + Cart */

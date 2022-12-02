@@ -32,11 +32,14 @@ $(document).ready(function () {
         touchDrag: false,
         autoHeight: false,
         responsive: {
-            1024: {
+            1400: {
                 items: 4,
             },
-            800: {
+            1000: {
                 items: 3,
+            },
+            800: {
+                items: 2,
                 mouseDrag: true,
                 touchDrag: true,
                 autoplay: true
@@ -116,6 +119,13 @@ $(document).ready(function() {
         let skuCode = ($(this).attr('code'))
         window.location.href = '/san-pham/'+skuCode;
     })
+    $('.btn-cart').on('click', function(e){
+        e.stopPropagation();
+    })
+    $('.btn-wishlist').on('click', function(e){
+        e.stopPropagation();
+    })
+    
 })
 
 
