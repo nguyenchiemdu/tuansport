@@ -7,6 +7,9 @@ class ApiUrl {
     static getProductById(id) {
         return `https://public.kiotapi.com/products/${id}`;
     }
+    static getProductBySkuCode(skuCode) {
+        return `https://public.kiotapi.com/products/code/${skuCode}`;
+    }
     static getAttributes = 'https://public.kiotapi.com/attributes/allwithdistinctvalue';
 }
 module.exports = ApiUrl

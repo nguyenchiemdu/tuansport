@@ -97,9 +97,9 @@ $(document).ready(function () {
 
 
 
-$(document).ready(function() {
-    $(".toggle-submenu").on('click', function(e) {
-        
+$(document).ready(function () {
+    $(".toggle-submenu").on('click', function (e) {
+
         var dropdown = $(this).siblings('ul')
         var openMenu = document.querySelectorAll('.open-menu')
         var closeMenu = document.querySelectorAll('.close-menu')
@@ -115,17 +115,68 @@ $(document).ready(function() {
             closeMenu[e.target.dataset.index].style.display = 'none'
         }
     })
-    $(".product-item").on('click', function(e){
+    $(".product-item").on('click', function (e) {
         let skuCode = ($(this).attr('code'))
-        window.location.href = '/san-pham/'+skuCode;
+        window.location.href = '/san-pham/' + skuCode;
     })
-    $('.btn-cart').on('click', function(e){
+    $('.btn-cart').on('click', function (e) {
         e.stopPropagation();
     })
-    $('.btn-wishlist').on('click', function(e){
+    $('.btn-wishlist').on('click', function (e) {
         e.stopPropagation();
+        let button = $(this)
+        if (button.hasClass('btn-light')) {
+            button.removeClass('btn-light')
+            button.addClass('btn-primary')
+            let skuCode = button.attr('skucode')
+            let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+            for (let button of sameSkuCodeButtons) {
+                $(button).removeClass('btn-light')
+                $(button).addClass('btn-primary')
+            }
+            let wishlist = window.localStorage.getItem('wishlist');
+            wishlist = JSON.parse(wishlist);
+           
+            if (wishlist == null) wishlist = [];
+            wishlist.push(skuCode)
+            wishlist = new Set(wishlist)
+            wishlist = Array.from(wishlist)
+            console.log(JSON.stringify(wishlist))
+            window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+        } else {
+            button.removeClass('btn-primary')
+            button.addClass('btn-light')
+            let skuCode = button.attr('skucode')
+            let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+            for (let button of sameSkuCodeButtons) {
+                $(button).removeClass('btn-primary')
+                $(button).addClass('btn-light')
+            }
+            let wishlist = window.localStorage.getItem('wishlist');
+            wishlist = JSON.parse(wishlist);
+           
+            if (wishlist == null) wishlist = [];
+            wishlist = wishlist.filter(function(item) {
+                return item !== skuCode
+            })
+            wishlist = new Set(wishlist)
+            wishlist = Array.from(wishlist)
+            console.log(JSON.stringify(wishlist))
+            window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+        }
     })
-    
+    // update porduct that in wishlists
+    let wishlist = window.localStorage.getItem('wishlist');
+    wishlist = JSON.parse(wishlist);
+    if (wishlist == null) wishlist = []
+
+    for (let skuCode of wishlist) {
+        let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+            for (let button of sameSkuCodeButtons) {
+                $(button).removeClass('btn-light')
+                $(button).addClass('btn-primary')
+            }
+    }
 })
 
 

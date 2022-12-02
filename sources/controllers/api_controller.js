@@ -22,6 +22,18 @@ class ApiController {
             next(err)
         }
     }
+    // GET
+    async  getProductBySkuCode(req,res,next) {
+        try {
+            let url = ApiUrl.getProductBySkuCode(req.params.skucode)
+            let response =  await KiotvietAPI.callApi(url)
+            res.json(baseRespond(true,AppString.ok,response.data))
+        } catch(err) {
+            console.error(err)
+            res.status(400)
+            next(err)
+        }
+    }
 }
 
 module.exports = new ApiController();
