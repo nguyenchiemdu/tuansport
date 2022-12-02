@@ -1,0 +1,171 @@
+<html>
+
+<head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Tuấn Sport Đà Nẵng – Số 1 Đà Nẵng</title>
+        <%- include ('../common/lib/font_css')%>
+                <%- include ('../common/lib/feather_icon_css')%>
+                        <%- include ('../common/lib/bootstrap_css')%>
+                        <%- include ('../common/lib/font_awesome_css')%>
+
+
+                                <%- include ('../common/css/style')%>
+
+                                        <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/logo.png">
+                                        <%- include ('../common/css/owl_carousel')%>
+
+</head>
+
+
+<body style="background-color:var(--white-color)">
+        <%- include ('../common/component/navigator')%>
+        <div class="app-body">
+            <div id="wishlist"> <!-- Content wishlist -->
+              <section class="container py-2 pt-4 ps-3" id="breadcrumb"> <!-- Path -->
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item text-decoration-none"><a href="/" class="text-color-dark-gray" style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight);">
+                      Home
+                    </a></li>
+                    <li class="breadcrumb-item active text-color-primary" aria-current="page">
+                      <span style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight)">Wishlist</span>
+                    </li>
+                  </ol>
+                </nav>
+              </section>
+          
+              <section class="container py-2 pb-5 text-center align-middle"> <!-- Main content wishlist -->
+                <div id="wishlist-mobile" style="display: none"> <!-- Mobile content-->
+                  <h2 class="text-center align-middle mb-4">Wishlist</h2>
+                  <div style="border-top: 1px solid var(--dark-gray-color)">
+                    <div class="my-3"> <!-- Item -->
+                          <div class="row align-items-center">
+                            <div class="col-7 d-flex align-items-center"> <!--Name-->
+                              <img src="https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/1200px-Man_Utd_FC_.svg.png" alt="" width="60px" height="60px" style="border-radius: 5px" /> 
+                              <span class="align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
+                                <h5 class="ms-2 short-description">This is some text. This is some text. This is some text.
+                                  This is some text. This is some text. This is some text.</h5>
+                              </span>
+                            </div>
+                            <div class="col-5 pt-3 ps-4"> <!-- Price-->
+                              <h5>$15000</h5>
+                            </div>
+                          </div>
+                          <div class="row align-items-center">
+                            <div class="col-7 d-flex align-items-center"> <!--Status-->
+                              <h5>Tình trạng: </h5>
+                              <span class="mx-2 status-mobile is-avaliable">
+                                <h5>Còn hàng</h5>
+                              </span>
+                            </div>
+                            <div class="col-5"> <!-- Icon -->
+                              <i class="ms-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping icon-wishlist  hover-bigger add-item-list text-center"></i>
+                              <i class="ms-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x icon-wishlist hover-bigger  remove-item-list text-center"></i>
+                            </div>
+                          </div>
+                    </div>
+                    <div class="my-3"> <!-- Item -->
+                      <div class="row align-items-center">
+                        <div class="col-7 d-flex align-items-center"> <!--Name-->
+                          <img src="https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/1200px-Man_Utd_FC_.svg.png" alt="" width="60px" height="60px" style="border-radius: 5px" /> 
+                          <span class="align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
+                            <h5 class="ms-2 short-description">This is some text. This is some text. This is some text.
+                              This is some text. This is some text. This is some text.</h5>
+                          </span>
+                        </div>
+                        <div class="col-5 pt-3 ps-4"> <!-- Price-->
+                          <h5>$15000</h5>
+                        </div>
+                      </div>
+                      <div class="row align-items-center">
+                        <div class="col-7 d-flex align-items-center"> <!--Status-->
+                          <h5>Tình trạng: </h5>
+                          <span class="mx-2 status-mobile is-unavaliable">
+                            <h5>Hết hàng</h5>
+                          </span>
+                        </div>
+                        <div class="col-5"> <!-- Icon -->
+                          <i class="ms-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping icon-wishlist  hover-bigger add-item-list text-center"></i>
+                          <i class="ms-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x icon-wishlist hover-bigger  remove-item-list text-center"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="my-5"></div>
+                  </div>
+                
+                <div id ="wishlist-web" style="display: block">
+                  <h2 class="text-start mb-4">Wishlist</h2>
+                  <table class="table align-middle"> <!-- Table -->
+                    <thead class="header-table"> <!-- Header -->
+                      <tr>
+                        <th scope="col">
+                          <h4>Tên</h4>
+                        </th>
+                        <th scope="col" class="text-center">
+                          <h4>Giá tiền</h4>
+                        </th>
+                        <th scope="col" class="text-center">
+                          <h4>Tình trạng</h4>
+                        </th>
+                        <th scope="col"></th>
+                      </tr>
+                    </thead> <!-- Header -->
+                    <tbody> <!-- Item --> 
+                      <tr>
+                        <td> <!-- Name item -->
+                          <img src="https://upload.wikimedia.org/wikipedia/vi/thumb/a/a1/Man_Utd_FC_.svg/1200px-Man_Utd_FC_.svg.png" alt="" width="120px" height="120px" style="border-radius: 20px" />
+                          <span class="d-inline-block align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4 short-description">
+                            <h3>Áo MU phiên bản cao cấp</h3>
+                          </span>
+                        </td> <!-- Name item -->
+                        <td class="text-center"> <!-- Price -->
+                          <h3>219000đ</h3>
+                        </td> <!-- Price -->
+                        <td> <!-- Status -->
+                          <h5 class="status is-unavaliable p-2 text-center">Hết hàng</h5>
+                        </td> <!-- Status -->
+                        <td class="pe-0 me-1 ps-4 "> <!-- Icon -->
+                          <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping icon-wishlist add-item-list text-center"></i>
+                          <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x icon-wishlist remove-item-list text-center"></i>
+                        </td> <!-- Icon -->
+                      </tr>
+                    </tbody> <!-- Item -->
+                    <tbody> <!-- Item --> 
+                        <tr>
+                          <td class=""> <!-- Name item -->
+                            <img src="http://hanoimoi.com.vn/Uploads/images/phananh/2021/11/17/MU.jpg" alt="" width="120px" height="120px" style="border-radius: 20px" />
+                            <span class="d-inline-block align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
+                              <h3>Áo MU phiên bản cao cấp</h3>
+                            </span>
+                          </td> <!-- Name item -->
+                          <td class="text-center"> <!-- Price -->
+                            <h3>219000đ</h3>
+                          </td> <!-- Price -->
+                          <td> <!-- Status -->
+                            <h5 class="status is-avaliable p-2 text-center">Còn hàng</h5>
+                          </td> <!-- Status -->
+                          <td class="pe-0 me-1 ps-4"> <!-- Icon -->
+                            <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping icon-wishlist add-item-list text-center"></i>
+                            <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x icon-wishlist remove-item-list text-center"></i>
+                          </td> <!-- Icon -->
+                        </tr>
+                      </tbody> <!-- Item -->
+                  </table>
+                  <div class="my-5 py-2"></div>
+                </div>
+                </section>
+            </div>
+          </div>
+          
+          
+          <%- include ('../common/component/footer')%>
+          <%- include ('../common/lib/bootstrap_js')%>
+          <%- include ('../common/lib/jquery')%>
+          <%- include ('../common/lib/feather_icon_js')%>
+            <script src="/assets/js/wishlist/wishlist.js"></script>
+
+        <%- include ('../common/js/index')%>
+</body>
+

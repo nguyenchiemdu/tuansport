@@ -61,6 +61,9 @@
     margin-right: 0 !important;
 }
 
+.nav-icon:hover > a > svg.feather {
+    stroke: red
+}
 .navbar .avatar-user{
     border-radius: 50%;
     border: 1px solid var(--black-color);
@@ -75,6 +78,9 @@
     content: none
 }
 
+.navbar .is-path{
+    stroke: red;
+}
 .dropdown-menu li {
     position: relative;
     }
