@@ -10,6 +10,8 @@ const mongoUser = require("../models/mongo/mongo.user")
 const mongoAttribute = require("../models/mongo/mongo.attribute")
 const mongoAttributeValue = require("../models/mongo/mongo.attribute_value")
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute")
+const KiotvietAPI = require('../common/kiotviet_api');
+const ApiUrl = require("../common/api_url");
 class AdminController {
     // GET  /products
     async products(req, res) {
@@ -119,10 +121,25 @@ class AdminController {
                 response = await mongoProduct.updateOne({
                     skuCode: product.skuCode
                 }, {
-                    $set: { isSynced: !product.isSynced }
+                    $set: { isSynced: !resProduct[0].isSynced }
                 })
             }
             else {
+                response = await KiotvietAPI.callApi(ApiUrl.getProductById(product.id))
+                product = response.data
+                 product = {
+                    _id : product.id,
+                    skuCode: product.code,
+                    name: product.name,
+                    fullName: product.fullName,
+                    price: product.basePrice,
+                    ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
+                    images: product.images,
+                    categoryId: product.categoryId,
+                    isSynced : product.isSynced,
+                    masterProductId: product.masterProductId?? null,
+                    attributes : product.attributes
+                } 
                 response
                     = await mongoProduct.findOneAndUpdate(
                         {

@@ -7,20 +7,23 @@ const mongoProduct = require("../models/mongo/mongo.product")
 
 class HomeController {
     // GET 
-    async home (req,res) {
+    async home(req, res) {
         // res.json(req.headers.userInfor)
-        let { docs } = await getTableDataWithPagination(req,mongoProduct, {findCondition : {
-            masterProductId : null,
-            isSynced : true
+        let { docs } = await getTableDataWithPagination(req, mongoProduct, {
+            findCondition: {
+                masterProductId: null,
+                isSynced: true
 
-        }})
+            }
+        })
         res.render("home/home", {
-            data: docs
+            data: docs,
+            user: req.headers.userInfor
         })
     }
 
-    async wishlist(req,res) {
-        res.render("wishlist/wishlist")
+    async wishlist(req, res) {
+        res.render("wishlist/wishlist", { user: req.headers.userInfor })
     }
 }
 

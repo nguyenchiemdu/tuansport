@@ -13,8 +13,6 @@
   <div class="wrapper">
     <!-- Sidebar  -->
     <%- include ('admin_navbar')%>
-      <script src="/assets/js/admin/sync_product.js"></script>
-
       <!-- Page Content  -->
       <div id="content">
         <div class="container" style="text-align: center">
@@ -22,8 +20,8 @@
           <div class="row justify-content-end">
             <div class="col-md-4 col-sm-12">
               <div class="input-group mb-3">
-                <input type="text" id='search-text'value="<%=name%>"  class="form-control" placeholder="Tìm kiếm sản phẩm"
-                  aria-label="Recipient's username" aria-describedby="button-addon2">
+                <input type="text" id='search-text' value="<%=name%>" class="form-control"
+                  placeholder="Tìm kiếm sản phẩm" aria-label="Recipient's username" aria-describedby="button-addon2">
                 <button class="btn btn-primary" type="button" id="search-btn" onclick="searchProduct()">Tìm
                   kiếm</button>
               </div>
@@ -34,6 +32,7 @@
               <thead class="table-dark ">
                 <tr>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Id nhóm hàng</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
@@ -42,10 +41,13 @@
                 </tr>
               </thead>
               <tbody>
-                <% for (let i in data) { delete data[i]['description']; %>
+                <% for (let i in data) { delete data[i]['description'];%>
                   <tr>
                     <th>
                       <%= pageSize*(page-1) +Number(i)+1%>
+                    </th>
+                    <th>
+                      <%=data[i].masterProductId%>
                     </th>
                     <th>
                       <%=data[i].code%>
@@ -58,11 +60,13 @@
                     </th>
                     <th>
                       <div class="form-check form-switch">
-                        <input class="form-check-input" value="<%=name%>" type="checkbox" id="flexSwitchCheckDefault" <%
-                          if (data[i].isSynced) {%> checked <% } %> onclick="syncProduct(`<%=JSON.stringify(data[i])%>
-                            `)">
-                            <!-- <label class="form-check-label" for="flexSwitchCheckDefault">Default switch checkbox input</label> -->
+
+                        <input class="form-check-input sync-button" value="<%=name%>" type="checkbox"
+                          skuCode='<%=data[i].code %>' productid="<%=data[i].id%>" id="flexCheckDefault" <% if
+                          (data[i].isSynced) {%> checked <% } %>>
+
                       </div>
+
                     </th>
                   </tr>
                   <%} %>
@@ -80,6 +84,8 @@
 </body>
 <%- include ('../common/lib/bootstrap_js')%>
   <%- include ('../common/lib/jquery')%>
+    <script src="/assets/js/admin/sync_product.js"></script>
     <%- include ('../common/js/index')%>
+
 
 </html>

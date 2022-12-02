@@ -35,7 +35,7 @@
                                                         <li class="breadcrumb-item " aria-current="page"><a
                                                                         style="color:var(--dark-gray-color)"
                                                                         href="/san-pham">Sản phẩm</a></li>
-                                                        <li class="breadcrumb-item active" aria-current="page"
+                                                        <li class="breadcrumb-item active product-name" aria-current="page"
                                                                 style="color:var(--primary-color)">
                                                                 <%= product.name %>
                                                         </li>
@@ -67,7 +67,7 @@
                                                         </div>
                                                 </div>
                                                 <div class="col col-md-7 ps-md-5 product-detail">
-                                                        <h1>
+                                                        <h1 class="product-name">
                                                                 <%=product.name%>
                                                         </h1>
                                                         <div class="mt-4">
@@ -81,13 +81,15 @@
                                                                         <h3>
                                                                                 <%=key%>
                                                                         </h3>
-                                                                        <div class="d-flex">
+                                                                        <div class="row row-cols-auto my-2">
                                                                                 <%for (let attribute of
                                                                                         mapAttributes[key]){%>
-                                                                                        <button type="button"
+                                                                                        <div class="col mb-3">
+                                                                                                <button type="button"
                                                                                                 class="btn btn-light px-3 py-2 attribute-button <%=attribute.attributeId%>" attributeId="<%=attribute.attributeId%>" value="<%=attribute.value%>">
                                                                                                 <%=attribute.value%>
-                                                                                        </button>
+                                                                                        </button>        
+                                                                                        </div>
                                                                                         <%}%>
                                                                         </div>
                                                                 </div>

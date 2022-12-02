@@ -1,33 +1,51 @@
+$(document).ready(() => {
+    $('.sync-button').on('click', async (e) => {
+        let button = $(e.target)
+        let body = {
+            id: button.attr('productid'),
+            skuCode: button.attr('skucode'),
+        };
+        await fetch('/admin/sync-product', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify(body)
+        }).then(res => res.json())
+            .then(res => {
+                response = res;
+                if (!response.success) {
+                    let isChecked = button.prop('checked')
+                    button.prop("checked", !isChecked)
+                    alert(response.message);
+                }
+            })
 
-async function syncProduct(product) {
-    product = JSON.parse(product)
-    let body = {
-        _id : product.id,
-        skuCode: product.code,
-        name: product.name,
-        fullName: product.fullName,
-        price: product.basePrice,
-        ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
-        images: product.images,
-        categoryId: product.categoryId,
-        isSynced : product.isSynced,
-        masterProductId: product.masterProductId?? null,
-        attributes : product.attributes
-    };
-    await fetch('/admin/sync-product',{
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(body)
-    }).then(res=> res.json())
-    .then(res=> {
-        response = res;
-        if (!response.success) {
-            alert(response.message);
-        }
+
     })
+})
+async function syncProduct(e) {
+    console.log(e.target)
+    // product = JSON.parse(product)
+    // let body = {
+    //     id : product.id,
+    //     skuCode: product.code,
+    // };
+    // await fetch('/admin/sync-product',{
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     method: "POST",
+    //     body: JSON.stringify(body)
+    // }).then(res=> res.json())
+    // .then(res=> {
+    //     response = res;
+    //     if (!response.success) {
+    //         alert(response.message);
+    //     }
+    // })
 }
 async function searchProduct() {
     let text = document.querySelector('#search-text').value;

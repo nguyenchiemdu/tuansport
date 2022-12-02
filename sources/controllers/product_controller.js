@@ -8,57 +8,65 @@ const mongoAttribute = require("../models/mongo/mongo.attribute");
 
 class ProductController {
     // GET 
-    async productDetail(req, res) {
+    async productDetail(req, res, next) {
         // res.json(req.headers.userInfor)
-        let skuCode = req.params.code
-        let product = await mongoProduct.findOne({
-            skuCode: skuCode
-        })
-        let mapAttributes = {
-
-        }
-        let listIdGroupProduct = await mongoProduct.find({
-            masterProductId: product._id
-        }).then(products => products.map((product) => { return { productId: product._id } }));
-        listIdGroupProduct.push({ productId: product._id })
-        let productAttributes = await mongoProductAttribute.find({
-            $or: listIdGroupProduct
-        }).populate('attributeValueId').exec().
-            then(async (attributes) => {
-                for (let i = 0; i < attributes.length; i++) {
-                    let attribute = await mongoAttribute.find({
-                        _id: attributes[i].attributeValueId.attributeId
-                    })
-                    if (mapAttributes[attribute[0].name] == null) {
-                        mapAttributes[attribute[0].name] = []
-                    }
-                    if (!mapAttributes[attribute[0].name].includes(attributes[i].attributeValueId))
-                        mapAttributes[attribute[0].name].push(attributes[i].attributeValueId)
-                    attributes[i].attribute = attribute[0]
-                }
-                return attributes
+        try {
+            let skuCode = req.params.code
+            let product = await mongoProduct.findOne({
+                skuCode: skuCode,
+                isSynced: true
             })
-        let mappedProductAttributes = {
+            let mapAttributes = {
 
-        }
-        for (let proAttr of productAttributes) {
-            let attribute = {
-                attributeId: proAttr.attributeValueId.attributeId,
-                value: proAttr.attributeValueId.value
             }
-            if (mappedProductAttributes[proAttr.productId] == null) mappedProductAttributes[proAttr.productId] = []
-            mappedProductAttributes[proAttr.productId].push(attribute)
-        }
-        let { docs } = await getTableDataWithPagination(req, mongoProduct, {
-            findCondition: {
-                masterProductId: null,
-                isSynced : true
+            let listIdGroupProduct = await mongoProduct.find({
+                masterProductId: product._id
+            }).then(products => products.map((product) => { return { productId: product._id } }));
+            listIdGroupProduct.push({ productId: product._id })
+            let productAttributes = await mongoProductAttribute.find({
+                $or: listIdGroupProduct
+            }).populate('attributeValueId').exec().
+                then(async (attributes) => {
+                    for (let i = 0; i < attributes.length; i++) {
+                        let attribute = await mongoAttribute.find({
+                            _id: attributes[i].attributeValueId.attributeId
+                        })
+                        if (mapAttributes[attribute[0].name] == null) {
+                            mapAttributes[attribute[0].name] = []
+                        }
+                        if (!mapAttributes[attribute[0].name].includes(attributes[i].attributeValueId))
+                            mapAttributes[attribute[0].name].push(attributes[i].attributeValueId)
+                        attributes[i].attribute = attribute[0]
+                    }
+                    return attributes
+                })
+            let mappedProductAttributes = {
+
             }
-        })
-        // res.json(baseRespond(true,AppString.ok,product))
-        res.render("product/product_detail", {
-            product, data: docs, mapAttributes, mappedProductAttributes
-        })
+            for (let proAttr of productAttributes) {
+                let attribute = {
+                    attributeId: proAttr.attributeValueId.attributeId,
+                    value: proAttr.attributeValueId.value
+                }
+                if (mappedProductAttributes[proAttr.productId] == null) mappedProductAttributes[proAttr.productId] = []
+                mappedProductAttributes[proAttr.productId].push(attribute)
+            }
+            let { docs } = await getTableDataWithPagination(req, mongoProduct, {
+                findCondition: {
+                    masterProductId: null,
+                    isSynced: true
+                }
+            })
+            // res.json(baseRespond(true,AppString.ok,product))
+            res.render("product/product_detail", {
+                product, data: docs, mapAttributes, mappedProductAttributes, user: req.headers.userInfor
+            })
+        } catch (err) {
+            console.log(err);
+            res.status(400)
+            next(err);
+        }
+
     }
 }
 

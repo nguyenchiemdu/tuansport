@@ -130,6 +130,7 @@ function initCarousel() {
 }
 function updateSelectedProduct(product) {
     $('#skuCode').html(product.code);
+    $('.product-name').html(product.fullName);
     $('#product-status').removeClass('d-none')
     $('#product-status').html(`Tình Trạng:
     <span>Còn ${product.inventories[0].onHand} sản
@@ -141,7 +142,7 @@ function removeOnHandTag() {
 function updateSelectedAttributeButton(button, mapAvailableAttr) {
     let allAttrBtn = $('.attribute-button');
     for (let btn of allAttrBtn) {
-        $(btn).addClass('d-none')
+        $(btn).parent().addClass('d-none')
 
         // if ($(btn).hasClass('btn-primary')) {
         // $(btn).removeClass('btn-primary')
@@ -154,7 +155,7 @@ function updateSelectedAttributeButton(button, mapAvailableAttr) {
         for (let btn of AttrBtns) {
             let value = $(btn).attr('value')
             if (mapAvailableAttr[key].includes(value)) {
-                $(btn).removeClass('d-none')
+                $(btn).parent().removeClass('d-none')
 
             } else {
                 if ($(btn).hasClass('btn-primary')) {

@@ -3,7 +3,7 @@ const AppString = require("../common/app_string");
 const { isValidateEmail, baseRespond, generateJWT } = require("../common/functions");
 const mongoUser = require("../models/mongo/mongo.user")
 
-class LoginController {
+class AuthController {
     // GET 
     async login (req,res) {
         if (req.headers['userInfor']!= null) 
@@ -39,6 +39,12 @@ class LoginController {
             next(error)
         }
     }
+    //GET 
+    async signout(req,res,next) {
+        // Clear cookie 
+        res.clearCookie('token')
+        res.redirect('/login')
+    }
 }
 
-module.exports = new LoginController();
+module.exports = new AuthController();
