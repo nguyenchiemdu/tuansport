@@ -1,10 +1,11 @@
 const { json } = require("express");
 const AppString = require("../common/app_string");
-const { isValidateEmail, baseRespond, generateJWT } = require("../common/functions");
+const { isValidateEmail, baseRespond, generateJWT, getQueryString } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const mongoProduct = require("../models/mongo/mongo.product")
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute");
 const mongoAttribute = require("../models/mongo/mongo.attribute");
+const mongoCategory = require("../models/mongo/mongo.category");
 
 class ProductController {
     // GET 
@@ -67,6 +68,41 @@ class ProductController {
             next(err);
         }
 
+    }
+    async productByCategory(req, res, next) {
+        try {
+        let categoryId = req.params.category
+            let sizes = JSON.parse(req.query.sizes?? '[]')
+            let min = req.query.min
+            let max = req.query.max
+            // get all children of category
+            let listCategoryid = []
+            let parent = await mongoCategory.findOne({ _id: categoryId })
+            let stack = [parent]
+            while (stack.length > 0) {
+                let node = stack.pop()
+                let categories = await mongoCategory.find({ parentId: node._id })
+                if (categories.length > 0) {
+                    stack.push(...categories)
+                }else  {
+                    listCategoryid.push(node._id)
+                }
+            }
+            let listFindCondition = listCategoryid.map(id=> {return {categoryId: id}})
+            let query = getQueryString(req)
+            let page = req.query.page ?? 1;
+            let response = await getTableDataWithPagination(req, mongoProduct, {
+                findCondition: {
+                   $or:listFindCondition,masterProductId: null,
+                   isSynced: true
+                }
+            })
+            res.render('product/product_by_category', { user: req.headers.userInfor, ...response, page, query,category:parent })
+        } catch (err) {
+            console.log(err);
+            res.status(400)
+            next(err);
+        }
     }
 }
 

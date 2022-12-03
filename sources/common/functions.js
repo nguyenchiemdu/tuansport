@@ -52,6 +52,15 @@ function isValidateEmail(email) {
             /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         );
 };
+function getQueryString(req) {
+    let query = req._parsedOriginalUrl.query ?? ''
+    if (query.length > 0) {
+        let ls = query.split('&')
+        ls = ls.filter((item) => !item.includes('page'))
+        query = ls.join('&')
+    }
+    return query
+}
 
 function removeAccent(str) { // Translate all accent characters to English characters
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -82,6 +91,11 @@ function removeNullKey (m) {
     }
     return m
 }
+function toPathString(s) {
+   s = s.toLowerCase();
+   s = s.replace(/ /g, "-");
+   return s
+}
 
 module.exports.removeAccent = removeAccent
 module.exports.hashPassword = hashPassword
@@ -93,3 +107,5 @@ module.exports.generateJWT = generateJWT
 module.exports.isValidateEmail = isValidateEmail
 module.exports.getRndInteger = getRndInteger
 module.exports.removeNullKey =removeNullKey
+module.exports.getQueryString = getQueryString
+module.exports.toPathString = toPathString
