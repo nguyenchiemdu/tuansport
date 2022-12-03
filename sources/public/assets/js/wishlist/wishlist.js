@@ -1,28 +1,4 @@
 console.log('wishlist')
-var width_default = window.innerWidth;
-
-var mobile = document.getElementById('wishlist-mobile');
-var web = document.getElementById('wishlist-web');
-
-
-if (width_default < 1200) {
-    mobile.style.display = 'block';
-    web.style.display = 'none';
-} else {
-    mobile.style.display = 'none';
-    web.style.display = 'block';
-}
-
-window.onresize = function () {
-    let width_resize = window.innerWidth
-    if (width_resize < 1200) {
-        mobile.style.display = 'block';
-        web.style.display = 'none';
-    } else {
-        mobile.style.display = 'none';
-        web.style.display = 'block';
-    }
-}
 // render wishlist
 $(document).ready(function () {
     let wishlist = window.localStorage.getItem('wishlist');
@@ -58,8 +34,8 @@ $(document).ready(function () {
                           
                         </td> <!-- Status -->
                         <td class="pe-0 me-1 ps-4 "> <!-- Icon -->
-                          <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping icon-wishlist add-item-list text-center"></i>
-                          <i skucode='${product.code}' class="ms-lg-3 ms-xl-3 ms-xxl-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x icon-wishlist remove-item-list text-center"></i>
+                          <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping action-icon add-item-list text-center"></i>
+                          <i skucode='${product.code}' class="ms-lg-3 ms-xl-3 ms-xxl-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x action-icon remove-item-list text-center"></i>
                         </td> <!-- Icon -->
                       </tr>`
                     $('#list-product-web').append(htmlTagWeb)
@@ -83,8 +59,8 @@ $(document).ready(function () {
                                        
                                         </div>
                                         <div class="col-5"> <!-- Icon -->
-                                        <i class="ms-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping icon-wishlist  hover-bigger add-item-list text-center"></i>
-                                        <i skucode='${product.code}' class="ms-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x icon-wishlist hover-bigger  remove-item-list text-center"></i>
+                                        <i class="ms-3 mb-2 mb-lg-0 mb-xl-0 mb-xxl-2 fa-solid fa-cart-shopping action-icon  hover-bigger add-item-list text-center"></i>
+                                        <i skucode='${product.code}' class="ms-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x action-icon hover-bigger  remove-item-list text-center"></i>
                                         </div>
                                     </div>
                                 </div>`
@@ -105,6 +81,19 @@ $(document).ready(function () {
                     })
                     wishlist = new Set(wishlist)
                     wishlist = Array.from(wishlist)
+
+                    if (wishlist.length > 0) {
+                        let badge = `
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                            ${wishlist.length}
+                        </span>  
+                        `
+                        $("#wishlist-nav-icon").append(badge)
+                    } else $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+
+                    if (wishlist.length == 0) {
+                        $("#wishlist-nav-icon").children('.badge').remove()
+                    }
                     window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
                     let products = $('.product-item.' + skuCode)
                     for (let item of products) {

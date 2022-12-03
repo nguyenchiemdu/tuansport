@@ -21,7 +21,7 @@
 <body style="background-color:var(--white-color)">
         <%- include ('../common/component/navigator')%>
         <div class="app-body">
-            <div id="wishlist"> <!-- Content wishlist -->
+            <div id="cart"> <!-- Content cart -->
               <section class="container py-2 pt-4 ps-3" id="breadcrumb"> <!-- Path -->
                 <nav aria-label="breadcrumb">
                   <ol class="breadcrumb">
@@ -95,7 +95,7 @@
                 </div>
                 
                 <div id="UI-web"> <!-- Web content-->
-                    <h2 class="text-start mb-3">Giỏ hàng (2)</h2>
+                    <h2 class="text-start mb-3" id="title-page">Giỏ hàng</h2>
                   <table class="table align-middle"> <!-- Table -->
                     <thead class="header-table"> <!-- Header -->
                       <tr>
@@ -114,68 +114,10 @@
                         <th scope="col"></th>
                       </tr>
                     </thead> <!-- Header -->
-                    <tbody class="product"> <!-- Item --> 
-                      <tr>
-                          <td class="product-detail"> <!-- Name item -->
-                            <img src="http://hanoimoi.com.vn/Uploads/images/phananh/2021/11/17/MU.jpg" alt="" width="120px" height="120px" style="border-radius: 20px" />
-                            <span class="d-inline-block align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
-                                <h3 class="product-size">Áo MU phiên bản cao cấp</h3>
-                                <p class="short-description">Size: XXL, Màu quỷ đỏ</p>
-                            </span>
-                          </td> <!-- Name item -->
-                          <td class="product-price text-center"> <!-- Price -->
-                            <h3>219000 đ</h3>
-                          </td> <!-- Price -->
-                          <td class="product-quantity"> <!-- Amount -->
-                            <div class="input-group mb-3 amount-box mx-auto">
-                                <span class="input-group-text change-value hover-bigger dec-value" style="border-radius: 23px 0 0 23px">
-                                    <i class="fa-solid fa-minus"></i>
-                                </span>
-                                <input type="text" class="form-control product-amount text-center shadow-none" aria-label="Amount" value="1">
-                                <span class="input-group-text change-value hover-bigger inc-value" style="border-radius: 0 23px 23px 0">
-                                    <i class="fa-regular fa-plus"></i>
-                                </span>
-                              </div>
-                          </td> <!-- Amount -->
-                          <td class="product-total-price text-center">
-                            <h3>219000 đ</h3>
-                          </td>
-                          <td class="pe-0 me-1 ps-5"> <!-- Icon -->
-                          <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x action-icon hover-bigger remove-item-list text-center" style="transform:translateY(-5px)"></i>
-                          </td> <!-- Icon -->
-                      </tr>
-                      </tbody> <!-- Item -->
-                    <tbody class="product"> <!-- Item --> 
-                        <tr>
-                            <td class="product-detail"> <!-- Name item -->
-                              <img src="http://hanoimoi.com.vn/Uploads/images/phananh/2021/11/17/MU.jpg" alt="" width="120px" height="120px" style="border-radius: 20px" />
-                              <span class="d-inline-block align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
-                                  <h3 class="product-size">Áo MU phiên bản cao cấp</h3>
-                                  <p class="short-description">Size: XXL, Màu quỷ đỏ</p>
-                              </span>
-                            </td> <!-- Name item -->
-                            <td class="product-price text-center"> <!-- Price -->
-                              <h3>219000 đ</h3>
-                            </td> <!-- Price -->
-                            <td class="product-quantity"> <!-- Amount -->
-                              <div class="input-group mb-3 amount-box mx-auto">
-                                  <span class="input-group-text change-value hover-bigger dec-value" style="border-radius: 23px 0 0 23px">
-                                      <i class="fa-solid fa-minus"></i>
-                                  </span>
-                                  <input type="text" class="form-control product-amount text-center shadow-none" aria-label="Amount" value="1">
-                                  <span class="input-group-text change-value hover-bigger inc-value" style="border-radius: 0 23px 23px 0">
-                                      <i class="fa-regular fa-plus"></i>
-                                  </span>
-                                </div>
-                            </td> <!-- Amount -->
-                            <td class="product-total-price text-center">
-                              <h3>219000 đ</h3>
-                            </td>
-                            <td class="pe-0 me-1 ps-5"> <!-- Icon -->
-                            <i class="ms-lg-3 ms-xl-3 ms-xxl-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x action-icon hover-bigger remove-item-list text-center" style="transform:translateY(-5px)"></i>
-                            </td> <!-- Icon -->
-                        </tr>
-                      </tbody> <!-- Item -->
+                    <tbody id="list-products-web">
+                    
+                    </tbody>
+                    
                   </table>
                     <div class="row pt-3"> <!--Redirect-->
                         <div class="col-3">

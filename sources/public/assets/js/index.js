@@ -15,6 +15,30 @@ const path = window.location.pathname.split('/')[1]
         }
         default: break;
     }
+
+    // Badge in wishlist + cart
+
+$(document).ready(function() {
+    let wishlist_length = JSON.parse(window.localStorage.getItem('wishlist')).length;
+    let cart_length = JSON.parse(window.localStorage.getItem('cart')).length;
+    if (wishlist_length > 0) {
+        let badge = `
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            ${wishlist_length}
+        </span>  
+        `
+        $("#wishlist-nav-icon").append(badge)
+    }
+    if (wishlist_length > 0) {
+        let badge = `
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            ${cart_length}
+        </span>  
+        `
+        $("#shopping-cart-nav-icon").append(badge)
+    }
+})
+
 // Change UI depend on screen
     
     var width_default = window.innerWidth;
