@@ -1,7 +1,7 @@
 const { response } = require("express");
 const { mongo } = require("mongoose");
 const AppString = require("../common/app_string");
-const { baseRespond } = require("../common/functions");
+const { baseRespond, getQueryString,toPathString } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
@@ -10,13 +10,14 @@ const mongoUser = require("../models/mongo/mongo.user")
 const mongoAttribute = require("../models/mongo/mongo.attribute")
 const mongoAttributeValue = require("../models/mongo/mongo.attribute_value")
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute")
+const mongoCategory = require("../models/mongo/mongo.category")
 const KiotvietAPI = require('../common/kiotviet_api');
 const ApiUrl = require("../common/api_url");
 class AdminController {
     // GET  /products
     async products(req, res) {
         let route = req.route.path;
-        let query = AdminController.getQueryString(req)
+        let query = getQueryString(req)
         let page = req.query.page ?? 1
         let pageSize = req.query.pageSize ?? 20
         let name = req.query.name;
@@ -123,12 +124,11 @@ class AdminController {
                 }, {
                     $set: { isSynced: !resProduct[0].isSynced }
                 })
-            }
-            else {
-                response = await KiotvietAPI.callApi(ApiUrl.getProductById(product.id))
-                product = response.data
-                 product = {
-                    _id : product.id,
+                // add size in to category parents
+                let res = await KiotvietAPI.callApi(ApiUrl.getProductById(product.id))
+                product = res.data
+                product = {
+                    _id: product.id,
                     skuCode: product.code,
                     name: product.name,
                     fullName: product.fullName,
@@ -136,10 +136,41 @@ class AdminController {
                     ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
                     images: product.images,
                     categoryId: product.categoryId,
-                    isSynced : product.isSynced,
-                    masterProductId: product.masterProductId?? null,
-                    attributes : product.attributes
-                } 
+                    isSynced: product.isSynced,
+                    masterProductId: product.masterProductId ?? null,
+                    attributes: product.attributes
+                }
+                let size = product.attributes.find(item => item.attributeName == 'SIZE').attributeValue
+                let parentId = product.categoryId;
+                while (parentId != null) {
+                    let category = await mongoCategory.findById(parentId)
+                    let listSize = category.listSize;
+                    listSize = listSize.filter(e => e != size)
+                    if (!resProduct[0].isSynced) listSize.push(size)
+                    await mongoCategory.updateOne({
+                        _id: parentId
+                    }, {
+                        $set: { listSize: listSize }
+                    })
+                    parentId = category.parentId
+                }
+            }
+            else {
+                response = await KiotvietAPI.callApi(ApiUrl.getProductById(product.id))
+                product = response.data
+                product = {
+                    _id: product.id,
+                    skuCode: product.code,
+                    name: product.name,
+                    fullName: product.fullName,
+                    price: product.basePrice,
+                    ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
+                    images: product.images,
+                    categoryId: product.categoryId,
+                    isSynced: product.isSynced,
+                    masterProductId: product.masterProductId ?? null,
+                    attributes: product.attributes
+                }
                 response
                     = await mongoProduct.findOneAndUpdate(
                         {
@@ -166,6 +197,21 @@ class AdminController {
                             attributeValueId: resValue._id
                         })
                     }
+                // add size in to category parents
+                let size = product.attributes.find(item => item.attributeName == 'SIZE').attributeValue
+                let parentId = product.categoryId;
+                while (parentId != null) {
+                    let category = await mongoCategory.findById(parentId)
+                    let listSize = category.listSize;
+                    listSize = listSize.filter(e => e != size)
+                    listSize.push(size)
+                    await mongoCategory.updateOne({
+                        _id: parentId
+                    }, {
+                        $set: { listSize: listSize }
+                    })
+                    parentId = category.parentId
+                }
             }
             res.json(baseRespond(true, AppString.ok, response))
         } catch (e) {
@@ -173,15 +219,6 @@ class AdminController {
             res.status(400)
             res.json(baseRespond(false, AppString.error, e))
         }
-    }
-    static getQueryString(req) {
-        let query = req._parsedOriginalUrl.query ?? ''
-        if (query.length > 0) {
-            let ls = query.split('&')
-            ls = ls.filter((item) => !item.includes('page'))
-            query = ls.join('&')
-        }
-        return query
     }
 }
 

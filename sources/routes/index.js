@@ -1,5 +1,5 @@
 var apiRouter = require("./api");
-var homeController = require("../controllers/home_controller");
+var productController = require("../controllers/product_controller");
 const auth_controller = require("../controllers/auth_controller")
 
 var adminRouter = require("./admin");
@@ -14,6 +14,7 @@ function route(app) {
   app.use("/login",authRouter)
   app.use("/api", apiRouter)
   app.use("/san-pham",productRouter)
+  app.use("/danh-muc/:category",productController.productByCategory)
   app.use("/api", apiRouter);
   app.get("/signout",auth_controller.signout)
   app.use("/",homeRouter)
