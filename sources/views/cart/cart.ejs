@@ -180,6 +180,34 @@
           <%- include ('../common/lib/jquery')%>
           <%- include ('../common/lib/feather_icon_js')%>
           <script src="/assets/js/cart/cart.js"></script>
+          <script>
+            
+// Change UI depend on screen
+            var width_default = window.innerWidth;
+
+            var mobile = document.getElementById('UI-mobile');
+            var web = document.getElementById('UI-web');
+
+
+            if (width_default <1200) {
+                mobile.style.display = 'block';
+                web.style.display = 'none';
+            } else {
+                mobile.style.display = 'none';
+                web.style.display = 'block';
+            }
+
+            window.onresize = function() {
+                let width_resize = window.innerWidth
+                if (width_resize <1200)     {
+                    mobile.style.display = 'block';
+                    web.style.display = 'none';
+                } else {
+                    mobile.style.display = 'none';
+                    web.style.display = 'block';
+                }
+            }
+          </script>
         <%- include ('../common/js/index')%>
 </body>
 

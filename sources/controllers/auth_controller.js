@@ -17,7 +17,7 @@ class AuthController {
             // Authentication 
             var ctv = await mongoUser.findOne({ username: req.body.username }) // Check username is existed 
                 if (!ctv) return res.json(baseRespond(false, AppString.invalidEmailPass))
-
+            
             var isRightPassword = await req.body.password == ctv.password // Check password 
                 if (!isRightPassword) {
                     return res.json(baseRespond(false, AppString.invalidEmailPass))

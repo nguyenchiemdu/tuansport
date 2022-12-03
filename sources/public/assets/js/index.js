@@ -19,50 +19,25 @@ const path = window.location.pathname.split('/')[1]
     // Badge in wishlist + cart
 
 $(document).ready(function() {
-    let wishlist_length = JSON.parse(window.localStorage.getItem('wishlist')).length;
-    let cart_length = JSON.parse(window.localStorage.getItem('cart')).length;
-    if (wishlist_length > 0) {
+    let wishlist = JSON.parse(window.localStorage.getItem('wishlist')) || [];
+    let cart = JSON.parse(window.localStorage.getItem('cart')) || [];
+    if (wishlist.length > 0) {
         let badge = `
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            ${wishlist_length}
+                            ${wishlist.length}
         </span>  
         `
         $("#wishlist-nav-icon").append(badge)
     }
-    if (wishlist_length > 0) {
+    if (cart.length > 0) {
         let badge = `
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            ${cart_length}
+                            ${cart.length}
         </span>  
         `
         $("#shopping-cart-nav-icon").append(badge)
     }
 })
 
-// Change UI depend on screen
-    
-    var width_default = window.innerWidth;
 
-    var mobile = document.getElementById('UI-mobile');
-    var web = document.getElementById('UI-web');
-    
-    
-    if (width_default <1200) {
-        mobile.style.display = 'block';
-        web.style.display = 'none';
-    } else {
-        mobile.style.display = 'none';
-        web.style.display = 'block';
-    }
-    
-    window.onresize = function() {
-        let width_resize = window.innerWidth
-        if (width_resize <1200)     {
-            mobile.style.display = 'block';
-            web.style.display = 'none';
-        } else {
-            mobile.style.display = 'none';
-            web.style.display = 'block';
-        }
-    }
     
