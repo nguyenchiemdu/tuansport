@@ -453,7 +453,7 @@
               <li class="nav-item dropdown">
                 <a class="btn nav-link text-color-white px-3 mb-2 mx-auto mx-xl-0 mb-xl-0 me-xl-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                   aria-expanded="false" style="background-color: var(--black-color); padding-top: 10px; padding-bottom: 10px;">
-                  <%=user.username %> 
+                  Xin chào: <%=user.username %> 
                 </a>
                 <ul class="dropdown-menu">
                   <li><a class="dropdown-item" href="/signout" id="signout">Đăng xuất</a></li>
@@ -462,16 +462,13 @@
               </li>
               <% } %>
                 <li class="nav-item nav-icon">
-                  <a href="/wishlist"><i data-feather="heart"
-                      class="nav-link feather-46 mb-2 mb-xl-0 me-xl-4 fs-4"></i></a>
+                  <a href="/wishlist" id="wishlist-nav-icon" class="d-flex position-relative mb-2 mb-xl-0 me-xl-4 fs-4">
+                    <i data-feather="heart" class="nav-link feather-46 position-relative"></i>
+                  </a>
                 </li>
                 <li class="nav-item nav-icon ">
-                  <a href="" class="shopping-cart d-flex position-relative mb-2 mb-xl-0 me-xl-4 fs-4 ">
+                  <a href="/cart" id="shopping-cart-nav-icon" class="shopping-cart d-flex position-relative mb-2 mb-xl-0 me-xl-4 fs-4 ">
                     <i data-feather="shopping-cart" class="nav-link feather-46 position-relative"></i>
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                      5
-                      <span class="visually-hidden">unread messages</span>
-                    </span>
                   </a>
                 </li>
         </ul>

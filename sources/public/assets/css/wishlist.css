@@ -1,22 +1,7 @@
-
-
-#wishlist .icon-wishlist{
-    border-radius: 23px;
-    padding: 11px 14px;
-    font-size:24px;
-    transition: transform .2s; 
-}
-
-
 #wishlist .add-item-list{
     padding: 11px 9.5px;
-}
-
-#wishlist .icon-wishlist:hover{
-    cursor: pointer;
-}
-#wishlist .add-item-list{
     background-color: var(--primary-color);
+
 }
 
 #wishlist .status{

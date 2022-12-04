@@ -21,7 +21,9 @@ class HomeController {
             user: req.headers.userInfor
         })
     }
-
+    async cart(req, res) {
+        res.render('cart/cart', { user: req.headers.userInfor })
+    }
     async wishlist(req, res) {
         res.render("wishlist/wishlist", { user: req.headers.userInfor })
     }

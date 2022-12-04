@@ -41,7 +41,7 @@
 
         <section class="container py-2 pb-5 text-center align-middle">
           <!-- Main content wishlist -->
-          <div id="wishlist-mobile" style="display: none">
+          <div id="UI-mobile" style="display: none">
             <!-- Mobile content-->
             <h2 class="text-center align-middle mb-4">Wishlist</h2>
             <div id="list-product-mobile" style="border-top: 1px solid var(--dark-gray-color)">
@@ -50,7 +50,7 @@
             <div class="my-5"></div>
           </div>
 
-          <div id="wishlist-web" style="display: block">
+          <div id="UI-web" style="display: block">
             <h2 class="text-start mb-4">Wishlist</h2>
             <table class="table align-middle">
               <!-- Table -->
@@ -85,7 +85,34 @@
       <%- include ('../common/lib/bootstrap_js')%>
         <%- include ('../common/lib/jquery')%>
           <%- include ('../common/lib/feather_icon_js')%>
-            <script src="/assets/js/wishlist/wishlist.js"></script>
+          <script src="/assets/js/wishlist/wishlist.js"></script>
+          <script>
+            
+// Change UI depend on screen 
+            var width_default = window.innerWidth;
 
+            var mobile = document.getElementById('UI-mobile');
+            var web = document.getElementById('UI-web');
+
+
+            if (width_default <1200) {
+                mobile.style.display = 'block';
+                web.style.display = 'none';
+            } else {
+                mobile.style.display = 'none';
+                web.style.display = 'block';
+            }
+
+            window.onresize = function() {
+                let width_resize = window.innerWidth
+                if (width_resize <1200)     {
+                    mobile.style.display = 'block';
+                    web.style.display = 'none';
+                } else {
+                    mobile.style.display = 'none';
+                    web.style.display = 'block';
+                }
+            }
+          </script>
             <%- include ('../common/js/index')%>
 </body>

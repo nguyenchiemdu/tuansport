@@ -23,6 +23,9 @@ a{
     color: var(--dark-gray-color);
 }
 
+input{
+    outline: 0;
+}
 
 /* reuse this color template in ejs template engine */
 :root {
@@ -159,14 +162,43 @@ h6 {
 }
 /* Navlink style */
 /* Link style */
-/* Sellecty ammount button */
+/* Selecty amount button */
+.amount-box{
+    border-radius: 23px!important;
+    background-color: var(--dark-gray-color);
+    width: 180px;
+    height:48px;
+}
+
+input.product-amount {
+    font-size: var(--heading5-font-size);
+    font-weight: var(--heading5-font-weight);
+    background: var(--light-gray-color);
+}
+
+input.product-amount:focus {
+    background: var(--light-gray-color);
+    outline: none;
+}
+
+
+.amount-box .change-value{
+    background: var(--light-gray-color);
+    font-size: var(--heading5-font-size);
+    font-weight: var(--heading5-font-weight);
+}
+
+.amount-box .change-value:hover{
+    cursor: pointer;
+}
+
 
 /* Checkbox */
 /* Ratio */
 /* Switch */
 /* Input */
 .input-box {
-    /* height: 46px; */
+    height: 46px;
     border-radius: 23px;
     background-color: var(--white-color);
 }
@@ -231,6 +263,26 @@ footer{
     transition: all 0.3s ease-in-out;
 }
 
+
+/* Wishlist + Cart */
+
+.remove-item-list{
+    background-color: var(--tertiary-color);
+}
+
+
+.action-icon{
+    border-radius: 23px;
+    padding: 11px 14px;
+    font-size:24px;
+    transition: transform .2s; 
+}
+
+.action-icon:hover{
+    cursor: pointer;
+}
+
+/* Responsive UI mobile */
 @media screen and (max-width: 1199px) {
     .status-mobile{
         border-radius: 16px;
@@ -238,16 +290,16 @@ footer{
         padding-top: 5px;
     }
 
+
+
 }
+
+
+/* Responsive UI screen between 1200px to 1400px */
+
 
 @media screen and (max-width: 1399px) {
 /* footer .element{
         border-bottom: 1px solid var(--dark-gray-color)!important;
     } */
-}
-
-/* Wishlist + Cart */
-
-.remove-item-list{
-    background-color: var(--tertiary-color);
 }

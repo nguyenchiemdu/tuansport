@@ -141,8 +141,17 @@ $(document).ready(function () {
             wishlist.push(skuCode)
             wishlist = new Set(wishlist)
             wishlist = Array.from(wishlist)
-            console.log(JSON.stringify(wishlist))
             window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+            if (wishlist.length > 0) {
+                let badge = `
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    ${wishlist.length}
+                </span>  
+                `
+                $("#wishlist-nav-icon").append(badge)
+            }
+            $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+            
         } else {
             button.removeClass('btn-primary')
             button.addClass('btn-light')
@@ -161,8 +170,12 @@ $(document).ready(function () {
             })
             wishlist = new Set(wishlist)
             wishlist = Array.from(wishlist)
-            console.log(JSON.stringify(wishlist))
             window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+            if (wishlist.length == 0) {
+                $("#wishlist-nav-icon").children('.badge').remove()
+            }
+            $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+
         }
     })
     // update porduct that in wishlists
