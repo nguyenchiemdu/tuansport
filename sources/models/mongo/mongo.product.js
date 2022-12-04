@@ -10,6 +10,7 @@ const Product = new Schema({
     skuCode: { type: String, required: true },
     price: { type: Number, required: true },
     ctvPrice: { type: Number, required: true },
+    salePrice: { type: Number,default:null},
     images: { type: Array, required: true },
     categoryId : {type: Number,required: true, ref: 'Category'},
     size: { type: String, required: true },

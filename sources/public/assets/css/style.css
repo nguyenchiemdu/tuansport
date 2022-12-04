@@ -22,6 +22,10 @@ a{
 .text-color-dark-gray{
     color: var(--dark-gray-color);
 }
+.text-bg-primary{
+    color: var(--black-color)!important;
+    background-color: var(--primary-color)!important;
+}
 
 input{
     outline: 0;

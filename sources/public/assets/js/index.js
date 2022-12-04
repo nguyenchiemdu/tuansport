@@ -98,5 +98,115 @@ $(document).ready(function() {
     }
 })
 
+// handle event for produt items
+$(document).ready(function () {
+    $(".product-item").on('click', function (e) {
+        let skuCode = ($(this).attr('skucode'))
+        window.location.href = '/san-pham/' + skuCode;
+    })
+    // tap to toast to go to cart
+    $('.go-to-cart').on('click', function (e) {
+        window.location.href = '/cart'
+    })
+    $('.btn-cart').on('click', function (e) {
+        e.stopPropagation();
+        
+        let button = $(this)
+        let skuCode = button.attr('skucode')
+        if (skuCode.includes('Master')){
+            $('#exampleModal').modal('show')
+            return
+        }
+        let cartItems = JSON.parse(window.localStorage.getItem('cart')) ?? []
+        let index = cartItems.findIndex(item => item.id == skuCode)
+        if (index<0) {
+            cartItems.push({id: skuCode,quantity:1})
+        } else {
+            cartItems[index].quantity = parseInt(cartItems[index].quantity) +1
+        }
+        window.localStorage.setItem('cart', JSON.stringify(cartItems))
+        
+        if (cartItems.length > 0) {
+            let badge = `
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                ${cartItems.length}
+            </span>  
+            `
+            $("#shopping-cart-nav-icon").append(badge)
+        }
+        $("#shopping-cart-nav-icon").children('.badge').html(cartItems.length)
+        $('#add-to-cart-success').toast('show')
+    })
+    $('.btn-wishlist').on('click', function (e) {
+        e.stopPropagation();
+        let button = $(this)
+        if (button.hasClass('btn-light')) {
+            button.removeClass('btn-light')
+            button.addClass('btn-primary')
+            let skuCode = button.attr('skucode')
+            let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+            for (let button of sameSkuCodeButtons) {
+                $(button).removeClass('btn-light')
+                $(button).addClass('btn-primary')
+            }
+            let wishlist = window.localStorage.getItem('wishlist');
+            wishlist = JSON.parse(wishlist);
+           
+            if (wishlist == null) wishlist = [];
+            wishlist.push(skuCode)
+            wishlist = new Set(wishlist)
+            wishlist = Array.from(wishlist)
+            window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+            if (wishlist.length > 0) {
+                let badge = `
+                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                    ${wishlist.length}
+                </span>  
+                `
+                $("#wishlist-nav-icon").append(badge)
+            }
+            $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+            
+        } else {
+            button.removeClass('btn-primary')
+            button.addClass('btn-light')
+            let skuCode = button.attr('skucode')
+            let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+            for (let button of sameSkuCodeButtons) {
+                $(button).removeClass('btn-primary')
+                $(button).addClass('btn-light')
+            }
+            let wishlist = window.localStorage.getItem('wishlist');
+            wishlist = JSON.parse(wishlist);
+           
+            if (wishlist == null) wishlist = [];
+            wishlist = wishlist.filter(function(item) {
+                return item !== skuCode
+            })
+            wishlist = new Set(wishlist)
+            wishlist = Array.from(wishlist)
+            window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+            if (wishlist.length == 0) {
+                $("#wishlist-nav-icon").children('.badge').remove()
+            }
+            $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+
+        }
+    })
+    // update porduct that in wishlists
+    let wishlist = window.localStorage.getItem('wishlist');
+    wishlist = JSON.parse(wishlist);
+    if (wishlist == null) wishlist = []
+
+    for (let skuCode of wishlist) {
+        let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+        if (sameSkuCodeButtons==null) sameSkuCodeButtons = []
+            for (let button of sameSkuCodeButtons) {
+                $(button).removeClass('btn-light')
+                $(button).addClass('btn-primary')
+            }
+    }
+})
+
 
     
