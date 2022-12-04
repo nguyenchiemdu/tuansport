@@ -1,7 +1,8 @@
 const { response } = require("express");
 const { mongo } = require("mongoose");
+const { default: axios } = require("axios");
 const AppString = require("../common/app_string");
-const { baseRespond, getQueryString,toPathString } = require("../common/functions");
+const { baseRespond, getQueryString, toPathString } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
@@ -13,6 +14,7 @@ const mongoProductAttribute = require("../models/mongo/mongo.product_attribute")
 const mongoCategory = require("../models/mongo/mongo.category")
 const KiotvietAPI = require('../common/kiotviet_api');
 const ApiUrl = require("../common/api_url");
+const KiotVietCategory = require("../models/kiotviet/kiotvet.category");
 class AdminController {
     // GET  /products
     async products(req, res) {
@@ -39,7 +41,7 @@ class AdminController {
         let route = req.route.path;
         let pageSize = req.query.pageSize ?? 20
         let username = req.query.username ?? ''
-        let query = AdminController.getQueryString(req)
+        let query = getQueryString(req)
         // let page = req.query.page ?? 1
         // let pageSize = req.query.pageSize ?? 20
         let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoUser, { findCondition: { "username": { $regex: username }, 'role': 'Cộng tác viên' } })
@@ -134,25 +136,43 @@ class AdminController {
                     fullName: product.fullName,
                     price: product.basePrice,
                     ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
+                    salePrice: product.priceBooks.find(e => e.priceBookName == 'giá khuyến mãi').price,
                     images: product.images,
                     categoryId: product.categoryId,
                     isSynced: product.isSynced,
                     masterProductId: product.masterProductId ?? null,
                     attributes: product.attributes
                 }
-                let size = product.attributes.find(item => item.attributeName == 'SIZE').attributeValue
+                let size = product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue
                 let parentId = product.categoryId;
                 while (parentId != null) {
                     let category = await mongoCategory.findById(parentId)
-                    let listSize = category.listSize;
-                    listSize = listSize.filter(e => e != size)
-                    if (!resProduct[0].isSynced) listSize.push(size)
-                    await mongoCategory.updateOne({
-                        _id: parentId
-                    }, {
-                        $set: { listSize: listSize }
-                    })
-                    parentId = category.parentId
+                    if (category == null) {
+                        category = await KiotVietCategory.getCategoryById(parentId)
+                        if (category != null) {
+                            await mongoCategory.create({
+                                _id: category.categoryId,
+                                categoryName: category.categoryName,
+                                parentId: 0
+                            })
+                            category = {
+                                _id: response.categoryId,
+                                categoryName: response.categoryName,
+                                parentId: 0
+                            }
+                        }
+                    }
+                    if (category != null && size != null) {
+                        let listSize = category.listSize ?? [];
+                        listSize = listSize.filter(e => e != size)
+                        if (!resProduct[0].isSynced) listSize.push(size)
+                        await mongoCategory.updateOne({
+                            _id: parentId
+                        }, {
+                            $set: { listSize: listSize }
+                        })
+                    }
+                    parentId = category?.parentId
                 }
             }
             else {
@@ -165,6 +185,7 @@ class AdminController {
                     fullName: product.fullName,
                     price: product.basePrice,
                     ctvPrice: product.priceBooks.find(e => e.priceBookName == 'GIÁ CTV').price,
+                    salePrice: product.priceBooks.find(e => e.priceBookName == 'giá khuyến mãi')?.price,
                     images: product.images,
                     categoryId: product.categoryId,
                     isSynced: product.isSynced,
@@ -198,19 +219,36 @@ class AdminController {
                         })
                     }
                 // add size in to category parents
-                let size = product.attributes.find(item => item.attributeName == 'SIZE').attributeValue
+                let size = product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue
                 let parentId = product.categoryId;
                 while (parentId != null) {
                     let category = await mongoCategory.findById(parentId)
-                    let listSize = category.listSize;
-                    listSize = listSize.filter(e => e != size)
-                    listSize.push(size)
-                    await mongoCategory.updateOne({
-                        _id: parentId
-                    }, {
-                        $set: { listSize: listSize }
-                    })
-                    parentId = category.parentId
+                    if (category == null) {
+                        category = await KiotVietCategory.getCategoryById(parentId)
+                        if (category != null) {
+                            await mongoCategory.create({
+                                _id: category.categoryId,
+                                categoryName: category.categoryName,
+                                parentId: 0
+                            })
+                            category = {
+                                _id: response.categoryId,
+                                categoryName: response.categoryName,
+                                parentId: 0
+                            }
+                        }
+                    }
+                    if (category != null && size != null) {
+                        let listSize = category.listSize ?? [];
+                        listSize = listSize.filter(e => e != size)
+                        listSize.push(size)
+                        await mongoCategory.updateOne({
+                            _id: parentId
+                        }, {
+                            $set: { listSize: listSize }
+                        })
+                    }
+                    parentId = category?.parentId
                 }
             }
             res.json(baseRespond(true, AppString.ok, response))

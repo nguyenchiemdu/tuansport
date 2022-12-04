@@ -560,7 +560,12 @@
                   aria-expanded="false" style="background-color: var(--black-color); padding-top: 10px; padding-bottom: 10px;">
                   Xin chào: <%=user.username %> 
                 </a>
+               
                 <ul class="dropdown-menu">
+                  <% if (user.role == 'Admin') {%>
+                    <li><a class="dropdown-item" href="/admin" id="signout">Trang admin</a></li>
+                    
+                  <%}%> 
                   <li><a class="dropdown-item" href="/signout" id="signout">Đăng xuất</a></li>
                   
                 </ul>

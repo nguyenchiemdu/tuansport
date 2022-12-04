@@ -35,8 +35,8 @@
                                                         <li class="breadcrumb-item " aria-current="page"><a
                                                                         style="color:var(--dark-gray-color)"
                                                                         href="/san-pham">Sản phẩm</a></li>
-                                                        <li class="breadcrumb-item active product-name" aria-current="page"
-                                                                style="color:var(--primary-color)">
+                                                        <li class="breadcrumb-item active product-name"
+                                                                aria-current="page" style="color:var(--primary-color)">
                                                                 <%= product.name %>
                                                         </li>
                                                 </ol>
@@ -86,16 +86,20 @@
                                                                                         mapAttributes[key]){%>
                                                                                         <div class="col mb-3">
                                                                                                 <button type="button"
-                                                                                                class="btn btn-light px-3 py-2 attribute-button <%=attribute.attributeId%>" attributeId="<%=attribute.attributeId%>" value="<%=attribute.value%>">
-                                                                                                <%=attribute.value%>
-                                                                                        </button>        
+                                                                                                        class="btn btn-light px-3 py-2 attribute-button <%=attribute.attributeId%>"
+                                                                                                        attributeId="<%=attribute.attributeId%>"
+                                                                                                        value="<%=attribute.value%>">
+                                                                                                        <%=attribute.value%>
+                                                                                                </button>
                                                                                         </div>
                                                                                         <%}%>
                                                                         </div>
                                                                 </div>
                                                                 <%}%>
                                                                         <div class="mt-4">
-                                                                                <h5 id="product-status" class="field-name d-none">Tình Trạng:
+                                                                                <h5 id="product-status"
+                                                                                        class="field-name d-none">Tình
+                                                                                        Trạng:
                                                                                         <span>Còn <%=1%> sản
                                                                                                         phẩm</span>
                                                                                 </h5>
@@ -116,7 +120,8 @@
                                                                                         </div>
                                                                                         <div
                                                                                                 class="col col-sm-12 col-md-8">
-                                                                                                <button class="btn btn-outline-primary my-sm-2"
+                                                                                                <button skucode="<%=product.skuCode%>Master"
+                                                                                                        class="btn btn-cart btn-outline-primary my-sm-2"
                                                                                                         type="button">Thêm
                                                                                                         vào giỏ
                                                                                                         hàng</button>
@@ -156,7 +161,8 @@
                                                                                         </div>
                                                                                         <div
                                                                                                 class="col-md-auto col-sm-12 d-flex my-3">
-                                                                                                <button skucode="<%=product.skuCode %>" class="btn btn-light btn-wishlist <%=product.skuCode%> rounded-circle px-2 py-2"
+                                                                                                <button skucode="<%=product.skuCode %>"
+                                                                                                        class="btn btn-light btn-wishlist <%=product.skuCode%> rounded-circle px-2 py-2"
                                                                                                         type='button'>
                                                                                                         <img
                                                                                                                 src="/assets/images/svg/love.svg" /></button>
@@ -173,15 +179,16 @@
                                                                                         <ul class="nav nav-tabs">
                                                                                                 <li class="nav-item ">
                                                                                                         <a class="nav-link active description-tab"
-                                                                                                                aria-current="page" style="background-color: var(--white-color)">
+                                                                                                                aria-current="page"
+                                                                                                                style="background-color: var(--white-color)">
                                                                                                                 <h4>Mô tả
                                                                                                                         sản
                                                                                                                         phẩm
                                                                                                                 </h4>
                                                                                                         </a>
-                                                                                                        
+
                                                                                                 </li>
-                                                                                                
+
                                                                                         </ul>
                                                                                         <div id="description"
                                                                                                 class="mt-4">
@@ -257,7 +264,8 @@
                                         <div class="owl-carousel related-product mt-3">
                                                 <% for (let item of data){ %>
                                                         <div class="p-3">
-                                                                <%- include('../common/component/product_item.ejs',{item: item}) %> 
+                                                                <%- include('../common/component/product_item.ejs',{item:
+                                                                        item}) %>
                                                         </div>
                                                         <% } %>
                                         </div>
@@ -266,11 +274,48 @@
                         </section>
                         <div class="my-3 my-md-5"></div>
                 </div>
+                <!--Modal notification -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                        <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Lỗi</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                                Hãy chọn loại sản phẩm bạn muốn mua trước khi thêm vào giỏ hàng!
+                                        </div>
+                                        <div class="modal-footer">
+
+                                                <button type="button" data-bs-dismiss="modal"
+                                                        class="btn btn-primary">OK</button>
+                                        </div>
+                                </div>
+                        </div>
+                </div>
+                <!-- Toast notification-->
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                        <div id="add-to-cart-success" class="toast text-bg-primary" role="alert" aria-live="assertive" aria-atomic="true">
+                                <div class="toast-header">
+                                        <img src="/assets/images/logo.png" width="20px" class="rounded me-2" alt="logo">
+                                        <strong class="me-auto">tuansportdanang</strong>
+                                        <small>bây giờ</small>
+                                        <button type="button" class="btn-close" data-bs-dismiss="toast"
+                                                aria-label="Close"></button>
+                                </div>
+                                <div class="toast-body go-to-cart">
+                                        Đã thêm sản phẩm vào giỏ hàng! <br/>
+                                        <a href="/cart" style="color: white"> Đi đến giỏ hàng</a>
+                                </div>
+                        </div>
+                </div>
                 <%- include ('../common/component/footer')%>
 </body>
 <script>
-        var mappedProductAttributes =JSON.parse(`<%-JSON.stringify(mappedProductAttributes)%>`) ;
-        var mapAttributes =JSON.parse(`<%-JSON.stringify(mapAttributes)%>`) ;
+        var mappedProductAttributes = JSON.parse(`<%-JSON.stringify(mappedProductAttributes)%>`);
+        var mapAttributes = JSON.parse(`<%-JSON.stringify(mapAttributes)%>`);
 </script>
 <%- include ('../common/lib/bootstrap_js')%>
         <%- include ('../common/lib/jquery')%>

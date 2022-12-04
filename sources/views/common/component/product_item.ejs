@@ -1,4 +1,4 @@
-<div code='<%=item.skuCode%> '
+<div skucode='<%=item.skuCode%> '
     class="product-item col hover-bigger">
     <div class="rounded-4 ratio ratio-1x1"
             style="background-image: url('<%=item.images[0]%>');background-size:cover">
@@ -25,19 +25,20 @@
             <div class="row row-cols-2">
 
                     <div class="col-8">
-
+                        <% if (item.salePrice!= null){ %> 
                             <h6
                                     style="color: var(--dark-gray-color)">
                                     <s>
-                                            $150.00
+                                            <%=item.salePrice%>đ
                                     </s>
                             </h6>
+                            <% } %> 
                     </div>
                     <div class=" col-4 position-relative ">
                             <div class="p-2"
                                     style="position:absolute;bottom: 0;right: 12px;">
-                                    <button
-                                            class="btn btn-cart btn-light px-3 py-3">
+                                    <button skucode="<%=item.skuCode%>"
+                                            class="btn btn-cart btn-light px-3 py-3 d-none">
                                             <img class="d-block"
                                                     src="/assets/images/svg/cart.svg"
                                                     style="width:21px;height: auto;" />

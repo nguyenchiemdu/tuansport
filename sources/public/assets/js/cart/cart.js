@@ -84,7 +84,7 @@ $(document).ready(async function() {
                     let isHasProduct = res.length == 0
                     
                     let htmlTagWeb = `  
-                      <tr class="product ${product.code}">  <!-- Item --> 
+                      <tr skucode="${product.code}"class="product product-item ${product.code}">  <!-- Item --> 
                           <td class="product-detail"> <!-- Name item -->
                             <img src="${product.images[0]}" alt="" width="120px" height="120px" style="border-radius: 20px" />
                             <span class="d-inline-block align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
@@ -127,6 +127,7 @@ $(document).ready(async function() {
 
         // Remove item
         $('.remove-item-list').on('click', function(e) {
+            e.stopPropagation()
             let skuCode = $(this).attr('skucode')
             let cartItems = JSON.parse(window.localStorage.getItem('cart')) || []
             cartItems = cartItems.filter(function(item) { 
@@ -160,6 +161,12 @@ $(document).ready(async function() {
             //     $(item).addClass('d-none')
             // }
         })  
+        // Go to product detail page
+        $('.product-item').on('click', function (e) {
+            let btn = $(this)
+            let skuCode = btn.attr('skucode')
+            window.location.href = '/san-pham/' + skuCode;
+        })
 
 
         // Change the number of items
