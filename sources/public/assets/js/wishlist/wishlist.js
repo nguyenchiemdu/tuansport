@@ -20,12 +20,14 @@ $(document).ready(function () {
                     let isOutOfStock = product.inventories[0].onHand == 0
                     let htmlTagWeb = `
                     <tr skucode='${product.code}' class=" product-item ${product.code}">
-                        <td> <!-- Name item -->
+                        <td> <!-- Image item -->
                           <img src="${product.images[0]}" alt="" width="120px" height="120px" style="border-radius: 20px" />
-                          <span class="d-inline-block align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4 short-description">
-                            <h3 class="text-start short-description">${product.name}</h3>
-                          </span>
-                        </td> <!-- Name item -->
+                        </td> <!-- Image item -->
+                        <td> <!-- Name item -->
+                            <div class="product-name align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
+                                <h3 class="text-start short-description">${product.name}</h3>
+                            </div>
+                        </td>  <!-- Name item -->
                         <td class="text-center"> <!-- Price -->
                           <h3>${product.basePrice}đ</h3>
                         </td> <!-- Price -->
