@@ -11,5 +11,6 @@ class ApiUrl {
         return `https://public.kiotapi.com/products/code/${skuCode}`;
     }
     static getAttributes = 'https://public.kiotapi.com/attributes/allwithdistinctvalue';
+    static createOrder = 'https://public.kiotapi.com/orders';
 }
 module.exports = ApiUrl

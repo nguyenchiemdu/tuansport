@@ -41,7 +41,7 @@ class KiotvietAPI {
     }
 
   }
-  static async  callApi(url, {method = 'get',body,params = {}} = {}) {
+  static async  callApi(url, {method = 'get',body,params = {},headers = {}} = {}) {
     try {
         let accessToken = await KiotvietAPI.token();
         let response = await axios({
@@ -49,7 +49,8 @@ class KiotvietAPI {
             url:url,
             headers: {
                 Authorization: `Bearer ${accessToken}`,
-                Retailer: process.env.RETAILER
+                Retailer: process.env.RETAILER,
+                ...headers
             },
             data: body,
             params:params
