@@ -27,6 +27,9 @@ class HomeController {
     async wishlist(req, res) {
         res.render("wishlist/wishlist", { user: req.headers.userInfor })
     }
+    async checkout(req, res) {
+        res.render("checkout/checkout", { user: req.headers.userInfor})
+    }
 }
 
 module.exports = new HomeController();

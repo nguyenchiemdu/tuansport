@@ -1,0 +1,109 @@
+<div id="app-body">
+    <div id="container checkout">
+        <section class="container py-2 pt-4 ps-3" id="breadcrumb"> <!-- Path -->
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item text-decoration-none"><a href="/" class="text-color-dark-gray"
+                    style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight);">
+                    Trang chủ
+                  </a></li>
+                <li class="breadcrumb-item active text-color-primary" aria-current="page">
+                  <span
+                    style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight)">Thanh toán</span>
+                </li>
+              </ol>
+            </nav>
+          </section>
+
+          <section class="container py-2 pb-5 align-middle">
+            <form action="" method="post">
+                <div class="checkout-content">
+                    <h2 class="align-middle mb-4" id="title-page">Đặt hàng</h2>
+                    <div class="row">
+                        <div class="col-lg-6 col-xl-6 col-xxl-6">
+                            <h3>Thông tin thanh toán</h3>
+                            <div class="row"> <!-- Name -->
+                                <div class="col-6">
+                                    <label class="py-2 ms-2" for="first-name" >Tên <span class="text-color-tertiary">*</span></label>
+                                    <input type="text" class="ps-3 input-box w-100" aria-required="true" name="firstname" placeholder="...">
+                                </div>
+                                <div class="col-6">
+                                    <label class="py-2 ms-2" for="last-name" >Họ <span class="text-color-tertiary">*</span></label>
+                                    <input type="text" class="ps-3 input-box w-100" aria-required="true" name="lastname" placeholder="...">
+                                </div>
+                            </div>
+                            <div class=> <!-- Company name-->
+                                <label class="py-2 ms-2"  for="company-name">Tên công ty (tuỳ chọn)</label>
+                                <input type="text" class="ps-3 input-box w-100" name="company-name" placeholder="...">
+                            </div>
+                            <div class="mt-2 ms-2"> <!--Country-->
+                                <p class="py-1 m-0">Quốc gia/Khu vực <span class="text-color-tertiary">*</span></p>
+                                <h4 class="ms-3">Việt Nam</h4>
+                            </div> 
+                            <div> <!--Address-->
+                                <label class="py-2 ms-2"  for="address">Địa chỉ <span class="text-color-tertiary">*</span></label>
+                                <input type="text" class="ps-3 input-box w-100" aria-required="true" name="address" placeholder="...">
+                            </div>
+                            <div> <!--ZIP code-->
+                                <label class="py-2 ms-2"  for="zip-code">Mã bưu điện (tuỳ chọn)</label>
+                                <input type="text" class="ps-3 input-box w-100" name="zip-code" placeholder="...">
+                            </div>
+                            <div>   <!-- City-->
+                                <label class="py-2 ms-2"  for="city">Tỉnh/thành phố <span class="text-color-tertiary">*</span></label>
+                                <input type="text" class="ps-3 input-box w-100" aria-required="true" name="city" placeholder="...">
+                            </div>
+                            <div> <!--Phone number-->
+                                <label class="py-2 ms-2"  for="phone-number">Số điện thoại <span class="text-color-tertiary">*</span></label>
+                                <input type="text" class="ps-3 input-box w-100" aria-required="true" name="phone-number" placeholder="...">
+                            </div>
+                            <div> <!-- Email -->
+                                <label class="py-2 ms-2"  for="email">Email</label>
+                                <input type="text" class="ps-3 input-box w-100" name="email" placeholder="...">
+                            </div>
+                            <div> <!-- More info -->
+                                <label class="py-2 ms-2"  for="more-info">Thông tin thêm</label>
+                                <textarea type="text" class="ps-3 input-box w-100 pt-2" name="more-info" style="resize: none;height: 122px;" placeholder="..."></textarea>
+                            </div>
+                        </div>
+                        <div class="offset-lg-1 offset-xl-1 offset-xxl-1 col-lg-5 col-xl-5 col-xxl-5" id="transaction"> <!--Tóm tắt đơn hàng-->
+                            <div class="row mb-4">
+                                <h3 class="text-start">Tóm tắt đơn hàng</h3>
+                            </div>
+                            <div class="row py-2 ">
+                                <h4 class="col-7 text-start">Tạm tính</h4>
+                                <h4 class="text-end col-5 total-value" id="transaction-product-price"></h4>
+                            </div>
+                            <div class="row py-3">
+                                <h4 class="col-7 text-start">Khuyến mãi</h4>
+                                <h4 class="text-end col-5 total-value" id="voucher-discount"></h4>
+                            </div>
+                            <div class="border my-3"></div>
+                            <div class="row py-3">
+                                <h4 class="col-7 text-start">Tổng</h4>
+                                <h4 class="text-end col-5 total-value" id="transaction-price"></h4>
+                            </div>
+                            <div class="form-check py-3">
+                                <input class="form-check-input" type="radio" name="payment" value="banking" id="banking" checked>
+                                <label class="form-check-label ms-2" for="payment">
+                                    <h4>Chuyển khoản ngân hàng</h4>
+                                    <p class="ms-2">Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần Nội dung thanh toán. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển.</p>
+                                </label>
+                            </div>
+                            <div class="form-check pt-2 pb-3">
+                                <input class="form-check-input" type="radio" name="payment" value="direct" id="direct">
+                                <label class="form-check-label ms-2" for="direct">
+                                    <h4>Trả tiền mặt khi nhận hàng</h4>
+                                    <p class="ms-2">Trả tiền mặt khi giao hàng</p>
+                                </label>
+                            </div>
+                            <div class="row pt-2">
+                                <a href="#" class="btn btn-primary w-100 transaction-btn">Thanh toán</a>
+                            </div>
+                        </div> <!-- Tóm tắt đơn hàng-->
+                    </div>
+                </div>
+            </form>
+                
+          </section>
+    </div>
+</div>

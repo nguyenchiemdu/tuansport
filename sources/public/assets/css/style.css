@@ -199,12 +199,22 @@ input.product-amount:focus {
 
 /* Checkbox */
 /* Ratio */
+.form-check-input:checked{
+    background-color: var(--primary-color)!important;
+    border: var(--primary-color)!important;
+    border-radius: 50%;
+}
+.form-check-input{
+    border: 1px solid var(--primary-color);
+}
 /* Switch */
 /* Input */
 .input-box {
     height: 46px;
     border-radius: 23px;
-    background-color: var(--white-color);
+    background-color: var(--light-gray-color);
+    border:0;
+    color: var(--dark-gray-color);
 }
 
 
