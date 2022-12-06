@@ -5,19 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin</title>
   <%- include ('../common/lib/bootstrap_css')%>
+  <%- include ('../common/css/admin_css')%>
 
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
 </head>
 
 <body>
-  <div class="wrapper">
+  <div class="wrapper min-vh-100">
     <!-- Sidebar  -->
-    <%- include ('admin_navbar')%>
+    <div class="d-flex flex-column h-100">
+      <%- include ('admin_navbar')%>
       <!-- Page Content  -->
       <div id="content">
-        <div class="container" style="text-align: center">
+        <div class="container min-vh-100" style="text-align: center">
           <h3>Danh sách sản phẩm</h3>
-          <div class="row justify-content-end">
+          <div class="row row-cols-md-2 row-cols-md-1 justify-content-between">
+            <div clas="col col-md-8 d-flex content-left"style="text-align: left">
+              
+              <button class="btn btn-primary sync-all" type="button">
+                Đồng bộ tất cả
+              </button>
+              <button class="btn btn-danger unsync-all" type="button">
+                Huỷ đồng bộ tất cả
+              </button>
+            </div>
             <div class="col-md-4 col-sm-12">
               <div class="input-group mb-3">
                 <input type="text" id='search-text' value="<%=name%>" class="form-control"
@@ -27,7 +38,7 @@
               </div>
             </div>
           </div>
-          <div class="h-75 overflow-auto">
+          <div class="row justify-content-center bg-blue flex-grow-1">
             <table class="table table-bordered table-striped table-hover">
               <thead class="table-dark ">
                 <tr>
@@ -79,6 +90,7 @@
           </div>
         </div>
       </div>
+    </div>
   </div>
   <!-- /#wrapper -->
 </body>

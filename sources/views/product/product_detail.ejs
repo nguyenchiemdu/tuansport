@@ -8,7 +8,6 @@
                                price=  item.ctvPrice
                        } else 
                        price =  item.price;
-       
                        return priceFormat.format(price)
                }
         %>
@@ -87,7 +86,11 @@
                                                                                 <%=product.skuCode%>Master
                                                                         </span></h5>
                                                         </div>
-                                                        <% for (let key in mapAttributes) {%>
+                                                        <% 
+                                                        let isNoAttribute = true;
+                                                        for (let key in mapAttributes) {
+                                                                if (mapAttributes[key].length>0) isNoAttribute = false
+                                                                %>
                                                                 <div class="mt-4">
 
                                                                         <h3>
@@ -126,12 +129,11 @@
                                                                                                 <p
                                                                                                         class="sale-price text-decoration-line-through">
                                                                                                         <%=priceFormat.format(product.salePrice)%>
-                                                                                                                đ
                                                                                                 </p>
                                                                                         </div>
                                                                                         <div
                                                                                                 class="col col-sm-12 col-md-8">
-                                                                                                <button skucode="<%=product.skuCode%>Master"
+                                                                                                <button noattr="<%=isNoAttribute%>"  skucode="<%=product.skuCode%>Master"
                                                                                                         class="btn btn-cart btn-outline-primary my-sm-2"
                                                                                                         type="button">Thêm
                                                                                                         vào giỏ

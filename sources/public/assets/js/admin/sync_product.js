@@ -24,6 +24,24 @@ $(document).ready(() => {
 
 
     })
+    $('.sync-all').on('click',function(e){
+            $('.sync-button').each(function(item){
+                let button  = $(this)
+                let isChecked = button.prop('checked')
+                if (!isChecked) {
+                    button.click()
+                }
+            })
+    })
+    $('.unsync-all').on('click',function(e){
+        $('.sync-button').each(function(item){
+            let button  = $(this)
+            let isChecked = button.prop('checked')
+            if (isChecked) {
+                button.click()
+            }
+        })
+})
 })
 async function syncProduct(e) {
     console.log(e.target)

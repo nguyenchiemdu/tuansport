@@ -28,3 +28,21 @@
 tr.selected{
     background-color: var(--primary-color-lighter) ;
 }
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--gray-color);
+}
+.btn-primary:hover {
+    background-color: var(--primary-color-darker);
+    border-color: var(--gray-color);
+}
+.btn-primary:active {
+    background-color: var(--black-color)!important;
+    border-color: var(--gray-color);
+}
+input:checked {
+    background-color: var(--primary-color)!important;
+
+    border-color: var(--primary-color-darker)!important;
+    border: none !important;;
+}

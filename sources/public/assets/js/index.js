@@ -113,10 +113,12 @@ $(document).ready(function () {
         
         let button = $(this)
         let skuCode = button.attr('skucode')
-        if (skuCode.includes('Master')){
+        let hasAttr = !(button.attr('noattr')==='true')
+        if (skuCode.includes('Master')&& hasAttr){
             $('#exampleModal').modal('show')
             return
         }
+        skuCode = skuCode.replace('Master','')
         let cartItems = JSON.parse(window.localStorage.getItem('cart')) ?? []
         let index = cartItems.findIndex(item => item.id == skuCode)
         if (index<0) {
