@@ -1,3 +1,15 @@
+<% 
+ let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+        function formatedPrice(item) {
+                let price;
+                if (user?.role== 'Cộng tác viên'){
+                        price=  item.ctvPrice
+                } else 
+                price =  item.price;
+
+                return priceFormat.format(price)
+        }
+ %>
 <div skucode='<%=item.skuCode%> '
     class="product-item col hover-bigger">
     <div class="rounded-4 ratio ratio-1x1"
@@ -20,7 +32,7 @@
     </div>
     <div>
             <h3>
-                    <%=item.price %> đ
+                    <%=formatedPrice(item) %>
             </h3>
             <div class="row row-cols-2">
 
@@ -29,7 +41,7 @@
                             <h6
                                     style="color: var(--dark-gray-color)">
                                     <s>
-                                            <%=item.salePrice%>đ
+                                        <%=priceFormat.format(item.salePrice)%>
                                     </s>
                             </h6>
                             <% } %> 

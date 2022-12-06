@@ -1,5 +1,17 @@
 <html>
 
+        <% 
+        let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+               function formatedPrice(item) {
+                       let price;
+                       if (user?.role== 'Cộng tác viên'){
+                               price=  item.ctvPrice
+                       } else 
+                       price =  item.price;
+       
+                       return priceFormat.format(price)
+               }
+        %>
 <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -109,12 +121,11 @@
                                                                                         <div
                                                                                                 class="col-sm-12 col-md-auto">
                                                                                                 <h2>
-                                                                                                        <%=product.price%>
-                                                                                                                đ
+                                                                                                        <%=formatedPrice(product)%>
                                                                                                 </h2>
                                                                                                 <p
                                                                                                         class="sale-price text-decoration-line-through">
-                                                                                                        <%=product.price%>
+                                                                                                        <%=priceFormat.format(product.salePrice)%>
                                                                                                                 đ
                                                                                                 </p>
                                                                                         </div>
