@@ -210,5 +210,15 @@ $(document).ready(function () {
     }
 })
 
+// Search engine    
+
+$(document).ready(function () {
+    $('.clear-input').click(function () {
+        $('#search-box').val('') 
+    })
+})
+
+
+
 
     

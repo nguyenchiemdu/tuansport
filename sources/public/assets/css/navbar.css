@@ -6,6 +6,9 @@
     color: black;
 }
 
+#search-nav-icon:hover{
+    cursor: pointer;
+}
 
 .navbar .navbar-brand{
     color: var(--tertiary-color);

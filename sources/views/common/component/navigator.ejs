@@ -547,7 +547,9 @@
             </div>
           </li>
           <li class="nav-item nav-icon">
-            <a href="#"><i data-feather="search" class="nav-link feather-46 mb-2 mb-xl-0 me-xl-4 me-0"></i></a>
+            <a id="search-nav-icon" class="d-flex mb-2 mb-xl-0 me-xl-4 fs-4" data-bs-toggle="modal" data-bs-target="#exampleModal" style="border:0">
+              <i data-feather="search" class="nav-link feather-46"></i>
+            </a>
           </li>
           <% if (user==null) { %>
             <li class="nav-item nav-icon">
