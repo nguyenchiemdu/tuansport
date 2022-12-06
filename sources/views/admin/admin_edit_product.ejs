@@ -1,0 +1,131 @@
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Admin</title>
+    <%- include ('../common/lib/bootstrap_css')%>
+        <link rel="stylesheet" href="/assets/css/admin.css">
+
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+</head>
+
+<body>
+    <div class="wrapper">
+        <!-- Sidebar  -->
+        <%- include ('admin_navbar')%>
+            <!-- Page Content  -->
+            <div id="content">
+                <div class="container mt-5" style="text-align: left">
+                    <a type="button" href="/admin/ctv/" class="btn btn-secondary mb-2">Trở lại</a>
+                    <h3>Chỉnh sửa sản phẩm </h3>
+
+                    <div class="container mt-5">
+                        <form id="edit-form" method="POST" action="?_method=PUT">
+                            <% let mapName={ 'name' : 'Tên sản phẩm' ,'fullName': 'Tên đầy đủ' } %>
+                                <% for (let key of ['name','fullName','categoryId','images']) { if
+                                    (['name','fullName','images','categoryId','color'].includes(key)) { if
+                                    (key!='images' ){ if (key=='categoryId' ){%>
+                                    <div class="mb-3">
+                                        <h4 for="exampleInputEmail1" class="form-label">
+                                            Nhóm hàng
+                                        </h4>
+                                        <p>Lưu ý: Nhóm hàng có kí hiệu ❌ nghĩa là chưa liên kết với cây danh mục còn nhóm hàng có kí hiệu ✅ nghĩa là đã có trong cây danh mục</p>
+                                        <select class="form-select" id="inputGroupSelect02" name="<%=key%>">
+                                            <% for(let category of categories){ %>
+                                                <option value="<%=category._id%>" <% if
+                                                    (category._id==itemData.categoryId) {%> selected <%}%>
+                                                        ><%=category.categoryName %>
+                                                            <% if (category.parentId==0){ %>
+                                                                ❌
+                                                                <%} else {%>
+                                                                    ✅
+                                                                    <%} %>
+                                                </option>
+                                                <% } %>
+                                        </select>
+                                    </div>
+                                    <%} else {%>
+                                        <div class="mb-3">
+                                            <h4 for="exampleInputEmail1" class="form-label">
+                                                <%=mapName[key]%>
+                                            </h4>
+                                            <input class="form-control" name='<%=key%>' value="<%= itemData[key]%>" />
+
+                                        </div>
+                                        <%}} else {%>
+                                            <div class="mb-3">
+                                                <h4 for="exampleInputEmail1" class="form-label">
+                                                    Ảnh
+                                                </h4>
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">Url</th>
+                                                                <th scope="col">Preview</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <% for (let link of itemData[key]){%>
+
+                                                            <tr>
+                                                                <td class="col-12">
+                                                                    <input class="form-control" name='<%=key%>'
+                                                                        value="<%= link%>" />
+                                                                </td>
+                                                                <td>
+                                                                    <img src="<%=link%>" width="250px" />
+                                                                </td>
+
+
+                                                            </tr>
+                                                            <%}%>
+                                                    </table>
+                                                </div>
+
+                                            </div>
+                                            <%}%>
+                                                <%}}%>
+
+
+                                                    <button type="button" class="btn btn-primary btn-apply">Áp
+                                                        dụng</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="update-success" class="toast text-bg-success" role="alert" aria-live="assertive"
+                    aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Thành công</strong>
+                        <small>Bây giờ</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Cập nhật sản phẩm thành công!
+                    </div>
+                </div>
+            </div>
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                <div id="update-failed" class="toast text-bg-danger" role="alert" aria-live="assertive"
+                    aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Lỗi</strong>
+                        <small>Bây giờ</small>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        Cập nhật sản phẩm thất bại, liên hệ nhà phát triển để sửa lỗi!
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!-- /#wrapper -->
+</body>
+
+<%- include ('../common/lib/bootstrap_js')%>
+    <%- include ('../common/lib/jquery')%>
+        <script src="/assets/js/admin/edit_product.js"></script>
+
+</html>

@@ -36,6 +36,17 @@ class AdminController {
         }));
         res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name })
     }
+    // GET  /synced-products
+    async syncedProducts(req, res) {
+        let route = req.route.path;
+        let query = getQueryString(req)
+        let page = req.query.page ?? 1
+        let pageSize = req.query.pageSize ?? 20
+
+        let name = req.query.name;
+        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: { isSynced: true } })
+        res.render("admin/admin_synced_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name })
+    }
     // GET /admin/ctv
     async ctv(req, res) {
         let route = req.route.path;
@@ -59,6 +70,22 @@ class AdminController {
             next(AppString.dataNotFound)
         }
     }
+    // GET /admin/synced-products/:id
+    async editSyncedProduct(req, res, next) {
+        let route = req.route.path;
+        let id = req.params.id
+        let [product, categories] = await Promise.all(
+            [mongoProduct.findById(id),
+            mongoCategory.find({})
+            ]
+        )
+        if (product != null) {
+            res.render("admin/admin_edit_product", { itemData: product, categories: categories, route: route })
+        } else {
+            res.status(400)
+            next(AppString.dataNotFound)
+        }
+    }
     // PUT /admin/ctv/:id
     async updateCtv(req, res, next) {
         let route = req.route.path;
@@ -73,6 +100,28 @@ class AdminController {
             res.status(400)
             next(AppString.dataNotFound)
         }
+    }
+    // PUT /admin/sycned-product/:id
+    async updateProduct(req, res, next) {
+        try {
+            let route = req.route.path;
+        let id = req.params.id
+        let product = await mongoProduct.findOneAndUpdate({
+            _id: id
+        }, req.body)
+        product = await mongoProduct.findById(id)
+        if (product != null) {
+            res.json(baseRespond(true,AppString.ok,product))
+        } else {
+            
+            throw AppString.dataNotFound
+        }
+        } catch (err) {
+            console.log(err)
+            res.status(400)
+            res.json(baseRespond(false,err))
+        }
+        
     }
     // DELETE /admin/ctv/:id
     async deleteCtv(req, res, next) {

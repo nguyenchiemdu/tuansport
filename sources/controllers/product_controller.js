@@ -24,7 +24,7 @@ class ProductController {
                 masterProductId: product._id
             }).then(products => products.map((product) => { return { productId: product._id } }));
             listIdGroupProduct.push({ productId: product._id })
-            let productAttributes;
+             let productAttributes;
             
             let dataProductAttributes = await mongoProductAttribute.find({
                 $or: listIdGroupProduct
