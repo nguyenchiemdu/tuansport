@@ -39,14 +39,13 @@ class ApiController {
     async createOrder(req, res, next) {
         try {
             let { customerName, contactNumber, address, email, listProduct, bankPayment } = req.body;
-            console.log(req.body)
             //get product by skucode
             let listCallApi = listProduct.map(async product => {
-                let url = ApiUrl.getProductBySkuCode(product.id)
+                let url = ApiUrl.getProductBySkuCode(product.productCode)
                 let response = await KiotvietAPI.callApi(url)
                 let price = response.data.basePrice
                 return {
-                    productCode: product.id,
+                    productCode: product.productCode,
                     quantity: product.quantity,
                     price: price,
                 }
@@ -56,7 +55,7 @@ class ApiController {
             res.json(baseRespond(true, AppString.ok, order))
         } catch (err) {
             res.status(400)
-            next(err)
+            res.json(baseRespond(false, err.message))
         }
     }
 }

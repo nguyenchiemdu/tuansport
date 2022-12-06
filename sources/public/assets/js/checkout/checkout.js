@@ -15,27 +15,30 @@ function isVietnamesePhoneNumber(number) {
     return /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/.test(number);
 }
 
-function isInvalid() {
+function isValid() {
+    let isValid = true
     $('#user-info input').each(function() {
+        if ($(this).attr('name')== 'email') return // do not check email
         if ($(this).val() == '')
-            {
+            {   isValid = false;
                 $(this).addClass('is-invalid')
                 $(this).siblings('.invalid-feedback').html('Vui lòng nhập thông tin')
-            } else {
-
-            }
+            } 
         
     })
     const isEmail = isValidateEmail($('#email').val().trim())
-    if (!isEmail) {
+    if ((!isEmail) &&( $('#email').val().length >0)) {
+        isValid = false
         $('#email').addClass('is-invalid')
         $('#validateEmail').html('Email không hợp lệ')
     }
     const isPhoneNumber = isVietnamesePhoneNumber($('#phone-number').val().trim().replaceAll(' ',''))
     if (!isPhoneNumber) {
+        isValid = false
         $('#phone-number').addClass('is-invalid')
         $('#validate-phone').html('Số điện thoại không hợp lệ')
     }
+    return isValid
 }
 
 
@@ -44,7 +47,12 @@ const order_form = $('#checkout-form')
 async function submit() {
     const body = {
         customerName: $("#last-name").val() + ' ' + $("#first-name").val(),
-        listProduct: cartItems,
+        listProduct: cartItems.map(function(item) {
+          return {
+            "productCode": item.id,
+            "quantity": parseInt(item.quantity)
+          }
+        }),
         address: $("#address").val() + ', ' + $('#city').val(),
         contactNumber: $("#phone-number").val(),
         email: $("#email").val(),
@@ -61,7 +69,11 @@ async function submit() {
     .then(res => res.json())
     .then(res => {
         if (res.success) {
+            localStorage.removeItem("cart");
             window.location.href = '/order-success'
+        } else {
+            $('.modal-body').html(res.message)
+            $('#checkout-fail-modal').modal('show')
         }
     })
     
@@ -96,8 +108,7 @@ $(document).ready(async function() {
 
     $("#transaction-btn").click(async function(e) {
         e.preventDefault()
-        isInvalid()
-        // await submit()
+        if (isValid())  await submit()
     })
 
     $('#user-info input').on('input',(function(e) {

@@ -1,144 +1,199 @@
 <html>
 
 <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Tuấn Sport Đà Nẵng – Số 1 Đà Nẵng</title>
-        <%- include ('../common/lib/font_css')%>
-                <%- include ('../common/lib/feather_icon_css')%>
-                        <%- include ('../common/lib/bootstrap_css')%>
-                                <%- include ('../common/lib/font_awesome_css')%>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tuấn Sport Đà Nẵng – Số 1 Đà Nẵng</title>
+    <%- include ('../common/lib/font_css')%>
+        <%- include ('../common/lib/feather_icon_css')%>
+            <%- include ('../common/lib/bootstrap_css')%>
+                <%- include ('../common/lib/font_awesome_css')%>
 
 
-                                        <%- include ('../common/css/style')%>
+                    <%- include ('../common/css/style')%>
 
-                                                <link rel="icon" type="image/png" sizes="16x16"
-                                                        href="/assets/images/logo.png">
-                                                <%- include ('../common/css/owl_carousel')%>
+                        <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+                        <%- include ('../common/css/owl_carousel')%>
 
 </head>
 
 
 <body style="background-color:var(--white-color)">
-        <%- include ('../common/component/navigator')%>
+    <%- include ('../common/component/navigator')%>
         <div id="app-body">
-                <div id="container checkout">
-                    <section class="container py-2 pt-4 ps-3" id="breadcrumb"> <!-- Path -->
-                        <nav aria-label="breadcrumb">
-                          <ol class="breadcrumb">
+            <div id="container checkout">
+                <section class="container py-2 pt-4 ps-3" id="breadcrumb">
+                    <!-- Path -->
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
                             <li class="breadcrumb-item text-decoration-none"><a href="/" class="text-color-dark-gray"
-                                style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight);">
-                                Trang chủ
-                              </a></li>
+                                    style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight);">
+                                    Trang chủ
+                                </a></li>
                             <li class="breadcrumb-item active text-color-primary" aria-current="page">
-                              <span
-                                style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight)">Thanh toán</span>
+                                <span
+                                    style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight)">Thanh
+                                    toán</span>
                             </li>
-                          </ol>
-                        </nav>
-                      </section>
-            
-                      <section class="container py-2 pb-5 align-middle">
-                        <form action="/api/order" id="checkout-form">
-                            <div class="checkout-content">
-                                <h2 class="align-middle mb-4" id="title-page">Đặt hàng</h2>
-                                <div id="error-checkout" style="display: none">
-                                    <div class="align-middle py-3" style="background-color: var(--dark-gray-color);border-radius: 10px;color: var(--light-gray-color)">   
-                                        <i class="fa-solid fa-exclamation p-2 ms-3">
-                                        </i>
-                                        <h5 class="d-inline-block">Không thể thanh toán khi giỏ hàng trống</h5>
-                                    </div>
-                                    <a href="/" class="btn btn-primary mt-4">QUAY TRỞ LẠI CỬA HÀNG</a>
+                        </ol>
+                    </nav>
+                </section>
+
+                <section class="container py-2 pb-5 align-middle">
+                    <form action="/api/order" id="checkout-form">
+                        <div class="checkout-content">
+                            <h2 class="align-middle mb-4" id="title-page">Đặt hàng</h2>
+                            <div id="error-checkout" style="display: none">
+                                <div class="align-middle py-3"
+                                    style="background-color: var(--dark-gray-color);border-radius: 10px;color: var(--light-gray-color)">
+                                    <i class="fa-solid fa-exclamation p-2 ms-3">
+                                    </i>
+                                    <h5 class="d-inline-block">Không thể thanh toán khi giỏ hàng trống</h5>
                                 </div>
-                                <div class="row" id="accept-checkout">
-                                    <div class="col-lg-6 col-xl-6 col-xxl-6" id="user-info">
-                                        <h3>Thông tin thanh toán</h3>
-                                        <div class="row" id="name"> <!-- Name -->
-                                            <div class="col-6" >
-                                                <label class="py-2 ms-2" for="first-name" >Tên <span class="text-color-tertiary">*</span></label>
-                                                <input type="text" class="form-control shadow-none ps-3 input-box w-100" required name="firstname" id="first-name" placeholder="Nhập tên">
-                                                <div class="invalid-feedback">
-                                                </div>
-                                            </div>    
-                                            <div class="col-6">
-                                                <label class="py-2 ms-2" for="last-name" >Họ <span class="text-color-tertiary">*</span></label>
-                                                <input type="text" class="form-control shadow-none ps-3 input-box w-100" required name="lastname" id="last-name" placeholder="Nhập họ">
-                                                <div class="invalid-feedback">
-                                                </div>
-                                            </div>    
-                                        </div>
-                                        <div class="mt-2 ms-2" > <!--Country-->
-                                            <p class="py-1 m-0">Quốc gia/Khu vực <span class="text-color-tertiary">*</span></p>
-                                            <h4 class="ms-3">Việt Nam</h4>
-                                        </div> 
-                                        <div id="info-detail">
-            
-                                            <label class="py-2 ms-2"  for="address">Địa chỉ <span class="text-color-tertiary">*</span></label>
-                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100" required name="address" id="address" placeholder="Nhập địa chỉ">
-                                            <div class="invalid-feedback">
-                                            </div>    
-                                            <label class="py-2 ms-2"  for="city">Tỉnh/thành phố <span class="text-color-tertiary">*</span></label>
-                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100" required name="city" id="city" placeholder="Nhập tỉnh/thành phố">
-                                            <div class="invalid-feedback">
-                                            </div>    
-                                            <label class="py-2 ms-2"  for="phone-number">Số điện thoại <span class="text-color-tertiary">*</span></label>
-                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100" required name="contactNumber" id="phone-number" placeholder="Nhập số điện thoại">
-                                            <div class="invalid-feedback" id="validate-phone">
-                                            </div>    
-                                            <label class="py-2 ms-2"  for="email">Email</label>
-                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100" required name="email" id="email" placeholder="Nhập email">
-                                            <div class="invalid-feedback" id="validateEmail">
-                                            </div>    
-                                        </div>
-                                    </div>
-                                    <div class="offset-lg-1 offset-xl-1 offset-xxl-1 col-lg-5 col-xl-5 col-xxl-5" id="transaction"> <!--Tóm tắt đơn hàng-->
-                                        <div class="row mb-4">
-                                            <h3 class="text-start">Tóm tắt đơn hàng</h3>
-                                        </div>
-                                        <div class="row py-2 ">
-                                            <h4 class="col-7 text-start">Tạm tính</h4>
-                                            <h4 class="text-end col-5 total-value" id="transaction-product-price"></h4>
-                                        </div>
-                                        <div class="row py-3 d-none">
-                                            <h4 class="col-7 text-start">Khuyến mãi</h4>
-                                            <h4 class="text-end col-5 total-value" id="voucher-discount"></h4>
-                                        </div>
-                                        <div class="border my-3"></div>
-                                        <div class="row py-3">
-                                            <h4 class="col-7 text-start">Tổng</h4>
-                                            <h4 class="text-end col-5 total-value" id="transaction-price"></h4>
-                                        </div>
-                                        <div class="form-check py-3">
-                                            <input class="form-check-input" type="radio" name="payment" value="true" id="banking" checked>
-                                            <label class="form-check-label ms-2" for="payment">
-                                                <h4>Chuyển khoản ngân hàng</h4>
-                                                <p class="ms-2">Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần Nội dung thanh toán. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển.</p>
-                                            </label>
-                                        </div>
-                                        <div class="form-check pt-2 pb-3">
-                                            <input class="form-check-input" type="radio" name="payment" value="false" id="direct">
-                                            <label class="form-check-label ms-2" for="direct">
-                                                <h4>Trả tiền mặt khi nhận hàng</h4>
-                                                <p class="ms-2">Trả tiền mặt khi giao hàng</p>
-                                            </label>
-                                        </div>
-                                        <div class="row pt-2">
-                                            <button id="transaction-btn" class="btn btn-primary w-100" type="submit">Thanh toán</button>
-                                        </div>
-                                    </div> <!-- Tóm tắt đơn hàng-->
-                                </div>
+                                <a href="/" class="btn btn-primary mt-4">QUAY TRỞ LẠI CỬA HÀNG</a>
                             </div>
-                        </form>
-                            
-                      </section>
+                            <div class="row" id="accept-checkout">
+                                <div class="col-lg-6 col-xl-6 col-xxl-6" id="user-info">
+                                    <h3>Thông tin thanh toán</h3>
+                                    <div class="row" id="name">
+                                        <!-- Name -->
+                                        <div class="col-6">
+                                            <label class="py-2 ms-2" for="first-name">Tên <span
+                                                    class="text-color-tertiary">*</span></label>
+                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100"
+                                                required name="firstname" id="first-name" placeholder="Nhập tên">
+                                            <div class="invalid-feedback">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="py-2 ms-2" for="last-name">Họ <span
+                                                    class="text-color-tertiary">*</span></label>
+                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100"
+                                                required name="lastname" id="last-name" placeholder="Nhập họ">
+                                            <div class="invalid-feedback">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 ms-2">
+                                        <!--Country-->
+                                        <p class="py-1 m-0">Quốc gia/Khu vực <span class="text-color-tertiary">*</span>
+                                        </p>
+                                        <h4 class="ms-3">Việt Nam</h4>
+                                    </div>
+                                    <div id="info-detail">
+
+                                        <div>
+                                            <label class="py-2 ms-2" for="address">Địa chỉ <span
+                                                    class="text-color-tertiary">*</span></label>
+                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100"
+                                                required name="address" id="address" placeholder="Nhập địa chỉ">
+                                        </div>
+                                        <div class="invalid-feedback">
+                                        </div>
+                                        <div>
+                                            <label class="py-2 ms-2" for="city">Tỉnh/thành phố <span
+                                                    class="text-color-tertiary">*</span></label>
+                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100"
+                                                required name="city" id="city" placeholder="Nhập tỉnh/thành phố">
+                                            <div class="invalid-feedback">
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label class="py-2 ms-2" for="phone-number">Số điện thoại <span
+                                                    class="text-color-tertiary">*</span></label>
+                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100"
+                                                required name="contactNumber" id="phone-number"
+                                                placeholder="Nhập số điện thoại">
+                                            <div class="invalid-feedback" id="validate-phone">
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label class="py-2 ms-2" for="email">Email</label>
+                                            <input type="text" class="form-control shadow-none ps-3 input-box w-100"
+                                                required name="email" id="email" placeholder="Nhập email">
+                                            <div class="invalid-feedback" id="validateEmail">
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="offset-lg-1 offset-xl-1 offset-xxl-1 col-lg-5 col-xl-5 col-xxl-5"
+                                    id="transaction">
+                                    <!--Tóm tắt đơn hàng-->
+                                    <div class="row mb-4">
+                                        <h3 class="text-start">Tóm tắt đơn hàng</h3>
+                                    </div>
+                                    <div class="row py-2 ">
+                                        <h4 class="col-7 text-start">Tạm tính</h4>
+                                        <h4 class="text-end col-5 total-value" id="transaction-product-price"></h4>
+                                    </div>
+                                    <div class="row py-3 d-none">
+                                        <h4 class="col-7 text-start">Khuyến mãi</h4>
+                                        <h4 class="text-end col-5 total-value" id="voucher-discount"></h4>
+                                    </div>
+                                    <div class="border my-3"></div>
+                                    <div class="row py-3">
+                                        <h4 class="col-7 text-start">Tổng</h4>
+                                        <h4 class="text-end col-5 total-value" id="transaction-price"></h4>
+                                    </div>
+                                    <div class="form-check py-3">
+                                        <input class="form-check-input" type="radio" name="payment" value="true"
+                                            id="banking" checked>
+                                        <label class="form-check-label ms-2" for="payment">
+                                            <h4>Chuyển khoản ngân hàng</h4>
+                                            <p class="ms-2">Thực hiện thanh toán vào ngay tài khoản ngân hàng của chúng
+                                                tôi. Vui lòng sử dụng Mã đơn hàng của bạn trong phần Nội dung thanh
+                                                toán. Đơn hàng sẽ đươc giao sau khi tiền đã chuyển.</p>
+                                        </label>
+                                    </div>
+                                    <div class="form-check pt-2 pb-3">
+                                        <input class="form-check-input" type="radio" name="payment" value="false"
+                                            id="direct">
+                                        <label class="form-check-label ms-2" for="direct">
+                                            <h4>Trả tiền mặt khi nhận hàng</h4>
+                                            <p class="ms-2">Trả tiền mặt khi giao hàng</p>
+                                        </label>
+                                    </div>
+                                    <div class="row pt-2">
+                                        <button id="transaction-btn" class="btn btn-primary w-100" type="button">Thanh
+                                            toán</button>
+                                    </div>
+                                </div> <!-- Tóm tắt đơn hàng-->
+                            </div>
+                        </div>
+                    </form>
+
+                </section>
+            </div>
+        </div>
+        <%- include ('../common/component/footer')%>
+            <!--Modal notification -->
+            <div class="modal fade" id="checkout-fail-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Lỗi</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" data-bs-dismiss="modal" class="btn btn-primary">OK</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        <%- include ('../common/component/footer')%>
 </body>
 <%- include ('../common/lib/bootstrap_js')%>
-        <%- include ('../common/lib/jquery')%>
-                <%- include ('../common/lib/feather_icon_js')%>
-                        <%- include ('../common/js/index')%>
-                        <script src="/assets/js/checkout/checkout.js"></script>
-                                <%- include ('../common/js/owl_carousel')%>
+    <%- include ('../common/lib/jquery')%>
+        <%- include ('../common/lib/feather_icon_js')%>
+            <%- include ('../common/js/index')%>
+                <script src="/assets/js/checkout/checkout.js"></script>
+                <%- include ('../common/js/owl_carousel')%>
+
 </html>
