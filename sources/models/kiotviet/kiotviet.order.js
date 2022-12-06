@@ -55,8 +55,8 @@ class KiotVietOrder {
             }).then(response => response.data);
             return response;
         } catch (err) {
-            console.log(err.data)
-            return null
+            console.log(err.response.data)
+            throw err.response.data.responseStatus
         }
     }
 }

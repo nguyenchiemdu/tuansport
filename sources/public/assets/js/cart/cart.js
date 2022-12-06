@@ -95,7 +95,7 @@ $(document).ready(async function() {
                     let htmlTagWeb = `  
                       <tr skucode="${product.code}"class="product product-item ${product.code}">  <!-- Item --> 
                           <td class="product-detail" skucode="${product.code}"> <!-- Name item -->
-                            <img class="" src="${product.images[0]}" alt="" width="120px" height="120px" style="border-radius: 20px" />
+                            <img class="" src="${product.images[0]}" alt="" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
                           <td>
                             <div class="product-name text-start align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                 <h3 class="text-start short-description">${product.name}</h3>
@@ -132,7 +132,7 @@ $(document).ready(async function() {
                     <div skucode="${product.code}" class="my-3 mx-2 product product-item ${product.code}"> <!-- Item -->
                           <div class="row align-items-center">
                             <div class="col-8 d-flex align-items-center product-detail" skucode="${product.code}}"> <!--Name-->
-                              <img src="${product.images[0]}" alt="" width="60px" height="60px" style="border-radius: 5px" class="me-1" /> 
+                              <img src="${product.images[0]}" alt="" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" class="me-1" /> 
                               <span class="align-middle text-start mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                 <h5 class="ms-2 short-description">${product.name}</h5>
                                 <h6 class="ms-2 short-description">
@@ -173,11 +173,11 @@ $(document).ready(async function() {
     // Handle function
     await $(document).ready(function() {
 
+        let cartItems = JSON.parse(window.localStorage.getItem('cart')) || []
         // Remove item
         $('.remove-item-list').on('click', function(e) {
             e.stopPropagation()
             let skuCode = $(this).attr('skucode')
-            let cartItems = JSON.parse(window.localStorage.getItem('cart')) || []
             cartItems = cartItems.filter(function(item) { 
                 return item.id !== skuCode
             })
@@ -219,7 +219,6 @@ $(document).ready(async function() {
             e.stopPropagation()
             let skuCode = $(this).attr('skucode')
             let value = $(this).val()
-            let cartItems = JSON.parse(window.localStorage.getItem('cart')) || []
             cartItems.find(item => {
                 if (item.id === skuCode) item.quantity = value
             })
@@ -247,7 +246,6 @@ $(document).ready(async function() {
         // Click to inc or dec item 
 
         $('.change-value').click(async function() {
-            let cartItems = JSON.parse(window.localStorage.getItem('cart')) || []
             let skuCode = $(this).attr('skucode')
             let amountInput = $(this).siblings('input');
             if ($(this).hasClass('inc-value')) {
@@ -266,6 +264,10 @@ $(document).ready(async function() {
             updatePrice(amountInput)
         })
 
+        if (cartItems.length > 0) {
+            $(".transaction-btn").removeProp('aria-disabled')
+            $(".transaction-btn").removeClass('disabled')
+        }
         recalculateTransactionPrice()
     }) 
 })

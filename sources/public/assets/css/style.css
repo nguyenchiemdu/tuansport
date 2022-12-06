@@ -144,7 +144,7 @@ h6 {
 }
 
 .btn-light:hover {
-    background-color: var(--light-gray-color) !important;
+    background-color: var(--dark-gray-color) !important;
     border-color: var(--dark-gray-color) !important;
     color: var(--black-color);
 
@@ -199,12 +199,22 @@ input.product-amount:focus {
 
 /* Checkbox */
 /* Ratio */
+.form-check-input:checked{
+    background-color: var(--primary-color)!important;
+    border: var(--primary-color)!important;
+    border-radius: 50%;
+}
+.form-check-input{
+    border: 1px solid var(--primary-color);
+}
 /* Switch */
 /* Input */
 .input-box {
     height: 46px;
     border-radius: 23px;
-    background-color: var(--white-color);
+    background-color: var(--light-gray-color);
+    border: 1px solid var(--light-gray-color);
+    color: var(--dark-gray-color);
 }
 
 
@@ -286,6 +296,11 @@ footer{
     cursor: pointer;
 }
 
+
+#cart .btn.disabled{
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
 /* Responsive UI mobile */
 @media screen and (max-width: 1199px) {
     .status-mobile{
