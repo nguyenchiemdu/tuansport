@@ -12,7 +12,7 @@ const Product = new Schema({
     ctvPrice: { type: Number, required: true },
     salePrice: { type: Number,default:null},
     images: { type: Array, required: true },
-    categoryId : {type: Number,required: true, ref: 'Category'},
+    categoryId : {type: Number,required: true, ref: 'Cagetory'},
     size: { type: String, required: true },
     isSynced: { type: Boolean, required: true,default: true},
     color: { type: String },

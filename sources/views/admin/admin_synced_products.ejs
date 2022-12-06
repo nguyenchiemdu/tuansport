@@ -9,6 +9,9 @@
 
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
 </head>
+<%
+ let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }) 
+ %> 
 
 <body>
   <div class="wrapper min-vh-100">
@@ -18,16 +21,10 @@
       <!-- Page Content  -->
       <div id="content">
         <div class="container min-vh-100" style="text-align: center">
-          <h3>Danh sách sản phẩm</h3>
+          <h3>Danh sách sản phẩm đã đồng bộ</h3>
           <div class="row row-cols-md-2 row-cols-md-1 justify-content-between">
             <div clas="col col-md-8 d-flex content-left"style="text-align: left">
               
-              <button class="btn btn-primary sync-all" type="button">
-                Đồng bộ tất cả
-              </button>
-              <button class="btn btn-danger unsync-all" type="button">
-                Huỷ đồng bộ tất cả
-              </button>
             </div>
             <div class="col-md-4 col-sm-12">
               <div class="input-group mb-3">
@@ -47,13 +44,15 @@
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá CTV</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá chưa giảm</th>
+                  <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th> -->
 
                 </tr>
               </thead>
               <tbody>
                 <% for (let i in data) { delete data[i]['description'];%>
-                  <tr>
+                  <tr class="product-row" id="<%=data[i]._id%>">
                     <th>
                       <%= pageSize*(page-1) +Number(i)+1%>
                     </th>
@@ -61,24 +60,21 @@
                       <%=data[i].masterProductId%>
                     </th>
                     <th>
-                      <%=data[i].code%>
+                      <%=data[i]._id%>
                     </th>
                     <th>
                       <%=data[i].fullName%>
                     </th>
                     <th>
-                      <%=data[i].basePrice%>
+                      <%=priceFormat.format(data[i].price)%>
                     </th>
                     <th>
-                      <div class="form-check form-switch">
-
-                        <input class="form-check-input sync-button" value="<%=name%>" type="checkbox"
-                          skuCode='<%=data[i].code %>' productid="<%=data[i].id%>" id="flexCheckDefault" <% if
-                          (data[i].isSynced) {%> checked <% } %>>
-
-                      </div>
-
-                    </th>
+                        <%=priceFormat.format(data[i].ctvPrice)%>
+                      </th>
+                      <th class="text-decoration-line-through">
+                        <%=priceFormat.format(data[i].salePrice)%>
+                      </th>
+                    
                   </tr>
                   <%} %>
               </tbody>
@@ -96,7 +92,7 @@
 </body>
 <%- include ('../common/lib/bootstrap_js')%>
   <%- include ('../common/lib/jquery')%>
-    <script src="/assets/js/admin/product.js"></script>
+    <script src="/assets/js/admin/synced_product.js"></script>
     <%- include ('../common/js/index')%>
 
 
