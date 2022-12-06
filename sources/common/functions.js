@@ -97,7 +97,12 @@ function toPathString(s) {
    return s
 }
 
+function isVietnamesePhoneNumber(number) {
+    return /(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(number);
+  }
+
 module.exports.removeAccent = removeAccent
+module.exports.isVietnamesePhoneNumber   = isVietnamesePhoneNumber    
 module.exports.hashPassword = hashPassword
 module.exports.readableDoc = readableDoc
 module.exports.baseRespond = baseRespond

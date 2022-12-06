@@ -24,23 +24,23 @@ class ProductController {
                 masterProductId: product._id
             }).then(products => products.map((product) => { return { productId: product._id } }));
             listIdGroupProduct.push({ productId: product._id })
-            let productAttributes = await mongoProductAttribute.find({
+            let productAttributes;
+            
+            let dataProductAttributes = await mongoProductAttribute.find({
                 $or: listIdGroupProduct
-            }).populate('attributeValueId').exec().
-                then(async (attributes) => {
-                    for (let i = 0; i < attributes.length; i++) {
-                        let attribute = await mongoAttribute.find({
-                            _id: attributes[i].attributeValueId.attributeId
-                        })
-                        if (mapAttributes[attribute[0].name] == null) {
-                            mapAttributes[attribute[0].name] = []
-                        }
-                        if (!mapAttributes[attribute[0].name].includes(attributes[i].attributeValueId))
-                            mapAttributes[attribute[0].name].push(attributes[i].attributeValueId)
-                        attributes[i].attribute = attribute[0]
-                    }
-                    return attributes
+            }).populate('attributeValueId').exec()
+            productAttributes = await Promise.all(dataProductAttributes.map(async attribute=> {
+                let attr = await mongoAttribute.find({
+                    _id: attribute.attributeValueId.attributeId
                 })
+                if (mapAttributes[attr[0].name] == null) {
+                    mapAttributes[attr[0].name] = []
+                }
+                if (!mapAttributes[attr[0].name].includes(attribute.attributeValueId))
+                    mapAttributes[attr[0].name].push(attribute.attributeValueId)
+                attribute.attribute = attr[0]
+                return attribute;
+            }))
             let mappedProductAttributes = {
 
             }

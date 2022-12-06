@@ -39,14 +39,14 @@ class ApiController {
     async createOrder(req, res, next) {
         try {
             let { customerName, contactNumber, address, email, listProduct, bankPayment } = req.body;
+            console.log(req.body)
             //get product by skucode
-
             let listCallApi = listProduct.map(async product => {
-                let url = ApiUrl.getProductBySkuCode(product.productCode)
+                let url = ApiUrl.getProductBySkuCode(product.id)
                 let response = await KiotvietAPI.callApi(url)
                 let price = response.data.basePrice
                 return {
-                    productCode: product.productCode,
+                    productCode: product.id,
                     quantity: product.quantity,
                     price: price,
                 }
