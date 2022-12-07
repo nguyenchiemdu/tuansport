@@ -5,9 +5,9 @@
     color: var(--black-color);
 }
 
-input {
+/* input {
     border-radius: 23px!important;
-}
+} */
 .sale-price {
     font-weight: 400;
     font-size: 16;

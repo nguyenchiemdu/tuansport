@@ -1,0 +1,80 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>
+        Kết quả tìm kiếm với <%=searchText %>
+    </title>
+    <%- include ('../common/lib/font_css')%>
+        <%- include ('../common/lib/feather_icon_css')%>
+            <%- include ('../common/lib/bootstrap_css')%>
+                <%- include ('../common/lib/font_awesome_css')%>
+
+
+                    <%- include ('../common/css/style')%>
+                    <link rel="stylesheet" href="/assets/css/product_by_category.css">
+                        <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+                        <%- include ('../common/css/owl_carousel')%>
+
+
+</head>
+
+
+<body style="background-color:var(--white-color)">
+    <%- include ('../common/component/navigator')%>
+        <div class="app-body">
+            <div class="container">
+                <div class="mt-5">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item" aria-current="#"><a style="color:var(--dark-gray-color)"
+                                    href="/">Trang chủ</a></li>
+                            <li class="breadcrumb-item active product-name" aria-current="page"
+                                style="color:var(--primary-color)">
+                                Sản phẩm
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="row row-cols-sm-1">
+                    
+                    <div class="col">
+                        <h2>
+                            Kết quả tìm kiếm với từ khoá "<%=searchText%>"
+                        </h2>
+                        <div class="d-flex justify-content-between my-2">
+                            <div class="py-2">
+                                <h5 class="">
+                                    <%=countResult %> Sản phẩm phù hợp
+                                </h5>
+                            </div>
+                            <div class="py-2 ">
+                                <h5 class="">
+                                    Giá từ cao -> thấp
+                                </h5>
+                            </div>
+                        </div>
+                        <div
+                            class="list-product row row-cols-2 row-cols-md-5 row-cols-lg-5  row-cols-sm-4 gx-4 gy-4 mt-3 mb-4">
+                            <% for (let item of docs){ %>
+                                <%- include('../common/component/product_item', {item: item}) %>
+
+                                    <%}%>
+                        </div>
+                        <%- include('product_pagination') %>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%- include ('../common/component/footer')%>
+</body>
+<%- include ('../common/lib/bootstrap_js')%>
+    <%- include ('../common/lib/jquery')%>
+        <%- include ('../common/lib/feather_icon_js')%>
+            <%- include ('../common/js/owl_carousel')%>
+                <%- include ('../common/js/index')%>
+
+
+</html>
