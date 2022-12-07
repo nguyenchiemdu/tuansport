@@ -69,8 +69,14 @@ async function submit() {
     .then(res => res.json())
     .then(res => {
         if (res.success) {
+            const data = res.data
             localStorage.removeItem("cart");
-            window.location.href = '/order-success'
+            $('#accept-checkout').hide();
+                $('.name-order').html(data.customerName)
+                $('.phone-order').html(data.orderDelivery.contactNumber)
+                $('.address-order').html(data.orderDelivery.address)
+                $('.bank-payment-order').html(data.description)
+            $('#order-successfully').show();
         } else {
             $('.modal-body').html(res.message)
             $('#checkout-fail-modal').modal('show')

@@ -89,19 +89,27 @@ $(document).ready(async function() {
         .then(res => {
                 if (res.success) {
                     let product = res.data 
-                    let isHasColor = product.attributes[1]?.attributeValue == undefined
+                    let isHasAttribute = product.attributes
+                    let isHasColor 
+                    if (isHasAttribute) {
+                        isHasColor = product?.attributes[1]?.attributeValue == undefined
+                    }
                     let isHasProduct = res.length == 0
-                    
+                    let isHasImage = product.images == undefined
                     let htmlTagWeb = `  
                       <tr skucode="${product.code}"class="product product-item ${product.code}">  <!-- Item --> 
                           <td class="product-detail" skucode="${product.code}"> <!-- Name item -->
-                            <img class="" src="${product.images[0]}" alt="" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
+                            <img class="" src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
                           <td>
                             <div class="product-name text-start align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                 <h3 class="text-start short-description">${product.name}</h3>
+                                ${isHasAttribute ? `
                                 <p>${product.attributes[0].attributeName}: ${product.attributes[0].attributeValue}
                                 ${!isHasColor ? `, ${product.attributes[1]?.attributeName}: ${product.attributes[1]?.attributeValue}`: ``}
                                 </p>
+                                ` : ' '
+                            }
+                                
                             </div>
                           </td>
                           </td> <!-- Name item -->
@@ -132,13 +140,13 @@ $(document).ready(async function() {
                     <div skucode="${product.code}" class="my-3 mx-2 product product-item ${product.code}"> <!-- Item -->
                           <div class="row align-items-center">
                             <div class="col-8 d-flex align-items-center product-detail" skucode="${product.code}}"> <!--Name-->
-                              <img src="${product.images[0]}" alt="" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" class="me-1" /> 
+                              <img class="me-1 hover-bigger" src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" /> 
                               <span class="align-middle text-start mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                 <h5 class="ms-2 short-description">${product.name}</h5>
-                                <h6 class="ms-2 short-description">
+                                ${isHasAttribute ? `<h6 class="ms-2 short-description">
                                 ${product.attributes[0].attributeName}: ${product.attributes[0].attributeValue}
                                 ${!isHasColor ? `, ${product.attributes[1]?.attributeName}: ${product.attributes[1]?.attributeValue}`: ``}
-                                </h6>
+                                </h6>` : ' '} 
                               </span>
                             </div>
                             <div class="pe-0 offset-1 col-3"> <!-- Icon -->

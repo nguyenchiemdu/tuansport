@@ -18,10 +18,17 @@ $(document).ready(function () {
 
                     let product = response.data
                     let isOutOfStock = product.inventories[0].onHand == 0
+                    let isHasAttribute = product.attributes
+                    let isHasColor 
+                    if (isHasAttribute) {
+                        isHasColor = product?.attributes[1]?.attributeValue == undefined
+                    }
+                    let isHasProduct = res.length == 0
+                    let isHasImage = product.images == undefined
                     let htmlTagWeb = `
                     <tr skucode='${product.code}' class=" product-item ${product.code}">
                         <td> <!-- Image item -->
-                          <img src="${product.images[0]}" alt="" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
+                          <img src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" alt="" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
                         </td> <!-- Image item -->
                         <td> <!-- Name item -->
                             <div class="product-name align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
@@ -45,7 +52,7 @@ $(document).ready(function () {
                                 <div skucode='${product.code}' class="my-3 product-item ${product.code}"> <!-- Item -->
                                     <div class="row align-items-center">
                                         <div class="col-7 d-flex align-items-center"> <!--Name-->
-                                        <img src="${product.images[0]}" alt="" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" /> 
+                                        <img src="${!isHasImage ? product.images[0] : ''} alt="${product.name}" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" /> 
                                         <span class="align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                             <h5 class="ms-2 short-description text-start">${product.name}</h5>
                                         </span>
