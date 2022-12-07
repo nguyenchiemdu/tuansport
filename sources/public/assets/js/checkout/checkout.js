@@ -70,12 +70,21 @@ async function submit() {
     .then(res => {
         if (res.success) {
             const data = res.data
+            console.log(data)
+            const isBank = data.description.includes('Chuyển khoản ngân hàng')
+            let payment
+            if (isBank) {
+                payment = 'Thanh toán bằng hình thức chuyển khoản'
+            } else {
+                payment = 'Trả bằng tiền mặt khi nhận hàng'
+            }
             localStorage.removeItem("cart");
             $('#accept-checkout').hide();
+                $('#title-page').html('Đã đặt hàng thành công')
                 $('.name-order').html(data.customerName)
                 $('.phone-order').html(data.orderDelivery.contactNumber)
                 $('.address-order').html(data.orderDelivery.address)
-                $('.bank-payment-order').html(data.description)
+                $('.bank-payment-order').html(payment)
             $('#order-successfully').show();
         } else {
             $('.modal-body').html(res.message)
