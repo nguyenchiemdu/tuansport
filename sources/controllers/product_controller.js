@@ -104,6 +104,31 @@ class ProductController {
             next(err);
         }
     }
+    // GET /products
+    async searchProductResult(req, res, next) {
+        try {
+        let searchText = req.query.search
+            let listFindCondition = [
+                {"name" : {$regex : searchText,$options: 'i'}, masterProductId: null},
+                {"fullName" : {$regex : searchText,$options: 'i'},masterProductId:null},
+            ]
+            if (searchText.length > 0) 
+                listFindCondition.push({"skuCode" : {$regex : searchText}})
+            let query = getQueryString(req)
+            let page = req.query.page ?? 1;
+            let response = await getTableDataWithPagination(req, mongoProduct, {
+                findCondition: {
+                   $or:listFindCondition,
+                   isSynced: true
+                }
+            })
+            res.render('product/product_search', { user: req.headers.userInfor, ...response, page,query,searchText })
+        } catch (err) {
+            console.log(err);
+            res.status(400)
+            next(err);
+        }
+    }
 }
 
 module.exports = new ProductController();

@@ -216,6 +216,16 @@ $(document).ready(function () {
     $('.clear-input').click(function () {
         $('#search-box').val('') 
     })
+    $('.btn-search').click(function () {
+        let searchText = $('#search-box').val()
+        window.location.href = '/products?search='+searchText
+    })
+    $('#search-box').keyup(function(e){
+        if(e.keyCode==13) {
+        $('.btn-search').click()
+        }
+    })
+
 })
 
 

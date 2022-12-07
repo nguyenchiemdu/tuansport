@@ -14,6 +14,7 @@ function route(app) {
   app.use("/login",authRouter)
   app.use("/api", apiRouter)
   app.use("/san-pham",productRouter)
+  app.use("/products",productController.searchProductResult)
   app.use("/danh-muc/:category",productController.productByCategory)
   app.use("/api", apiRouter);
   app.get("/signout",auth_controller.signout)
