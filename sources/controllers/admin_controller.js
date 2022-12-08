@@ -105,23 +105,23 @@ class AdminController {
     async updateProduct(req, res, next) {
         try {
             let route = req.route.path;
-        let id = req.params.id
-        let product = await mongoProduct.findOneAndUpdate({
-            _id: id
-        }, req.body)
-        product = await mongoProduct.findById(id)
-        if (product != null) {
-            res.json(baseRespond(true,AppString.ok,product))
-        } else {
-            
-            throw AppString.dataNotFound
-        }
+            let id = req.params.id
+            let product = await mongoProduct.findOneAndUpdate({
+                _id: id
+            }, req.body)
+            product = await mongoProduct.findById(id)
+            if (product != null) {
+                res.json(baseRespond(true, AppString.ok, product))
+            } else {
+
+                throw AppString.dataNotFound
+            }
         } catch (err) {
             console.log(err)
             res.status(400)
-            res.json(baseRespond(false,err))
+            res.json(baseRespond(false, err))
         }
-        
+
     }
     // DELETE /admin/ctv/:id
     async deleteCtv(req, res, next) {
@@ -307,10 +307,37 @@ class AdminController {
             res.json(baseRespond(false, AppString.error, e))
         }
     }
-     // GET /admin/password
-     async password(req, res, next) {
+    // GET /admin/password
+    async password(req, res, next) {
         let route = req.route.path;
         res.render("admin/password", { route: route })
+
+    }
+    // PUT admin/password
+    async putPassword(req, res, next) {
+        try {
+            let { password, newpassword, confirmpassword } = req.body
+            if (newpassword !== confirmpassword) {
+                return res.json(baseRespond(false, AppString.newPasswordNotMatch))
+            }
+            let admin = await mongoUser.findOne({
+                username: 'admin'
+            })
+            if (admin.password != password) {
+                return res.json(baseRespond(false, AppString.invalidPassword))
+            }
+            await mongoUser.findOneAndUpdate({
+                username: 'admin'
+
+            }, {
+                password: newpassword
+            })
+            return res.json(baseRespond(true, AppString.passwordUpdated))
+        } catch (err) {
+            console.log(err)
+            res.status(400)
+            res.json(baseRespond(false, err))
+        }
 
     }
 }
