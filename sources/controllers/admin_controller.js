@@ -337,8 +337,42 @@ class AdminController {
             console.log(err)
             res.status(400)
             res.json(baseRespond(false, err))
-        }
+        }}
 
+    async category(req, res,next) {
+        try {
+        let route = req.route.path;
+            let listCategory =  await mongoCategory.find({
+                parentId: null
+            })
+        let listResult = listCategory.map(function(category){
+            return {... category._doc}
+        })
+        let stack = [...listResult]
+            while( stack.length > 0) {
+                let ref= stack.pop();
+                if (ref.hasNoChild) continue
+                let listChild = await mongoCategory.find({
+                    parentId : ref._id,
+                   
+                })
+                listChild = listChild.map(function(category){
+                    return {...category._doc}
+                })
+                ref.children = [...listChild]
+                stack.push(...listChild)
+            }
+        let freeCategory = await mongoCategory.find({
+            parentId : 0
+        })
+        res.json({
+            categoryTree: listResult,
+            freeCategory: freeCategory
+        })
+        } catch(err){
+            console.log(err)
+            next(err)
+        }
     }
 }
 
