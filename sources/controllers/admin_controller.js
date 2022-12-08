@@ -307,6 +307,12 @@ class AdminController {
             res.json(baseRespond(false, AppString.error, e))
         }
     }
+     // GET /admin/password
+     async password(req, res, next) {
+        let route = req.route.path;
+        res.render("admin/password", { route: route })
+
+    }
 }
 
 module.exports = new AdminController();

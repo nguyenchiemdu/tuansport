@@ -5,6 +5,7 @@ const RedirectMiddleWare = require("../middlewares/redirect.middleware");
 
 router.get("/",RedirectMiddleWare.redirect('/admin/products'));
 router.get("/products", adminController.products);
+router.get("/password", adminController.password);
 router.get("/synced-products/:id", adminController.editSyncedProduct);
 router.put("/synced-products/:id", adminController.updateProduct);
 router.get("/synced-products", adminController.syncedProducts);
