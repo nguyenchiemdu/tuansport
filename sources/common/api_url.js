@@ -1,6 +1,9 @@
 class ApiUrl {
     static accessToken = 'https://id.kiotviet.vn/connect/token';
     static getProducts = 'https://public.kiotapi.com/products';
+    static getAllCategory() {
+        return `https://public.kiotapi.com/categories?pageSize=100&hierachicalData=true`
+    }
     static getCategoryById(id) {
         return `https://public.kiotapi.com/categories/${id}?hierachicalData=true`;
     }

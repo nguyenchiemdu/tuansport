@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $('.product-row').each(function(product) {
-        $(this).on('click', function(e) {
+        $(this).on('dblclick', function(e) {
             let row = $(this);
             let id = row.attr('id');
             window.location.href = '/admin/synced-products/'+id

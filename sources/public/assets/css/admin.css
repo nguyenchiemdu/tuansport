@@ -46,3 +46,9 @@ input:checked {
     border-color: var(--primary-color-darker)!important;
     border: none !important;;
 }
+.nav-item a.active {
+    color: var(--primary-color-darker)!important; 
+}
+.category-item.selected {
+    background-color: var(--primary-color-lighter) ;
+}

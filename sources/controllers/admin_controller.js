@@ -23,7 +23,13 @@ class AdminController {
         let page = req.query.page ?? 1
         let pageSize = req.query.pageSize ?? 20
         let name = req.query.name;
-        let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true, name: name })
+        let categoryId = req.query.categoryid
+        let categoryParam = {}
+        if (categoryId!= null) 
+            categoryParam = {
+                categoryId
+            }
+        let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true, name: name,...categoryParam })
         response.data = await Promise.all(response.data.map(async product => {
             let syncProduct = await mongoProduct.find({
                 skuCode: product.code,
@@ -34,7 +40,12 @@ class AdminController {
             }
             return product
         }));
-        res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name })
+        let listCategory = await KiotVietCategory.getAllCategory()
+        for (let i = 0; i < listCategory.length; i++) {
+            KiotVietCategory.modifyCategoryToTree(listCategory[i],categoryId)
+        }
+
+        res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name ,listCategory})
     }
     // GET  /synced-products
     async syncedProducts(req, res) {

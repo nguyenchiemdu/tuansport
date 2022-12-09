@@ -24,24 +24,32 @@ $(document).ready(() => {
 
 
     })
-    $('.sync-all').on('click',function(e){
-            $('.sync-button').each(function(item){
-                let button  = $(this)
-                let isChecked = button.prop('checked')
-                if (!isChecked) {
-                    button.click()
-                }
-            })
+    $('.sync-all').on('click', function (e) {
+        $('.sync-button').each(function (item) {
+            let button = $(this)
+            let isChecked = button.prop('checked')
+            if (!isChecked) {
+                button.click()
+            }
+        })
     })
-    $('.unsync-all').on('click',function(e){
-        $('.sync-button').each(function(item){
-            let button  = $(this)
+    $('.unsync-all').on('click', function (e) {
+        $('.sync-button').each(function (item) {
+            let button = $(this)
             let isChecked = button.prop('checked')
             if (isChecked) {
                 button.click()
             }
         })
-})
+    })
+    $('.category-item').on('dblclick', function (e) {
+        e.preventDefault()
+        // console.log($(this).attr('id'))
+        var url = new URL(window.location.href.split('?')[0]);
+        url.searchParams.set('categoryid', $(this).attr('id'));
+    window.location.replace(url.toString());
+
+    })
 })
 async function syncProduct(e) {
     console.log(e.target)
@@ -67,7 +75,8 @@ async function syncProduct(e) {
 }
 async function searchProduct() {
     let text = document.querySelector('#search-text').value;
-    var url = new URL(window.location.href.split('?')[0]);
+    var url = new URL(window.location.href);
     url.searchParams.set('name', text);
+    url.searchParams.delete('page');
     window.location.replace(url.toString());
 }

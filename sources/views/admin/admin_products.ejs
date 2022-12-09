@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin</title>
   <%- include ('../common/lib/bootstrap_css')%>
-  <%- include ('../common/css/admin_css')%>
-
-    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+    <%- include ('../common/css/admin_css')%>
+      <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+      <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+      <link rel="stylesheet" type="text/css" href="/assets/css/bstreeview/bstreeview.css">
 </head>
 
 <body>
@@ -15,87 +17,103 @@
     <!-- Sidebar  -->
     <div class="d-flex flex-column h-100">
       <%- include ('admin_navbar')%>
-      <!-- Page Content  -->
-      <div id="content">
-        <div class="container min-vh-100" style="text-align: center">
-          <h3>Danh sách sản phẩm</h3>
-          <div class="row row-cols-md-2 row-cols-md-1 justify-content-between">
-            <div clas="col col-md-8 d-flex content-left"style="text-align: left">
-              
-              <button class="btn btn-primary sync-all" type="button">
-                Đồng bộ tất cả
-              </button>
-              <button class="btn btn-danger unsync-all" type="button">
-                Huỷ đồng bộ tất cả
-              </button>
-            </div>
-            <div class="col-md-4 col-sm-12">
-              <div class="input-group mb-3">
-                <input type="text" id='search-text' value="<%=name%>" class="form-control"
-                  placeholder="Tìm kiếm sản phẩm" aria-label="Recipient's username" aria-describedby="button-addon2">
-                <button class="btn btn-primary" type="button" id="search-btn" onclick="searchProduct()">Tìm
-                  kiếm</button>
+        <!-- Page Content  -->
+        <div id="content">
+          <div class="container-fluid px-3 min-vh-100" style="text-align: center">
+            <h3>Danh sách sản phẩm</h3>
+            <div class="row row-cols-md-2 row-cols-md-1 justify-content-between">
+              <div clas="col col-md-8 d-flex content-left" style="text-align: left">
+
+              </div>
+              <div class="col-md-4 col-sm-12">
+                <div class="input-group mb-3">
+                  <input type="text" id='search-text' value="<%=name%>" class="form-control"
+                    placeholder="Tìm kiếm sản phẩm" aria-label="Recipient's username" aria-describedby="button-addon2">
+                  <button class="btn btn-primary" type="button" id="search-btn" onclick="searchProduct()">Tìm
+                    kiếm</button>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row justify-content-center bg-blue flex-grow-1">
-            <table class="table table-bordered table-striped table-hover">
-              <thead class="table-dark ">
-                <tr>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Id nhóm hàng</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th>
+            <div class="row justify-content-center bg-blue flex-grow-1">
+              <div class=" col-md-3 h-75">
+                <div id="tree" class="  text-start"></div>
+              </div>
+              <div class="col-md-9">
+                <table class="table table-bordered table-striped table-hover">
+                  <thead class="table-dark ">
+                    <tr>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Id nhóm hàng</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">
+                        <button class="btn btn-primary sync-all" type="button">
+                          Đồng bộ tất cả
+                        </button>
+                        <button class="btn btn-danger unsync-all d-none" type="button">
+                          Huỷ đồng bộ tất cả
+                        </button>
+                      </th>
 
-                </tr>
-              </thead>
-              <tbody>
-                <% for (let i in data) { delete data[i]['description'];%>
-                  <tr>
-                    <th>
-                      <%= pageSize*(page-1) +Number(i)+1%>
-                    </th>
-                    <th>
-                      <%=data[i].masterProductId%>
-                    </th>
-                    <th>
-                      <%=data[i].code%>
-                    </th>
-                    <th>
-                      <%=data[i].fullName%>
-                    </th>
-                    <th>
-                      <%=data[i].basePrice%>
-                    </th>
-                    <th>
-                      <div class="form-check form-switch">
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% for (let i in data) { delete data[i]['description'];%>
+                      <tr>
+                        <th>
+                          <%= pageSize*(page-1) +Number(i)+1%>
+                        </th>
+                        <th>
+                          <%=data[i].masterProductId%>
+                        </th>
+                        <th>
+                          <%=data[i].code%>
+                        </th>
+                        <th>
+                          <%=data[i].fullName%>
+                        </th>
+                        <th>
+                          <%=data[i].basePrice%>
+                        </th>
+                        <th>
+                          <div class="form-check form-switch">
 
-                        <input class="form-check-input sync-button" value="<%=name%>" type="checkbox"
-                          skuCode='<%=data[i].code %>' productid="<%=data[i].id%>" id="flexCheckDefault" <% if
-                          (data[i].isSynced) {%> checked <% } %>>
+                            <input class="form-check-input sync-button" value="<%=name%>" type="checkbox"
+                              skuCode='<%=data[i].code %>' productid="<%=data[i].id%>" id="flexCheckDefault" <% if
+                              (data[i].isSynced) {%> checked <% } %>>
 
-                      </div>
+                          </div>
 
-                    </th>
-                  </tr>
-                  <%} %>
-              </tbody>
-            </table>
-          </div>
-          <div class="pt-5">
-            <%- include ('pagination')%>
+                        </th>
+                      </tr>
+                      <%} %>
+                  </tbody>
+                </table>
+                <div class="pt-5">
+                  <%- include ('pagination')%>
+
+                </div>
+              </div>
+            </div>
 
           </div>
         </div>
-      </div>
     </div>
   </div>
   <!-- /#wrapper -->
 </body>
 <%- include ('../common/lib/bootstrap_js')%>
   <%- include ('../common/lib/jquery')%>
+    <script src="/assets/js/bstreeview/bstreeview.js"></script>
+
+    <script>
+      var listCategory = JSON.parse('<%-JSON.stringify(listCategory)%>')
+      $(document).ready(function () {
+        $('#tree').bstreeview({ data: listCategory });
+      })
+      console.log(listCategory)
+    </script>
     <script src="/assets/js/admin/product.js"></script>
     <%- include ('../common/js/index')%>
 
