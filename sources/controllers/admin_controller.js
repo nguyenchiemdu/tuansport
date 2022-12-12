@@ -431,6 +431,22 @@ class AdminController {
             res.json(baseRespond(false, err))
         }
     }
+    async updateCategoryPosition(req, res, next) {
+       try {
+        let parentId = req.body.parentId
+        let categoryId = req.params.id
+        let category = await mongoCategory.findOneAndUpdate({
+            _id: categoryId,
+        }, {
+            parentId: parentId
+        })
+        res.json(baseRespond(true, AppString.ok))
+       } catch (err){
+        res.status(404)
+        res.json(baseRespond(false, err))
+       }
+
+    }
 }
 
 module.exports = new AdminController();

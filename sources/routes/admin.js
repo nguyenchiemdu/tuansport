@@ -21,6 +21,7 @@ router.put("/ctv/:id", adminController.updateCtv);
 router.delete("/ctv/:id", adminController.deleteCtv);
 router.get("/ctv", adminController.ctv);
 router.get("/category", adminController.category);
+router.patch("/category/:id/position", adminController.updateCategoryPosition);
 router.post("/sync-product", adminController.syncProductPost);
 
 module.exports = router;
