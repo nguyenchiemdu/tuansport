@@ -1,0 +1,57 @@
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin</title>
+  <%- include ('../common/lib/bootstrap_css')%>
+    <%- include ('../common/css/admin_css')%>
+      <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+      <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+      <link rel="stylesheet" type="text/css" href="/assets/css/bstreeview/bstreeview.css">
+</head>
+
+<body>
+  <div class="wrapper min-vh-100">
+    <!-- Sidebar  -->
+    <div class="d-flex flex-column h-100">
+      <%- include ('admin_navbar')%>
+        <!-- Page Content  -->
+        <div class="row">
+          <div class="col-md-3 h-75">
+            <div id="tree" class="text-start">
+
+            </div>
+          </div>
+          <div class="col-md-3 h-75">
+            <div id="list-free-category" class="text-start">
+
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+  <!-- /#wrapper -->
+</body>
+<%- include ('../common/lib/bootstrap_js')%>
+  <%- include ('../common/lib/jquery')%>
+    <script src="/assets/js/bstreeview/bstreeview.js"></script>
+
+    <script>
+      var listCategory = JSON.parse('<%-JSON.stringify(categoryTree)%>')
+      var listFreeCategory = JSON.parse('<%-JSON.stringify(listFreeCategory)%>')
+
+      $(document).ready(function () {
+        $('#tree').bstreeview({ data: listCategory });
+        $('#list-free-category').bstreeview({ data: listFreeCategory});
+      })
+      console.log(listCategory)
+      console.log(listFreeCategory);
+    </script>
+    <script src="/assets/js/admin/config_category.js"></script>
+    <%- include ('../common/js/index')%>  
+
+
+</html>

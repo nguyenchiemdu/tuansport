@@ -45,7 +45,7 @@ class AdminController {
             KiotVietCategory.modifyCategoryToTree(listCategory[i], categoryId)
         }
 
-        res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name, listCategory })
+        res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name ,listCategory})
     }
     // GET  /synced-products
     async syncedProducts(req, res) {
@@ -353,16 +353,16 @@ class AdminController {
 
     async category(req, res, next) {
         try {
-            let route = req.route.path;
-            let listCategory = await mongoCategory.find({
+        let route = req.route.path;
+            let listCategory =  await mongoCategory.find({
                 parentId: null
             })
-            let listResult = listCategory.map(function (category) {
-                return { ...category._doc }
-            })
-            let stack = [...listResult]
-            while (stack.length > 0) {
-                let ref = stack.pop();
+        let listResult = listCategory.map(function(category){
+            return {... category._doc}
+        })
+        let stack = [...listResult]
+            while( stack.length > 0) {
+                let ref= stack.pop();
                 if (ref.hasNoChild) continue
                 let listChild = await mongoCategory.find({
                     parentId: ref._id,
@@ -374,14 +374,21 @@ class AdminController {
                 ref.children = [...listChild]
                 stack.push(...listChild)
             }
-            let freeCategory = await mongoCategory.find({
-                parentId: 0
-            })
-            res.json({
-                categoryTree: listResult,
-                freeCategory: freeCategory
-            })
-        } catch (err) {
+        let freeCategory = await mongoCategory.find({
+            parentId : 0
+        })
+        let listFreeCategory = freeCategory.map(function(category){
+            return {...category._doc}
+        })
+        for (let i = 0; i < listFreeCategory.length; i++) {
+            KiotVietCategory.modifyCategoryToTree(listFreeCategory[i])
+        }
+        for (let i = 0; i < listResult.length; i++) {
+            KiotVietCategory.modifyCategoryToTree(listResult[i])
+        }
+        console.log(freeCategory)
+        res.render("admin/admin_category_tree", { categoryTree: listResult, listFreeCategory,  route})
+        } catch(err){
             console.log(err)
             next(err)
         }
