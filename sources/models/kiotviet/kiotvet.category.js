@@ -40,9 +40,9 @@ class KiotVietCategory {
             isExpanded = true;
         } else {
         refCategory.class = 'category-item'
-
         }
-            refCategory.id = refCategory.categoryId
+        
+            refCategory.id = refCategory?.categoryId || refCategory?._id
         if (refCategory.children!= null) {
             refCategory.nodes = [...refCategory.children]
             refCategory.icon =  "fa fa-folder"

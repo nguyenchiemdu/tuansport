@@ -354,7 +354,8 @@ class AdminController {
     async category(req, res, next) {
         try {
         let route = req.route.path;
-            let listCategory =  await mongoCategory.find({
+
+        let listCategory =  await mongoCategory.find({
                 parentId: null
             })
         let listResult = listCategory.map(function(category){
@@ -366,7 +367,6 @@ class AdminController {
                 if (ref.hasNoChild) continue
                 let listChild = await mongoCategory.find({
                     parentId: ref._id,
-
                 })
                 listChild = listChild.map(function (category) {
                     return { ...category._doc }
@@ -374,19 +374,41 @@ class AdminController {
                 ref.children = [...listChild]
                 stack.push(...listChild)
             }
+            
+            await mongoCategory.updateMany({
+                parentId: 0
+            }, {
+                hasNoChild: true
+            })
+            
         let freeCategory = await mongoCategory.find({
             parentId : 0
         })
         let listFreeCategory = freeCategory.map(function(category){
             return {...category._doc}
         })
+        while (stack.length > 0) 
+            stack.pop()
+        stack = [...listFreeCategory]
+            while( stack.length > 0) {
+                let ref= stack.pop();
+                if (ref.hasNoChild) 
+                    continue
+                let listChild = await mongoCategory.find({
+                    parentId: ref._id,
+                })
+                listChild = listChild.map(function (category) {
+                    return { ...category._doc }
+                })
+                ref.children = [...listChild]
+                stack.push(...listChild)
+        }
         for (let i = 0; i < listFreeCategory.length; i++) {
             KiotVietCategory.modifyCategoryToTree(listFreeCategory[i])
         }
         for (let i = 0; i < listResult.length; i++) {
             KiotVietCategory.modifyCategoryToTree(listResult[i])
         }
-        console.log(freeCategory)
         res.render("admin/admin_category_tree", { categoryTree: listResult, listFreeCategory,  route})
         } catch(err){
             console.log(err)
@@ -438,8 +460,9 @@ class AdminController {
         let category = await mongoCategory.findOneAndUpdate({
             _id: categoryId,
         }, {
-            parentId: parentId
+            parentId: parentId,
         })
+        await 
         res.json(baseRespond(true, AppString.ok))
        } catch (err){
         res.status(404)
