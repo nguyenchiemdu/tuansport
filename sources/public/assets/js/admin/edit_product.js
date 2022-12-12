@@ -31,22 +31,47 @@ $(document).ready(function () {
                 }
             })
     })
-    $('form#edit-form :input[name="images"]').each(function () {
+    $('#edit-form input[name="images"]').each(function () {
         $(this).on('blur', function () {
-            let parent = $(this).parent().parent()
-
+            let parent = $(this).parent()
             let src = $(this).val()
             $(parent).each(function () {
-                $(this).find('img').attr('src', src)
+                $(this).children('div').css('background-image', `url('${src}')`)
             })
         })
         $(this).on('input', function () {
-            let parent = $(this).parent().parent()
-
             let src = $(this).val()
-            $(parent).each(function () {
-                $(this).find('img').attr('src', src)
-            })
+            $(this).parent().css('background-image', `url('${src}')`)
+            // let parent = $(this).parent()
+
+            // let src = $(this).val()
+            // $(parent).each(function () {
+            //     $(this).children('div').css('background-image',`url('${src}')`)
+            // })
+        })
+    })
+    $('.btn-delete-img').click(function (e) {
+        var url = new URL(window.location.href.split('?')[0]);
+        let button = $(this);
+        let imageUrl = $(this).attr('url');
+        let body = {
+            url: imageUrl
+        }
+        e.preventDefault()
+        fetch(url + '/delete-img', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        }).then(res=> res.json())
+        .then(res=> {
+            if (res.success) {
+                button.parent().parent().remove()
+            } else {
+                alert(response.message)
+            }
         })
     })
 })

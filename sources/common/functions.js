@@ -101,6 +101,16 @@ function isVietnamesePhoneNumber(number) {
     return /(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(number);
   }
 
+// const fs = require('fs')
+// var filePath ='./sources/public/try.js'
+// fs.unlink(filePath,function(err){
+//     if (err) {
+//         console.log(err)
+
+//     }
+//     else console.log('deleted file')
+// })
+
 module.exports.removeAccent = removeAccent
 module.exports.isVietnamesePhoneNumber   = isVietnamesePhoneNumber    
 module.exports.hashPassword = hashPassword

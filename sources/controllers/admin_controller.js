@@ -25,11 +25,11 @@ class AdminController {
         let name = req.query.name;
         let categoryId = req.query.categoryid
         let categoryParam = {}
-        if (categoryId!= null) 
+        if (categoryId != null)
             categoryParam = {
                 categoryId
             }
-        let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true, name: name,...categoryParam })
+        let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true, name: name, ...categoryParam })
         response.data = await Promise.all(response.data.map(async product => {
             let syncProduct = await mongoProduct.find({
                 skuCode: product.code,
@@ -42,10 +42,10 @@ class AdminController {
         }));
         let listCategory = await KiotVietCategory.getAllCategory()
         for (let i = 0; i < listCategory.length; i++) {
-            KiotVietCategory.modifyCategoryToTree(listCategory[i],categoryId)
+            KiotVietCategory.modifyCategoryToTree(listCategory[i], categoryId)
         }
 
-        res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name ,listCategory})
+        res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name, listCategory })
     }
     // GET  /synced-products
     async syncedProducts(req, res) {
@@ -348,41 +348,80 @@ class AdminController {
             console.log(err)
             res.status(400)
             res.json(baseRespond(false, err))
-        }}
+        }
+    }
 
-    async category(req, res,next) {
+    async category(req, res, next) {
         try {
-        let route = req.route.path;
-            let listCategory =  await mongoCategory.find({
+            let route = req.route.path;
+            let listCategory = await mongoCategory.find({
                 parentId: null
             })
-        let listResult = listCategory.map(function(category){
-            return {... category._doc}
-        })
-        let stack = [...listResult]
-            while( stack.length > 0) {
-                let ref= stack.pop();
+            let listResult = listCategory.map(function (category) {
+                return { ...category._doc }
+            })
+            let stack = [...listResult]
+            while (stack.length > 0) {
+                let ref = stack.pop();
                 if (ref.hasNoChild) continue
                 let listChild = await mongoCategory.find({
-                    parentId : ref._id,
-                   
+                    parentId: ref._id,
+
                 })
-                listChild = listChild.map(function(category){
-                    return {...category._doc}
+                listChild = listChild.map(function (category) {
+                    return { ...category._doc }
                 })
                 ref.children = [...listChild]
                 stack.push(...listChild)
             }
-        let freeCategory = await mongoCategory.find({
-            parentId : 0
-        })
-        res.json({
-            categoryTree: listResult,
-            freeCategory: freeCategory
-        })
-        } catch(err){
+            let freeCategory = await mongoCategory.find({
+                parentId: 0
+            })
+            res.json({
+                categoryTree: listResult,
+                freeCategory: freeCategory
+            })
+        } catch (err) {
             console.log(err)
             next(err)
+        }
+    }
+    async uploadImage(req, res, next) {
+        let path = req.headers.host;
+        let id = req.params.id
+        path = 'http://' + path + '/' + req.file.path.split('/').slice(2).join('/')
+        let product = await mongoProduct.findOne({ _id: id })
+        if (product != null) {
+            let images = product.images
+            images.push(path)
+            product = await mongoProduct.findOneAndUpdate({
+                _id: id,
+            }, {
+                images: images
+            })
+        }
+        res.redirect('/admin/synced-products/' + id)
+        // console.log(req.file)
+        // res.json(path)
+    }
+    async deleteImage(req, res, next) {
+        try {
+            let url = req.body.url;
+            let id = req.params.id
+            let product = await mongoProduct.findOne({ _id: id })
+            if (product != null) {
+                let images = product.images
+                images = images.filter(item => item != url)
+                product = await mongoProduct.findOneAndUpdate({
+                    _id: id,
+                }, {
+                    images: images
+                })
+            }
+            res.json(baseRespond(true, AppString.ok))
+        } catch (err) {
+            res.error(400)
+            res.json(baseRespond(false, err))
         }
     }
 }
