@@ -13,32 +13,57 @@
 </head>
 
 <body>
+  <!-- Navbar -->
+  <%- include ('admin_navbar')%>
+
+  <!-- Modal -->
+  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Vui long nhap lua chon
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="1">Add vao con</button>
+          <button type="button" class="btn btn-primary" id="2">Add vao tree</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- App body -->
   <div class="wrapper min-vh-100">
     <!-- Sidebar  -->
     <div class="d-flex flex-column h-100">
-      <%- include ('admin_navbar')%>
         <!-- Page Content  -->
-        <div class="row">
-          <div class="col-md-3 h-75">
-            <div id="tree" class="text-start">
-
-            </div>
-          </div>
-          <div class="col-md-3 h-75">
-            <div id="list-free-category" class="text-start">
-
-            </div>
+      <div class="row">
+        <div class="col-md-3 h-75">
+          <div id="tree" class="text-start">
+            
           </div>
         </div>
-
+        <div class="col-md-3 h-75">
+          <div id="list-free-category" class="text-start">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+       
+          
     </div>
   </div>
   <!-- /#wrapper -->
 </body>
 <%- include ('../common/lib/bootstrap_js')%>
   <%- include ('../common/lib/jquery')%>
+  <%- include ('../common/js/index')%>  
     <script src="/assets/js/bstreeview/bstreeview.js"></script>
-
     <script>
       var listCategory = JSON.parse('<%-JSON.stringify(categoryTree)%>')
       var listFreeCategory = JSON.parse('<%-JSON.stringify(listFreeCategory)%>')
@@ -51,7 +76,6 @@
       console.log(listFreeCategory);
     </script>
     <script src="/assets/js/admin/config_category.js"></script>
-    <%- include ('../common/js/index')%>  
 
 
 </html>

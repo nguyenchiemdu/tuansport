@@ -29,7 +29,7 @@
     var templates = {
         treeview: '<div class="bstreeview"></div>',
         treeviewItem: '<div role="treeitem" class="list-group-item" data-bs-toggle="collapse" draggable="true"></div>',
-        treeviewGroupItem: '<div role="group" class="list-group collapse" id="itemid" draggable="true"></div>',
+        treeviewGroupItem: '<div role="group" class="list-group collapse" id="itemid"></div>',
         treeviewItemStateIcon: '<i class="state-icon"></i>',
         treeviewItemIcon: '<i class="item-icon"></i>'
     };

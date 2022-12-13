@@ -7,7 +7,7 @@ const Cagetory = new Schema({
     parentId: { type: Number},
     categoryName: { type: String, required: true, },
     listSize: { type: Array,default: []},
-    hasNoChild: {type: Boolean, default: false}
+    hasNoChild: {type: Boolean, default: false  }
 }, {
     timestamps: true,
 }, { collection: 'categories' }
