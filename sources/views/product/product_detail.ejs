@@ -5,10 +5,12 @@
                function formatedPrice(item) {
                        let price;
                        if (user?.role== 'Cộng tác viên'){
-                               price=  item.ctvPrice
-                       } else 
-                       price =  item.price;
+                               price =  item.ctvPrice
+                               return  'CTV: '+priceFormat.format(price)
+                       } else  {
+                        price =  item.price;
                        return priceFormat.format(price)
+                       }
                }
         %>
 <head>

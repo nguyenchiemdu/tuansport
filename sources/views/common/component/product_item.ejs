@@ -1,13 +1,24 @@
 <% 
- let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
-        function formatedPrice(item) {
+ let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
+ function formatedPrice(item) {
+                       let price;
+                       if (user?.role== 'Cộng tác viên'){
+                               price =  item.ctvPrice
+                               return  'CTV: '+priceFormat.format(price)
+                       } else  {
+                        price =  item.price;
+                       return priceFormat.format(price)
+                       }
+        }
+        function secondaryPrice(item){
                 let price;
-                if (user?.role== 'Cộng tác viên'){
-                        price=  item.ctvPrice
-                } else 
-                price =  item.price;
-
-                return priceFormat.format(price)
+                       if (user?.role== 'Cộng tác viên'){
+                               price =  item.price
+                               return  'Giá bán: '+priceFormat.format(price)
+                       } else  {
+                        price =  item.salePrice;
+                       return priceFormat.format(price)
+                       }
         }
  %>
 <div skucode='<%=item.skuCode%> '
@@ -41,7 +52,7 @@
                             <h6
                                     style="color: var(--dark-gray-color)">
                                     <s>
-                                        <%=priceFormat.format(item.salePrice)%>
+                                        <%=secondaryPrice(item)%>
                                     </s>
                             </h6>
                             <% } %> 
