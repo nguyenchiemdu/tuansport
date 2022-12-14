@@ -115,33 +115,47 @@ $(document).ready(function () {
         let skuCode = button.attr('skucode')
         let hasAttr = !(button.attr('noattr')==='true')
         if (skuCode.includes('Master')&& hasAttr){
-            $('#exampleModal').modal('show')
-            return
-        }
-        skuCode = skuCode.replace('Master','')
-        let cartItems = JSON.parse(window.localStorage.getItem('cart')) ?? []
-        let index = cartItems.findIndex(item => item.id == skuCode)
-        if (index<0) {
-            cartItems.push({id: skuCode,quantity:1})
+            $('.toast-body span').text('Vui lòng chọn thuộc tính của sản phẩm')
+            $('.toast-body a').addClass('d-none')
+            $('#add-to-cart-success').toast('show')
         } else {
-            cartItems[index].quantity = parseInt(cartItems[index].quantity) +1
+            if ($('#product-status span:contains("0")').length > 0) {
+                $('.toast-body span').text('Sản phẩm của bạn hiện đã hết hàng')
+                $('.toast-body a').addClass('d-none')
+                $('#add-to-cart-success').toast('show')
+            } else {
+                console.log('con hang')
+                skuCode = skuCode.replace('Master','')
+                let cartItems = JSON.parse(window.localStorage.getItem('cart')) ?? []
+                let index = cartItems.findIndex(item => item.id == skuCode)
+                if (index<0) {
+                    cartItems.push({id: skuCode,quantity:1})
+                } else {
+                    cartItems[index].quantity = parseInt(cartItems[index].quantity) +1
+                }
+                window.localStorage.setItem('cart', JSON.stringify(cartItems))
+                
+                if (cartItems.length > 0) {
+                    let badge = `
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        ${cartItems.length}
+                    </span>  
+                    `
+                    $("#shopping-cart-nav-icon").append(badge)
+                }
+                $("#shopping-cart-nav-icon").children('.badge').html(cartItems.length)
+                $('.toast-body span').text('Đã thêm sản phẩm vào giỏ hàng!')
+                $('.toast-body a').removeClass('d-none')
+                $('.toast-body a').text('Đi đến giỏ hàng')
+                $('.toast-body a').attr('href', '/cart')
+                $('#add-to-cart-success').toast('show')
+            }
         }
-        window.localStorage.setItem('cart', JSON.stringify(cartItems))
-        
-        if (cartItems.length > 0) {
-            let badge = `
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                ${cartItems.length}
-            </span>  
-            `
-            $("#shopping-cart-nav-icon").append(badge)
-        }
-        $("#shopping-cart-nav-icon").children('.badge').html(cartItems.length)
-        $('#add-to-cart-success').toast('show')
     })
     $('.btn-wishlist').on('click', function (e) {
         e.stopPropagation();
         let button = $(this)
+
         if (button.hasClass('btn-light')) {
             button.removeClass('btn-light')
             button.addClass('btn-primary')
@@ -192,8 +206,17 @@ $(document).ready(function () {
                 $("#wishlist-nav-icon").children('.badge').remove()
             }
             $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+        }
+        $('.toast-body a').text('Đi đến wishlist')
+        $('.toast-body a').attr('href', '/wishlist')
+        if (!$(button).hasClass('btn-light')) {
+            $('.toast-body span').text('Đã thêm sản phẩm vào wishlist! ')
+        } else {
+            $('.toast-body span').text('Đã gỡ sản phẩm ra khỏi wishlist! ')
 
         }
+            
+        $('#add-to-cart-success').toast('show')
     })
     // update porduct that in wishlists
     let wishlist = window.localStorage.getItem('wishlist');
