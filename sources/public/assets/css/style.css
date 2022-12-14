@@ -31,6 +31,10 @@ input{
     outline: 0;
 }
 
+.tag{
+    font-weight: var(--heading5-font-weight);
+    color: black!important;
+}
 /* reuse this color template in ejs template engine */
 :root {
     --primary-color: #FFD93D;

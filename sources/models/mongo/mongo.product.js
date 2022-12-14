@@ -16,7 +16,7 @@ const Product = new Schema({
     size: { type: String, required: true },
     isSynced: { type: Boolean, required: true,default: true},
     color: { type: String },
-
+    tag: { type: String, default: ''},
 }, {
     timestamps: true,
 }, { collection: 'products' }

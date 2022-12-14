@@ -106,6 +106,7 @@ class AdminController {
             mongoCategory.find({})
             ]
         )
+        console.log(product)
         if (product != null) {
             res.render("admin/admin_edit_product", { itemData: product, categories: categories, route: route })
         } else {

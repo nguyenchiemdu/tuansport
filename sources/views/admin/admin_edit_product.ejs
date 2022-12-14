@@ -22,9 +22,9 @@
 
                     <div class="container mt-5">
                         <form id="edit-form" method="POST" action="?_method=PUT">
-                            <% let mapName={ 'name' : 'Tên sản phẩm' ,'fullName': 'Tên đầy đủ' } %>
-                                <% for (let key of ['name','fullName','categoryId','images']) { if
-                                    (['name','fullName','images','categoryId','color'].includes(key)) { if
+                            <% let mapName={ 'name' : 'Tên sản phẩm' ,'fullName': 'Tên đầy đủ' , 'tag': 'Tag sản phẩm'} %>
+                                <% for (let key of ['name','fullName','categoryId','images', 'tag']) { if
+                                    (['name','fullName','images','categoryId','color', 'tag'].includes(key)) { if
                                     (key!='images' ){ if (key=='categoryId' ){%>
                                     <div class="mb-3">
                                         <h4 for="exampleInputEmail1" class="form-label">
