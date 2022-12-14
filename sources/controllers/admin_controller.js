@@ -600,7 +600,7 @@ class AdminController {
             await mongoNavbarcategories.findByIdAndUpdate(1, {
                 string: html
             })
-           await  writeFile('./sources/views/common/component/category.ejs',html)
+           await  writeFile('./sources/public/assets/category.html',html)
         } catch (error) {
             console.log(error)
         }   

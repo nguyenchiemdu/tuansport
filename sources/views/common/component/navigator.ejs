@@ -14,10 +14,18 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
-  
-       
-        <ul class="navbar-nav justify-content-evenly me-auto mb-2 mb-lg-0">
-         <%- include('category') %> 
+        <ul class="navbar-nav category-nav justify-content-evenly me-auto mb-2 mb-lg-0">
+          <script>
+            function defer(method) {
+              if (window.jQuery) {
+                method();
+              } else {
+                setTimeout(function () { defer(method) }, 50);
+              }
+            }; defer(function () {
+              $(".category-nav").load("/assets/category.html");
+            })
+          </script>
         </ul>
         <ul class="navbar-nav mb-lg-0 align-items-center align-middle text-center">
           <li class="nav-item search-box">
@@ -32,7 +40,8 @@
             </div>
           </li>
           <li class="nav-item nav-icon">
-            <a id="search-nav-icon" class="d-flex mb-2 mb-xl-0 me-xl-4 fs-4" data-bs-toggle="modal" data-bs-target="#exampleModal" style="border:0">
+            <a id="search-nav-icon" class="d-flex mb-2 mb-xl-0 me-xl-4 fs-4" data-bs-toggle="modal"
+              data-bs-target="#exampleModal" style="border:0">
               <i data-feather="search" class="nav-link feather-46"></i>
             </a>
           </li>
@@ -43,18 +52,19 @@
             </li>
             <% } else { %>
               <li class="nav-item dropdown">
-                <a class="btn nav-link text-color-white px-3 mb-2 mx-auto mx-xl-0 mb-xl-0 me-xl-4 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                  aria-expanded="false" style="background-color: var(--black-color); padding-top: 10px; padding-bottom: 10px;">
-                  Xin chào: <%=user.username %> 
+                <a class="btn nav-link text-color-white px-3 mb-2 mx-auto mx-xl-0 mb-xl-0 me-xl-4 dropdown-toggle"
+                  href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  style="background-color: var(--black-color); padding-top: 10px; padding-bottom: 10px;">
+                  Xin chào: <%=user.username %>
                 </a>
-               
+
                 <ul class="dropdown-menu">
-                  <% if (user.role == 'Admin') {%>
+                  <% if (user.role=='Admin' ) {%>
                     <li><a class="dropdown-item" href="/admin" id="signout">Trang admin</a></li>
-                    
-                  <%}%> 
-                  <li><a class="dropdown-item" href="/signout" id="signout">Đăng xuất</a></li>
-                  
+
+                    <%}%>
+                      <li><a class="dropdown-item" href="/signout" id="signout">Đăng xuất</a></li>
+
                 </ul>
               </li>
               <% } %>
@@ -64,7 +74,8 @@
                   </a>
                 </li>
                 <li class="nav-item nav-icon ">
-                  <a href="/cart" id="shopping-cart-nav-icon" class="shopping-cart d-flex position-relative mb-2 mb-xl-0 me-xl-4 fs-4 ">
+                  <a href="/cart" id="shopping-cart-nav-icon"
+                    class="shopping-cart d-flex position-relative mb-2 mb-xl-0 me-xl-4 fs-4 ">
                     <i data-feather="shopping-cart" class="nav-link feather-46 position-relative"></i>
                   </a>
                 </li>
