@@ -18,11 +18,9 @@ class HomeController {
 
             }
         })
-        let html = (await mongoNavbarcategories.findById(1)).string
         res.render("home/home", {
             data: docs,
             user: req.headers.userInfor,
-            html: html,
         })
     }
     async cart(req, res) {

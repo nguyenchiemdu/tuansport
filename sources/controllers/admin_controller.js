@@ -2,7 +2,7 @@ const { response } = require("express");
 const { mongo } = require("mongoose");
 const { default: axios } = require("axios");
 const AppString = require("../common/app_string");
-const { baseRespond, getQueryString, toPathString } = require("../common/functions");
+const { baseRespond, getQueryString, toPathString,writeFile } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
@@ -496,7 +496,7 @@ class AdminController {
                 } else {
                     htmlCategory = `
                     <li class="nav-item dropdown text-center p-1" id="nav-redirect">
-                        <a class="nav-link dropdown-toggle" href="/danh-muc/${category.icon}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                        <a class="nav-link dropdown-toggle" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <img src="/assets/images/icon-navbar/${category.icon}" class="p-1 mb-2"></img>
                         <h5>${category.categoryName.toUpperCase()}</h5>
@@ -600,6 +600,7 @@ class AdminController {
             await mongoNavbarcategories.findByIdAndUpdate(1, {
                 string: html
             })
+           await  writeFile('./sources/views/common/component/category.ejs',html)
         } catch (error) {
             console.log(error)
         }   
