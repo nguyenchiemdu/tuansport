@@ -65,7 +65,9 @@
                                                         </div>
                                                         <div class="row row-cols-auto my-2">
 
-                                                                <% for(let size of category.listSize){ %> 
+                                                                <% 
+                                                                        
+                                                                        for(let size of category.listSize.sort()){ %> 
                                                                         <div class="col mb-3 p-1">
                                                                                 <button type="button"
                                                                                         class="btn btn-light px-3 py-2 size-button 162354"
