@@ -42,18 +42,15 @@
                                                                 aria-label="Slide 3"></button>
                                                 </div>
                                                 <div class="carousel-inner rounded-3 w-80 ratio ratio-21x9">
+                                                        <div class="carousel-item">
+                                                                <img src="/assets/images/slider/slider2.jpeg"
+                                                                        class="d-block w-100" alt="...">
+                                                        </div>
                                                         <div class="carousel-item active">
-                                                                <img src="/assets/images/slider/slider1.jpeg"
+                                                                <img src="/assets/images/slider/slider2.jpeg"
                                                                         class="d-block w-100" alt="...">
                                                         </div>
-                                                        <div class="carousel-item">
-                                                                <img src="/assets/images/slider/slider1.jpeg"
-                                                                        class="d-block w-100" alt="...">
-                                                        </div>
-                                                        <div class="carousel-item">
-                                                                <img src="/assets/images/slider/slider1.jpeg"
-                                                                        class="d-block w-100" alt="...">
-                                                        </div>
+                                                       
                                                 </div>
                                                 <button class="carousel-control-prev" type="button"
                                                         data-bs-target="#carouselExampleControls" data-bs-slide="prev">
@@ -198,14 +195,14 @@
 
                                                         </div>
                                                         <div class="p-3">
-                                                                <a href="#" style="color: var(--black-color);">
+                                                                <a href="/danh-muc/4" style="color: var(--black-color);">
                                                                         <div class="rounded ratio ratio-1x1 hover-bigger"
-                                                                                style="background-image: url('https://as2.ftcdn.net/v2/jpg/02/47/29/23/1000_F_247292335_xuy1Cs0haWQwQcfKZaVkYYeYOvCe7Piv.jpg');background-size: cover">
+                                                                                style="background-image: url('https://wallpapercave.com/wp/wp7966060.jpg');background-size: cover">
                                                                                 <div>
                                                                                         <div class="position-absolute rounded-bottom w-100 bottom-0 px-3 py-3"
                                                                                                 style="background-color: rgba(255,255,255, 0.6); backdrop-filter: blur(5px);
                                                                                 ">
-                                                                                                <h4>Balo</h4>
+                                                                                                <h4>Bóng</h4>
                                                                                                 <h6>Special</h6>
                                                                                         </div>
                                                                                 </div>
@@ -248,7 +245,7 @@
                                                         </h2>
                                                 </div>
                                                 <div class="col text-end d-flex justify-content-end">
-                                                        <a href="#" class="d-flex align-items-center"
+                                                        <a href="/products?newest=true" class="d-flex align-items-center"
                                                                 style="color: black">
                                                                 <h5 class="align-middle">
                                                                         Xem tất cả
@@ -258,7 +255,7 @@
 
                                         </div>
                                         <div class="owl-carousel newest-product mt-3">
-                                                <% for (let item of data){ %>
+                                                <% for (let item of newestProduct){ %>
                                                         <div class="p-3">
                                                                 <%- include('../common/component/product_item.ejs',{item:
                                                                         item}) %>
@@ -277,7 +274,7 @@
                                                         </h2>
                                                 </div>
                                                 <div class="col text-end d-flex justify-content-end">
-                                                        <a href="#" class="d-flex align-items-center"
+                                                        <a href="/products" class="d-flex align-items-center"
                                                                 style="color: black">
                                                                 <h5 class="align-middle">
                                                                         Xem tất cả

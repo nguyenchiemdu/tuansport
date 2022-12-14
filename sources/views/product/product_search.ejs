@@ -40,9 +40,20 @@
                 <div class="row row-cols-sm-1">
                     
                     <div class="col">
+                        <% if (searchText==null || searchText.length ==0) {%>
+                            <h2>
+                                Tất cả sản phẩm
+                            </h2>
+                            <%} else {%>
                         <h2>
                             Kết quả tìm kiếm với từ khoá "<%=searchText%>"
                         </h2>
+                        <% } %> 
+                        <% if (newest) {%>
+                            <h3>
+                                Ưu tiên sản phẩm mới về
+                            </h3>
+                            <%} %>
                         <div class="d-flex justify-content-between my-2">
                             <div class="py-2">
                                 <h5 class="">

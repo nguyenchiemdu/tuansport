@@ -96,6 +96,27 @@ function resetRightValue() {
 	$('.slider-end').html(_this.value + "đ")
 
 }
+function initLeftValue(value) {
+	var _this = inputLeft,
+		min = parseInt(_this.min),
+		max = parseInt(_this.max);
+	_this.value = value;
+	var percent = ((_this.value - min) / (max - min)) * 100;
+	thumbLeft.style.left = percent + "%";
+	range.style.left = percent + "%";
+	$('.slider-start').html(_this.value + "đ")
+}
+function initRightValue(value) {
+	var _this = inputRight,
+		min = parseInt(_this.min),
+		max = parseInt(_this.max);
+	_this.value = value;
+	var percent = ((_this.value - min) / (max - min)) * 100;
+	thumbRight.style.right = (100 - percent) + "%";
+	range.style.right = (100 - percent) + "%";
+	$('.slider-end').html(_this.value + "đ")
+
+}
 var selectedSizes = []
 // select size buttons
 $('.size-button').on('click', function () {
@@ -116,4 +137,19 @@ $('.apply-filter').on('click', function () {
 	var loc = window.location.pathname;
 	var dir = loc.substring(0, loc.lastIndexOf('?'));
 	window.location.href = `${dir}?sizes=${JSON.stringify(selectedSizes)}&min=${inputLeft.value}&max=${inputRight.value}`
+})
+
+// init selected filter
+$(document).ready(function () {
+	let url = new URL(window.location.href)
+	let sizes = JSON.parse(url.searchParams.get('sizes'))?? [];
+	let min = parseInt(url.searchParams.get('min'));
+	let max = parseInt(url.searchParams.get('max'));
+	if (min.toString() !='NaN') initLeftValue(min)
+	if (max.toString() !='NaN') initRightValue(max)
+	sizes.forEach(size => {
+		selectedSizes.push(size)
+		$(`.size-button[value='${size}']`).removeClass('btn-light')
+		$(`.size-button[value='${size}']`).addClass('btn-primary')
+	});
 })

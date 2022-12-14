@@ -24,12 +24,12 @@ class ProductController {
                 masterProductId: product._id
             }).then(products => products.map((product) => { return { productId: product._id } }));
             listIdGroupProduct.push({ productId: product._id })
-             let productAttributes;
-            
+            let productAttributes;
+
             let dataProductAttributes = await mongoProductAttribute.find({
                 $or: listIdGroupProduct
             }).populate('attributeValueId').exec()
-            productAttributes = await Promise.all(dataProductAttributes.map(async attribute=> {
+            productAttributes = await Promise.all(dataProductAttributes.map(async attribute => {
                 let attr = await mongoAttribute.find({
                     _id: attribute.attributeValueId.attributeId
                 })
@@ -71,8 +71,9 @@ class ProductController {
     }
     async productByCategory(req, res, next) {
         try {
-        let categoryId = req.params.category
-            let sizes = JSON.parse(req.query.sizes?? '[]')
+            let role = req.headers.userInfor.role;
+            let categoryId = req.params.category
+            let sizes = JSON.parse(req.query.sizes ?? '[]')
             let min = req.query.min
             let max = req.query.max
             // get all children of category
@@ -84,20 +85,51 @@ class ProductController {
                 let categories = await mongoCategory.find({ parentId: node._id })
                 if (categories.length > 0) {
                     stack.push(...categories)
-                }else  {
+                } else {
                     listCategoryid.push(node._id)
                 }
             }
-            let listFindCondition = listCategoryid.map(id=> {return {categoryId: id}})
+            let findCondition = {
+                categoryId: {
+                    $in: listCategoryid
+                },
+                masterProductId: null,
+                isSynced: true,
+
+            };
+            if (sizes != null && sizes.length > 0) {
+                findCondition = {
+                    categoryId: {
+                        $in: listCategoryid
+                    },
+                    isSynced: true,
+                    size: {
+                        $in: sizes
+                    }
+                }
+            }
+            let priceParam = 'price';
+            if (role == 'Cộng tác viên') {
+                priceParam = 'ctvPrice'
+            }
+            let priceCondition = {}
+            // query min value 
+            if (min != null) {
+                priceCondition['$gte'] = min
+            }
+            if (max != null) {
+                priceCondition['$lte'] = max
+
+            }
+            if (Object.keys(priceCondition).length > 0) {
+                findCondition[priceParam] = priceCondition
+            }
             let query = getQueryString(req)
             let page = req.query.page ?? 1;
             let response = await getTableDataWithPagination(req, mongoProduct, {
-                findCondition: {
-                   $or:listFindCondition,masterProductId: null,
-                   isSynced: true
-                }
+                findCondition: findCondition
             })
-            res.render('product/product_by_category', { user: req.headers.userInfor, ...response, page, query,category:parent })
+            res.render('product/product_by_category', { user: req.headers.userInfor, ...response, page, query, category: parent })
         } catch (err) {
             console.log(err);
             res.status(400)
@@ -107,22 +139,33 @@ class ProductController {
     // GET /products
     async searchProductResult(req, res, next) {
         try {
-        let searchText = req.query.search
+            let searchText = req.query.search;
+            let newest = req.query.newest ?? false;
             let listFindCondition = [
-                {"name" : {$regex : searchText,$options: 'i'}, masterProductId: null},
-                {"fullName" : {$regex : searchText,$options: 'i'},masterProductId:null},
             ]
-            if (searchText.length > 0) 
-                listFindCondition.push({"skuCode" : {$regex : searchText}})
+            if (searchText != null && searchText.length > 0) {
+                listFindCondition = [
+                    { "name": { $regex: searchText, $options: 'i' }, masterProductId: null },
+                    { "fullName": { $regex: searchText, $options: 'i' }, masterProductId: null },
+                    { "skuCode": { $regex: searchText } }
+                ]
+            }
+            let findCondition = {
+                isSynced: true
+            }
+            if (listFindCondition.length > 0) {
+                findCondition['$or'] = listFindCondition
+            } else {
+                findCondition['masterProductId'] = null
+            }
             let query = getQueryString(req)
             let page = req.query.page ?? 1;
+            let sortCondition = newest? '-updatedAt': ''
             let response = await getTableDataWithPagination(req, mongoProduct, {
-                findCondition: {
-                   $or:listFindCondition,
-                   isSynced: true
-                }
+                sortCondition:sortCondition,
+                findCondition: findCondition
             })
-            res.render('product/product_search', { user: req.headers.userInfor, ...response, page,query,searchText })
+            res.render('product/product_search', { user: req.headers.userInfor, ...response, page, query, searchText,newest })
         } catch (err) {
             console.log(err);
             res.status(400)

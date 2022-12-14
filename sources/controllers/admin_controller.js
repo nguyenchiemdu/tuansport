@@ -56,7 +56,22 @@ class AdminController {
         let pageSize = req.query.pageSize ?? 20
 
         let name = req.query.name;
-        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: { isSynced: true } })
+        let listFindCondition = [
+        ]
+        if (name != null && name.length > 0) {
+            listFindCondition = [
+                { "name": { $regex: name, $options: 'i' } },
+                { "fullName": { $regex: name, $options: 'i' }},
+                { "skuCode": { $regex: name } }
+            ]
+        }
+        let findCondition = {
+            isSynced: true
+        }
+        if (listFindCondition.length > 0) {
+            findCondition['$or'] = listFindCondition
+        }
+        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition })
         res.render("admin/admin_synced_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name })
     }
     // GET /admin/ctv
@@ -190,20 +205,20 @@ class AdminController {
                 // add size in to category parents
                 let res = await KiotvietAPI.callApi(ApiUrl.getProductById(product.id))
                 product = res.data
-                product = {
-                    _id: product.id,
-                    skuCode: product.code,
-                    name: product.name,
-                    fullName: product.fullName,
-                    price: product.basePrice,
-                    ctvPrice: product.priceBooks?.find(e => e.priceBookName == 'GIÁ CTV').price,
-                    salePrice: product.priceBooks?.find(e => e.priceBookName == 'giá khuyến mãi').price,
-                    images: product.images,
-                    categoryId: product.categoryId,
-                    isSynced: product.isSynced,
-                    masterProductId: product.masterProductId ?? null,
-                    attributes: product.attributes
-                }
+                // product = {
+                //     _id: product.id,
+                //     skuCode: product.code,
+                //     name: product.name,
+                //     fullName: product.fullName,
+                //     price: product.basePrice,
+                //     ctvPrice: product.priceBooks?.find(e => e.priceBookName == 'GIÁ CTV').price,
+                //     salePrice: product.priceBooks?.find(e => e.priceBookName == 'giá khuyến mãi').price,
+                //     images: product.images,
+                //     categoryId: product.categoryId,
+                //     isSynced: product.isSynced,
+                //     masterProductId: product.masterProductId ?? null,
+                //     attributes: product.attributes
+                // }
                 let size = product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue
                 let parentId = product.categoryId;
                 while (parentId != null) {
@@ -247,6 +262,7 @@ class AdminController {
                     price: product.basePrice,
                     ctvPrice: product.priceBooks?.find(e => e.priceBookName == 'GIÁ CTV').price,
                     salePrice: product.priceBooks?.find(e => e.priceBookName == 'giá khuyến mãi')?.price,
+                    size : product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue,
                     images: product.images,
                     categoryId: product.categoryId,
                     isSynced: product.isSynced,

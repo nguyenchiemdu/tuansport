@@ -18,8 +18,17 @@ class HomeController {
 
             }
         })
+        let { docs: newestProduct } = await getTableDataWithPagination(req, mongoProduct, {
+            sortCondition:'-updatedAt',
+            findCondition: {
+                masterProductId: null,
+                isSynced: true
+
+            }
+        })
         res.render("home/home", {
             data: docs,
+            newestProduct,
             user: req.headers.userInfor,
         })
     }

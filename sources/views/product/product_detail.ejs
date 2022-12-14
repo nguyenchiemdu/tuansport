@@ -47,7 +47,7 @@
                                                                         href="/">Trang chủ</a></li>
                                                         <li class="breadcrumb-item " aria-current="page"><a
                                                                         style="color:var(--dark-gray-color)"
-                                                                        href="/san-pham">Sản phẩm</a></li>
+                                                                        href="/products">Sản phẩm</a></li>
                                                         <li class="breadcrumb-item active product-name"
                                                                 aria-current="page" style="color:var(--primary-color)">
                                                                 <%= product.name %>
@@ -100,7 +100,7 @@
                                                                         </h3>
                                                                         <div class="row row-cols-auto my-2">
                                                                                 <%for (let attribute of
-                                                                                        mapAttributes[key]){%>
+                                                                                        mapAttributes[key].sort()){%>
                                                                                         <div class="col mb-3">
                                                                                                 <button type="button"
                                                                                                         class="btn btn-light px-3 py-2 attribute-button <%=attribute.attributeId%>"
