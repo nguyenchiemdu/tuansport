@@ -3,7 +3,9 @@ const AppString = require("../common/app_string");
 const { isValidateEmail, baseRespond, generateJWT } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const mongoUser = require("../models/mongo/mongo.user")
-const mongoProduct = require("../models/mongo/mongo.product")
+const mongoProduct = require("../models/mongo/mongo.product");
+const mongoCategory = require("../models/mongo/mongo.category");
+const mongoNavbarcategories = require("../models/mongo/mongo.navbarcategories");
 
 class HomeController {
     // GET 
@@ -18,7 +20,7 @@ class HomeController {
         })
         res.render("home/home", {
             data: docs,
-            user: req.headers.userInfor
+            user: req.headers.userInfor,
         })
     }
     async cart(req, res) {

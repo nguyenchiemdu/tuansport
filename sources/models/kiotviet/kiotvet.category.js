@@ -35,12 +35,21 @@ class KiotVietCategory {
         let isExpanded = false;
 
         refCategory.text = refCategory.categoryName
-        if (refCategory.categoryId == selectedId) {
-        refCategory.class = 'category-item selected'
-            isExpanded = true;
-        } else {
-        refCategory.class = 'category-item'
-        }
+        if (refCategory.categoryId)
+            if ((refCategory.categoryId == selectedId)) {
+            refCategory.class = 'category-item selected'
+                isExpanded = true;
+            } else {
+            refCategory.class = 'category-item'
+            }
+
+        if (refCategory.id)
+            if ((refCategory.id == selectedId)) {
+            refCategory.class = 'category-item selected'
+                isExpanded = true;
+            } else {
+            refCategory.class = 'category-item'
+            }
         
             refCategory.id = refCategory?.categoryId || refCategory?._id
         if (refCategory.children!= null) {

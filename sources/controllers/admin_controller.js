@@ -2,7 +2,7 @@ const { response } = require("express");
 const { mongo } = require("mongoose");
 const { default: axios } = require("axios");
 const AppString = require("../common/app_string");
-const { baseRespond, getQueryString, toPathString } = require("../common/functions");
+const { baseRespond, getQueryString, toPathString,writeFile } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
@@ -15,6 +15,7 @@ const mongoCategory = require("../models/mongo/mongo.category")
 const KiotvietAPI = require('../common/kiotviet_api');
 const ApiUrl = require("../common/api_url");
 const KiotVietCategory = require("../models/kiotviet/kiotvet.category");
+const mongoNavbarcategories = require("../models/mongo/mongo.navbarcategories");
 class AdminController {
     // GET  /products
     async products(req, res) {
@@ -403,6 +404,7 @@ class AdminController {
                 ref.children = [...listChild]
                 stack.push(...listChild)
         }
+        
         for (let i = 0; i < listFreeCategory.length; i++) {
             KiotVietCategory.modifyCategoryToTree(listFreeCategory[i])
         }
@@ -453,6 +455,156 @@ class AdminController {
             res.json(baseRespond(false, err))
         }
     }
+    static async updateNavigatorBar() {
+        let listCategory = await mongoCategory.find({
+            parentId: null
+        })
+        try {
+            let listResult = listCategory.map((category) =>category._doc)
+            let stack = [...listResult]
+            while (stack.length > 0) {
+                let ref = stack.pop();
+                if (ref.hasNoChild) {
+                    continue
+                }
+                let listChild = await mongoCategory.find({
+                    parentId: ref._id
+                })
+                listChild = listChild.map(category => category._doc)
+                ref.children = [...listChild]
+                stack.push(...listChild)
+            }
+            let html = ''
+            let i = 0
+            listResult.map(function(category) {
+                let htmlCategory = ''
+                if (category.hasNoChild) {
+                    htmlCategory = `
+                    <li class="nav-item dropdown text-center p-1" id="nav-redirect">
+                        <a class="nav-link dropdown-toggle" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <img src="/assets/images/icon-navbar/${category.icon}" class="p-1 mb-2"></img>
+                            <h5>${category.categoryName.toUpperCase()}</h5>
+                            <div class="progress" style="height: 2px;">
+                                <div class="progress-bar" role="progressbar" aria-label="Example 1px high" style="width: 100%;"
+                                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </a>
+                    </li>
+                    `
+                    html.concat(htmlCategory)
+                } else {
+                    htmlCategory = `
+                    <li class="nav-item dropdown text-center p-1" id="nav-redirect">
+                        <a class="nav-link dropdown-toggle" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <img src="/assets/images/icon-navbar/${category.icon}" class="p-1 mb-2"></img>
+                        <h5>${category.categoryName.toUpperCase()}</h5>
+                        <div class="progress" style="height: 2px;">
+                            <div class="progress-bar" role="progressbar" aria-label="Example 1px high" style="width: 100%;"
+                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </a>
+                        <ul class="dropdown-menu py-xl-3">
+                        `
+                        category.children.map(function(sub_category) {
+                            let htmlDropdown1 = ``
+                            if (sub_category.hasNoChild) {
+                                htmlDropdown1 = `
+                                    <li class="dropend position-relative"><!-- Dropdown level 1-->
+                                        <a class="dropdown-item py-3 px-4" href="/danh-muc/${sub_category._id}"
+                                            aria-haspopup="true">
+                                            ${sub_category.categoryName.toUpperCase()}
+                                        </a>
+                                    </li><!-- Dropdown level 1 -->
+                                    `
+                                htmlCategory += htmlDropdown1
+                            } else {
+                                i++
+                                htmlDropdown1 = `
+                                    <li class="dropend position-relative"> <!-- Dropdown level 1 -->
+                                        <span class="toggle-submenu position-absolute p-3 mt-1" data-index="0">
+                                        <!-- In mobile  -->
+                                            <i class="toggle-icon fa-regular fa-plus open-menu" data-index="0"></i>
+                                            <i class="toggle-icon fa-regular fa-minus close-menu" data-index="0" style="display: none"></i>
+                                        </span>
+                                        <a class="dropdown-item py-3 px-4" href="/danh-muc/1067572"
+                                        aria-haspopup="true">
+                                        ÁO BÓNG ĐÁ KHÔNG LOGO
+                                        </a>
+                                        <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0">
+                                    `
+                                    sub_category.children.map(function(child_sub_category) {
+                                        let htmlDropdown2 = ''
+                                        if ((child_sub_category).hasNoChild) {
+                                            if ((child_sub_category).logo){
+                                                htmlDropdown2 = `
+                                                <li>
+                                                    <a href="/danh-muc/${child_sub_category._id}" class="dropdown-item ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
+                                                        <img src="/assets/images/logo-FC/${child_sub_category.logo}" width="36px" height="36px" class="p-1" alt="">
+                                                        ${child_sub_category.categoryName.toUpperCase()}
+                                                    </a>
+                                                </li>
+                                                `
+                                            } else {
+                                                htmlDropdown2 = `
+                                                    <li>
+                                                        <a href="/danh-muc/${child_sub_category._id}/" class="dropdown-item ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
+                                                            ${child_sub_category.categoryName.toUpperCase()}
+                                                        </a>
+                                                    </li>
+                                                `
+                                            }
+                                            htmlDropdown1 += htmlDropdown2
+                                        } else {
+                                            htmlDropdown2 = `
+                                            <li class="dropend position-relative"> <!-- Dropdown submenu-->
+                                                    <span class="toggle-submenu position-absolute p-2 me-2 mt-1" data-index="1">
+                                                    <!-- In mobile  -->
+                                                        <i class="toggle-icon fa-regular fa-plus open-menu" data-index="1"></i>
+                                                        <i class="toggle-icon fa-regular fa-minus close-menu" data-index="1" style="display: none"></i>
+                                                    </span>
+                                                        <a class="dropdown-item ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2" href="/danh-muc/${child_sub_category._id}"
+                                                        aria-haspopup="true">
+                                                        ${child_sub_category.categoryName.toUpperCase()}
+                                                    </a>
+                                                <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0"> <!-- Dropdown level 3 -->`
+                                                    child_sub_category.children.map(function(child) {
+                                                        let htmlDropdown3 = `
+                                                        <li>
+                                                            <a href="/danh-muc/${child._id}" class="dropdown-item ms-3 ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
+                                                                ${child.categoryName.toUpperCase()}
+                                                            </a>
+                                                        </li>
+                                                        `
+                                                        htmlDropdown2 += htmlDropdown3
+                                                    })
+                                            htmlDropdown2 += `</ul>
+                                            </li>
+                                            `
+                                            htmlDropdown1 += htmlDropdown2
+                                        }
+                                    })
+                                    htmlDropdown1 += `</ul> <!-- Dropdown level 2 -->
+                                </li> <!-- Dropdown level 1 -->
+                                `
+                                htmlCategory += htmlDropdown1
+                            }
+                        })
+                        htmlCategory += `</ul> 
+                    </li>
+                    `
+                    html += htmlCategory
+                }
+            })
+            await mongoNavbarcategories.findByIdAndUpdate(1, {
+                string: html
+            })
+           await  writeFile('./sources/public/assets/category.html',html)
+        } catch (error) {
+            console.log(error)
+        }   
+    }
     async updateCategoryPosition(req, res, next) {
        try {
         let parentId = req.body.parentId
@@ -462,14 +614,16 @@ class AdminController {
         }, {
             parentId: parentId,
         })
+        AdminController.updateNavigatorBar()
         await 
         res.json(baseRespond(true, AppString.ok))
        } catch (err){
         res.status(404)
+        console.log(err)
         res.json(baseRespond(false, err))
        }
-
     }
+    
 }
 
 module.exports = new AdminController();

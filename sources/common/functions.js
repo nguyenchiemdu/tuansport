@@ -2,6 +2,8 @@ const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
 const AppString = require('./app_string')
 const jwt = require('jsonwebtoken')
+const fs = require('fs')
+
 require('dotenv').config()
 
 async function hashPassword(plainTextPassword) {
@@ -16,7 +18,7 @@ function readableDoc(doc, ...needRemoveKey) {
 function editableField(doc) {
     try {
         const { password, __v, createAt, updatedAt, _id, ...rest } = doc
-    return rest
+        return rest
     } catch (error) {
         throw AppString.invalidRequestBody
     }
@@ -81,9 +83,9 @@ function removeAccent(str) { // Translate all accent characters to English chara
 }
 
 function getRndInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
-  }
-function removeNullKey (m) {
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+function removeNullKey(m) {
     for (key in m) {
         if (m[key] == null) {
             delete m[key]
@@ -92,27 +94,36 @@ function removeNullKey (m) {
     return m
 }
 function toPathString(s) {
-   s = s.toLowerCase();
-   s = s.replace(/ /g, "-");
-   return s
+    s = s.toLowerCase();
+    s = s.replace(/ /g, "-");
+    return s
 }
 
 function isVietnamesePhoneNumber(number) {
     return /(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(number);
-  }
+}
 
-// const fs = require('fs')
-// var filePath ='./sources/public/try.js'
-// fs.unlink(filePath,function(err){
-//     if (err) {
-//         console.log(err)
+async  function writeFile(filePath, content) {
+    // var filePath ='./sources/public/try.js'
+    fs.writeFile(filePath, content, err => {
+        if (err) {
+            console.error(err);
+        }
+        // file written successfully
+    });
+    // fs.unlink(filePath,function(err){
+    //     if (err) {
+    //         console.log(err)
 
-//     }
-//     else console.log('deleted file')
-// })
+    //     }
+    //     else console.log('deleted file')
+    // })
+}
+
+
 
 module.exports.removeAccent = removeAccent
-module.exports.isVietnamesePhoneNumber   = isVietnamesePhoneNumber    
+module.exports.isVietnamesePhoneNumber = isVietnamesePhoneNumber
 module.exports.hashPassword = hashPassword
 module.exports.readableDoc = readableDoc
 module.exports.baseRespond = baseRespond
@@ -121,6 +132,7 @@ module.exports.editableField = editableField
 module.exports.generateJWT = generateJWT
 module.exports.isValidateEmail = isValidateEmail
 module.exports.getRndInteger = getRndInteger
-module.exports.removeNullKey =removeNullKey
+module.exports.removeNullKey = removeNullKey
 module.exports.getQueryString = getQueryString
 module.exports.toPathString = toPathString
+module.exports.writeFile = writeFile

@@ -3,9 +3,7 @@ console.log('category Tree')
 
 $(document).ready(function() {
 
-    $('.list-group-item').each(function() {
-        $(this).removeClass('selected')
-    })
+    
     $(`#tree [aria-level = 1]`).each(function(e) {
         $(this).removeAttr('draggable')
     })
@@ -15,14 +13,12 @@ $(document).ready(function() {
             $(this).removeAttr('draggable')
     })
     $(document).on('dragstart', function(e) {
-        console.log('drag')
         let id =  e.target.getAttribute('data-bs-target')
         // Set data to drop
         e.originalEvent.dataTransfer.setData('element', e.target.getAttribute('data-bs-target'))
     })
 
     $('#tree').on('drop', async function(e) {
-        console.log('drop')
         // Get element to drop
         let id = e.originalEvent.dataTransfer.getData('element')
         let element = $(`[data-bs-target="${id}"]`)
@@ -62,12 +58,13 @@ $(document).ready(function() {
             body: JSON.stringify({parentId})
         })
         .then(res => res.json())
-        .then(res => console.log(res))
+        .then(res => {
+            if (res.success) {
+            }
+        })
     })
 
     $('#list-free-category').on('drop', async function(e) {
-        console.log('drag sub')
-
         // Get element to drop
         let id = e.originalEvent.dataTransfer.getData('element')
         let element = $(`[data-bs-target="${id}"]`)
@@ -88,7 +85,8 @@ $(document).ready(function() {
         })
         .then(res => res.json())
         .then(res => {
-
+            if (res.success) {
+            }
         })
     })
     $('.list-group-item').on('dragover', function(e) {
