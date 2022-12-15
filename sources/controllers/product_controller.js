@@ -71,7 +71,7 @@ class ProductController {
     }
     async productByCategory(req, res, next) {
         try {
-            let role = req.headers.userInfor.role;
+            let role = req.headers.userInfor?.role;
             let categoryId = req.params.category
             let sizes = JSON.parse(req.query.sizes ?? '[]')
             let min = req.query.min
