@@ -6,6 +6,7 @@ var adminRouter = require("./admin");
 var authRouter = require("./auth");
 var productRouter = require("./product");
 var homeRouter = require("./home");
+var webhookRouter = require("./webhook");
 
 const authMiddlewares = require("../middlewares/auth.middlewares");
 
@@ -18,6 +19,7 @@ function route(app) {
   app.use("/danh-muc/:category",productController.productByCategory)
   app.use("/api", apiRouter);
   app.get("/signout",auth_controller.signout)
+  app.use('/webhook',webhookRouter)
   app.use("/",homeRouter)
   
 }
