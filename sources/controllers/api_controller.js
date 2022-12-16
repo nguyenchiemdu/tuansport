@@ -5,6 +5,7 @@ const { baseRespond } = require("../common/functions");
 const KiotvietAPI = require("../common/kiotviet_api");
 const KiotVietOrder = require("../models/kiotviet/kiotviet.order");
 const mongoProduct = require("../models/mongo/mongo.product");
+
 class ApiController {
     tryApi(_, res) {
         let response = { "success": true, "message": "OK", "data": "" };
@@ -24,6 +25,17 @@ class ApiController {
         }
     }
     // GET
+    static async getProductBySkuCodeInMongo(skuCode) {
+        try{
+            let product = await mongoProduct.find({
+                skuCode: skuCode
+            }).exec()
+            return product
+        } catch(err) {
+            console.error(err)
+        }
+    }
+    // GET
     async getProductBySkuCode(req, res, next) {
         try {
             let url = ApiUrl.getProductBySkuCode(req.params.skucode)
@@ -32,6 +44,7 @@ class ApiController {
             let product = await mongoProduct.findOne({
                 skuCode: req.params.skucode
             });
+            if (product == null) throw res.json(baseRespond(false, AppString.dataNotFound))
             let combinedProduct =  Object.assign({}, kiotvietProduct, product._doc);
             res.json(baseRespond(true, AppString.ok, combinedProduct))
         } catch (err) {

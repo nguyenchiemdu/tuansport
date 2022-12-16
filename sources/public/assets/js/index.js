@@ -77,22 +77,62 @@ const path = window.location.pathname.split('/')[1]
 
     // Badge in wishlist + cart
 
-$(document).ready(function() {
+$(document).ready(async function() {
     let wishlist = JSON.parse(window.localStorage.getItem('wishlist')) || [];
-    let cart = JSON.parse(window.localStorage.getItem('cart')) || [];
-    console.log(cart)
+    await Promise.all(wishlist.map(async (item,i) => {
+        await fetch('/api/product/code/' + item, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "GET",
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                let product = res.data
+                if (!product.isSynced) {
+                    wishlist.splice(i, 1)
+                }
+            } else wishlist.splice(i, 1)
+            
+        })
+    }))
+    localStorage.setItem('wishlist', JSON.stringify(wishlist))
     if (wishlist.length > 0) {
         let badge = `
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            ${wishlist.length}
+        ${wishlist.length}
         </span>  
         `
         $("#wishlist-nav-icon").append(badge)
     }
-    if (cart.length > 0) {
+
+
+    let cartItems = JSON.parse(window.localStorage.getItem('cart')) || [];
+    await Promise.all(cartItems.map(async (item, i) => {
+        await fetch('/api/product/code/' + item.id, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "GET",
+        })
+        .then(res => res.json())
+        .then(res => {
+            if (res.success) {
+                let product = res.data
+                if (!product.isSynced) {
+                    cartItems.splice(i, 1)
+                }
+            } else cartItems.splice(i, 1)
+        })
+    }))
+    localStorage.setItem('cart', JSON.stringify(cartItems))
+    if (cartItems.length > 0) {
         let badge = `
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            ${cart.length}
+                            ${cartItems.length}
         </span>  
         `
         $("#shopping-cart-nav-icon").append(badge)
