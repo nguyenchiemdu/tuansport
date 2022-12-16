@@ -40,7 +40,6 @@ class ApiController {
         try {
             let { role, customerName, contactNumber, address, email, listProduct, bankPayment } = req.body;
             //get product by skucode
-            console.log(req.body)
             let listCallApi = listProduct.map(async product => {
                 let url = ApiUrl.getProductBySkuCode(product.productCode)
                 let response = await KiotvietAPI.callApi(url)

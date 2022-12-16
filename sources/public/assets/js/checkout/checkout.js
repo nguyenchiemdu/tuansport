@@ -11,12 +11,19 @@ function isValidateEmail(email) {
         );
 };
 
+let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
 function formatedPrice(item) {
     let user = document.querySelector('[user]')
     if (user) {
-        return item.priceBooks[0].price
+        return {
+            string: priceFormat.format(item.priceBooks[0].price),
+            price: item.priceBooks[0].price
+        }
     } else  {
-        return item.basePrice;
+        return {
+            string: priceFormat.format(item.basePrice),
+            price: item.basePrice
+        };
     }
 }
 
@@ -122,14 +129,14 @@ $(document).ready(async function() {
         .then(res => {
                 if (res.success) {
                     let product = res.data 
-                    let product_price = formatedPrice(product)
+                    let product_price = formatedPrice(product).price
                     transaction_product_price += parseInt(product_price) * parseInt(item.quantity)
                 }
             })
         }))
-    $('#transaction-product-price').html(transaction_product_price + ' đ')
-    $('#voucher-discount').html(voucher_discount + ' đ')
-    $('#transaction-price').html(transaction_product_price - voucher_discount + ' đ')
+    $('#transaction-product-price').html(priceFormat.format(transaction_product_price))
+    $('#voucher-discount').html(priceFormat.format(voucher_discount))
+    $('#transaction-price').html(priceFormat.format(transaction_product_price - voucher_discount))
 
 
     $("#transaction-btn").click(async function(e) {

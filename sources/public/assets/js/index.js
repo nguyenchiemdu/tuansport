@@ -80,6 +80,7 @@ const path = window.location.pathname.split('/')[1]
 $(document).ready(function() {
     let wishlist = JSON.parse(window.localStorage.getItem('wishlist')) || [];
     let cart = JSON.parse(window.localStorage.getItem('cart')) || [];
+    console.log(cart)
     if (wishlist.length > 0) {
         let badge = `
         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
