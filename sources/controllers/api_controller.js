@@ -4,7 +4,7 @@ const AppString = require("../common/app_string");
 const { baseRespond } = require("../common/functions");
 const KiotvietAPI = require("../common/kiotviet_api");
 const KiotVietOrder = require("../models/kiotviet/kiotviet.order");
-
+const mongoProduct = require("../models/mongo/mongo.product");
 class ApiController {
     tryApi(_, res) {
         let response = { "success": true, "message": "OK", "data": "" };
@@ -28,7 +28,12 @@ class ApiController {
         try {
             let url = ApiUrl.getProductBySkuCode(req.params.skucode)
             let response = await KiotvietAPI.callApi(url)
-            res.json(baseRespond(true, AppString.ok, response.data))
+            let kiotvietProduct = response.data;
+            let product = await mongoProduct.findOne({
+                skuCode: req.params.skucode
+            });
+            let combinedProduct =  Object.assign({}, kiotvietProduct, product._doc);
+            res.json(baseRespond(true, AppString.ok, combinedProduct))
         } catch (err) {
             console.error(err)
             res.status(400)
