@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Category = require('../models/mongo/mongo.category')
-let {importCategories,importAttributes} = require('../common/sync_data')
+let {importCategories,importAttributes} = require('../common/sync_data');
+const mongoProduct = require('../models/mongo/mongo.product');
 async function connect() {
 
     try {        
@@ -16,7 +17,18 @@ async function connect() {
         //     _id: 7,
         //     categoryName: 'Dụng cụ TDTT',
         // })
-    } catch (error) {
+
+        // let count = await mongoProduct.countDocuments({})
+        // let docs = []
+        // await mongoProduct.find({})
+        //     .then(products => products.forEach(product => docs.push(product)))
+        // for (let i = 0; i < count; i++) {
+        //     mongoProduct.updateMany({_id: docs[i]._id}, {
+        //         tag: ''
+        //     }).then(res => console.log(res))
+        // }
+    }
+        catch (error) {
         console.log('Connect Mongo DB failure!');
         console.log('Error: ',error)
     }

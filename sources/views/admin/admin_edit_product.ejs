@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin</title>
     <%- include ('../common/lib/bootstrap_css')%>
+    <%- include ('../common/lib/font_awesome_css')%>
         <link rel="stylesheet" href="/assets/css/admin.css">
 
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
@@ -23,58 +24,86 @@
                     <div class="container mt-5">
                         <form id="edit-form" method="POST" action="?_method=PUT">
                             <% let mapName={ 'name' : 'Tên sản phẩm' ,'fullName': 'Tên đầy đủ' } %>
-                                <% for (let key of ['name','fullName','categoryId','images']) { if
-                                    (['name','fullName','images','categoryId','color'].includes(key)) { if
-                                    (key!='images' ){ if (key=='categoryId' ){%>
-                                    <div class="mb-3">
-                                        <h4 for="exampleInputEmail1" class="form-label">
-                                            Nhóm hàng
-                                        </h4>
-                                        <p>Lưu ý: Nhóm hàng có kí hiệu ❌ nghĩa là chưa liên kết với cây danh mục còn
-                                            nhóm hàng có kí hiệu ✅ nghĩa là đã có trong cây danh mục</p>
-                                        <select class="form-select" id="inputGroupSelect02" name="<%=key%>">
-                                            <% for(let category of categories){ %>
-                                                <option value="<%=category._id%>" <% if
-                                                    (category._id==itemData.categoryId) {%> selected <%}%>
-                                                        ><%=category.categoryName %>
-                                                            <% if (category.parentId==0){ %>
-                                                                ❌
-                                                                <%} else {%>
-                                                                    ✅
-                                                                    <%} %>
-                                                </option>
-                                                <% } %>
-                                        </select>
-                                    </div>
-                                    <%} else {%>
-                                        <div class="mb-3">
-                                            <h4 for="exampleInputEmail1" class="form-label">
-                                                <%=mapName[key]%>
-                                            </h4>
-                                            <input class="form-control" name='<%=key%>' value="<%= itemData[key]%>" />
-
-                                        </div>
-                                        <%}} else {%>
-                                            <div class="mb-3">
-                                                <h4 for="exampleInputEmail1" class="form-label">
-                                                    Ảnh
-                                                </h4>
-
-                                                <div class="row rows-col-auto">
-                                                    <% for (let link of itemData[key]){%>
-                                                        <div class="col-md-3">
-                                                            <div class="position-relative" style="background-image: url('<%=link%>'); background-size: cover;width: 250px;height: 250px;">
-                                                                <button url="<%=link%>" class="float-end btn btn-danger btn-close btn-delete-img p-3"></button>
-                                                            <input class="position-absolute bottom-0 form-control align-bottom" name='<%=key%>'value="<%= link%>" />
-
-                                                            </div>
-                                                        </div>
-                                                        <%}%>
+                                <% for (let key of ['name','fullName','categoryId','images', 'tags']) { 
+                                    if (['name','fullName','images','categoryId','color', 'tags'].includes(key)) { 
+                                        if (key!='images' && key!= 'tags') { 
+                                            if (key=='categoryId' ){%>
+                                                <div class="mb-3">
+                                                    <h4 for="exampleInputEmail1" class="form-label">
+                                                        Nhóm hàng
+                                                    </h4>
+                                                    <p>Lưu ý: Nhóm hàng có kí hiệu ❌ nghĩa là chưa liên kết với cây danh mục còn
+                                                        nhóm hàng có kí hiệu ✅ nghĩa là đã có trong cây danh mục</p>
+                                                    <select class="form-select" id="inputGroupSelect02" name="<%=key%>">
+                                                        <% for(let category of categories){ %>
+                                                            <option value="<%=category._id%>" <% if
+                                                                (category._id==itemData.categoryId) {%> selected <%}%>
+                                                                    ><%=category.categoryName %>
+                                                                        <% if (category.parentId==0){ %>
+                                                                            ❌
+                                                                            <%} else {%>
+                                                                                ✅
+                                                                                <%} %>
+                                                            </option>
+                                                            <% } %>
+                                                    </select>
                                                 </div>
-
-                                            </div>
+                                            <%} else {%>
+                                                <div class="mb-3">
+                                                    <h4 for="exampleInputEmail1" class="form-label">
+                                                        <%=mapName[key]%>
+                                                    </h4>
+                                                    <input class="form-control" name='<%=key%>' value="<%= itemData[key]%>" />
+                                                </div>
                                             <%}%>
-                                                <%}}%>
+                                        <%} else {%>
+                                            <% if (key == 'images') {%>
+                                                <div class="mb-3">
+                                                    <h4 for="exampleInputEmail1" class="form-label">
+                                                        Ảnh
+                                                    </h4>
+    
+                                                    <div class="row rows-col-auto">
+                                                        <% for (let link of itemData[key]){%>
+                                                            <div class="col-md-3">
+                                                                <div class="position-relative" style="background-image: url('<%=link%>'); background-size: cover;width: 250px;height: 250px;">
+                                                                    <button url="<%=link%>" class="float-end btn btn-danger btn-close btn-delete-img p-3"></button>
+                                                                <input class="position-absolute bottom-0 form-control align-bottom" name='<%=key%>'value="<%= link%>" />
+    
+                                                                </div>
+                                                            </div>
+                                                            <%}%>
+                                                    </div>
+    
+                                                </div>
+                                            <% } %>
+                                            <% if (key == 'tags') {
+                                                let i = 0 %>
+                                                <div class="mb-3">
+                                                    <h4 for="exampleInputEmail1" class="form-label pb-1">
+                                                        Tag sản phẩm 
+                                                        <span>
+                                                            <button class="btn btn-primary add-tag-btn ms-3" type="submit">Thêm tag sản phẩm</button>
+                                                        </span>
+                                                    </h4>
+                                                    <div class="row rows-col-auto tag-area">
+                                                        <% for (let tag of itemData[key]){ %>
+                                                            <div class="col-md-3 py-2" >
+                                                                <div class="input-group">
+                                                                    <input class="form-control" placeholder="Nhập tag sản phẩm" name='<%=key%>'value="<%=tag%>" />
+                                                                    <div class="input-group-append">
+                                                                        <span data-index="<%=i %>">
+                                                                            <i class="fa-solid fa-x remove-tag-icon" style="padding: 11px 10px;"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        <% i++ }%>
+                                                    </div>
+                                                </div>
+                                            <% } %>
+                                        <%}%>
+                                    <%}}%>
 
 
                                                     <button type="button" class="btn btn-primary btn-apply">Áp

@@ -433,6 +433,46 @@ class AdminController {
             next(err)
         }
     }
+    // POST
+    async addTag(req,res,next) {
+        try {
+            let id = req.params.id
+            let product = await mongoProduct.findOne({_id: id})
+            if (product != null) {
+                let tags = product.tags
+                tags.push('')
+                product = await mongoProduct.findOneAndUpdate({
+                    _id: id
+                }, {
+                    tags: tags
+                })
+            }
+            res.json(baseRespond(true, AppString.ok))
+        } catch (err) {
+            res.error(400)
+            res.json(baseRespond(false, err))
+        }
+    }
+    async deleteTag(req,res,next) {
+        try {
+            let id = req.params.id
+            let index = req.body.index
+            let product = await mongoProduct.findOne({_id: id})
+            if (product != null) {
+                let tags = product.tags
+                tags.splice(index, 1)
+                product = await mongoProduct.findOneAndUpdate({
+                    _id: id
+                }, {
+                    tags: tags
+                })
+            }
+            res.json(baseRespond(true, AppString.ok))
+        } catch (err) { 
+            res.error(400)
+            res.json(baseRespond(false, err))
+        }
+    }
     async uploadImage(req, res, next) {
         let path = req.headers.host;
         let id = req.params.id

@@ -31,6 +31,12 @@ input{
     outline: 0;
 }
 
+.tag{
+    font-size: var(--heading6-font-size);
+    font-weight: var(--heading6-font-weight);
+    color: black!important;
+
+}
 /* reuse this color template in ejs template engine */
 :root {
     --primary-color: #FFD93D;
@@ -304,6 +310,10 @@ footer{
 #cart .btn.disabled{
     background-color: var(--primary-color);
     border-color: var(--primary-color);
+}
+
+.remove-icon:hover{
+    cursor: pointer;
 }
 /* Responsive UI mobile */
 @media screen and (max-width: 1199px) {
