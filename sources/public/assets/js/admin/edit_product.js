@@ -21,7 +21,7 @@ $(document).ready(function () {
                 flag = false
                 return false
             } 
-        } 
+        }   
         if (flag) {
             await fetch(window.location.href,
                 {
