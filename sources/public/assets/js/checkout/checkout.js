@@ -1,7 +1,20 @@
 
 console.log('checkout')
 
-const cartItems = JSON.parse(window.localStorage.getItem('cart')) || []
+
+var cartItems
+var previousURL = document.referrer
+if (previousURL.toString().includes('/san-pham')) {
+    previousURL = previousURL.split('/')
+    cartItems = [{
+        id: previousURL[previousURL.length-1],
+        quantity: 1
+    }
+    ]
+} else {
+    cartItems = JSON.parse(window.localStorage.getItem('cart')) || []
+}
+
 // Common function and variables
 function isValidateEmail(email) {
     return String(email)

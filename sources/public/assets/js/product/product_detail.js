@@ -130,6 +130,9 @@ function updateSelectedProduct(product) {
     $('.btn-cart').each(function(){
         $(this).attr('skucode',product.code)
     })
+    $('.btn-direct-buy').each(function(){
+        $(this).attr('skucode',product.code)
+    })
     $('.product-name').html(product.fullName);
     $('#product-status').removeClass('d-none')
     $('#product-status').html(`Tình Trạng:

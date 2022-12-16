@@ -139,15 +139,36 @@ $(document).ready(async function() {
     }
 })
 
+
 // handle event for produt items
 $(document).ready(function () {
+
     $(".product-item").on('click', function (e) {
         let skuCode = ($(this).attr('skucode'))
         window.location.href = '/san-pham/' + skuCode;
     })
-    // tap to toast to go to cart
-    $('.go-to-cart').on('click', function (e) {
-        window.location.href = '/cart'
+    
+
+    $('.btn-direct-buy').on('click', function (e) {
+        e.stopPropagation();
+        
+        let button = $(this)
+        let skuCode = button.attr('skucode')
+        if (skuCode.includes('Master')){
+            $('.toast-body span').text('Vui lòng chọn thuộc tính của sản phẩm')
+            $('.toast-body a').addClass('d-none')
+            $('#add-to-cart-success').toast('show')
+        } else {
+            if ($('#product-status span:contains("0")').length > 0) {
+                $('.toast-body span').text('Sản phẩm của bạn hiện đã hết hàng')
+                $('.toast-body a').addClass('d-none')
+                $('#add-to-cart-success').toast('show')
+            } else {
+                
+                window.location.pathname= '/checkout'
+            }
+        }
+
     })
     $('.btn-cart').on('click', function (e) {
         e.stopPropagation();
