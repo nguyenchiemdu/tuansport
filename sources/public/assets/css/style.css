@@ -278,6 +278,9 @@ footer{
     transition: all 0.3s ease-in-out;
 }
 
+.available-hover:hover{
+    cursor: pointer;
+}
 
 /* Wishlist + Cart */
 

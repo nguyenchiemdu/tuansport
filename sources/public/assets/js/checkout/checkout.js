@@ -11,6 +11,15 @@ function isValidateEmail(email) {
         );
 };
 
+function formatedPrice(item) {
+    let user = document.querySelector('[user]')
+    if (user) {
+        return item.priceBooks[0].price
+    } else  {
+        return item.basePrice;
+    }
+}
+
 function isVietnamesePhoneNumber(number) {
     return /(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b/.test(number);
 }
@@ -46,16 +55,17 @@ const order_form = $('#checkout-form')
 
 async function submit() {
     const body = {
+        role: $('[user]').attr('user'),
         customerName: $("#last-name").val() + ' ' + $("#first-name").val(),
+        contactNumber: $("#phone-number").val(),
+        address: $("#address").val() + ', ' + $('#city').val(),
+        email: $("#email").val(),
         listProduct: cartItems.map(function(item) {
           return {
             "productCode": item.id,
             "quantity": parseInt(item.quantity)
           }
         }),
-        address: $("#address").val() + ', ' + $('#city').val(),
-        contactNumber: $("#phone-number").val(),
-        email: $("#email").val(),
         bankPayment: $('.form-check-input').prop('checked')
     }
     await fetch('/api/order', {
@@ -81,9 +91,9 @@ async function submit() {
             localStorage.removeItem("cart");
             $('#accept-checkout').hide();
                 $('#title-page').html('Đã đặt hàng thành công')
-                $('.name-order').html(data.customerName)
-                $('.phone-order').html(data.orderDelivery.contactNumber)
-                $('.address-order').html(data.orderDelivery.address)
+                $('.name-order').html(body.customerName)
+                $('.phone-order').html(body.contactNumber)
+                $('.address-order').html(body.address)
                 $('.bank-payment-order').html(payment)
             $('#order-successfully').show();
         } else {
@@ -93,6 +103,7 @@ async function submit() {
     })
     
 }
+
 
 $(document).ready(async function() {
     // Render transaction detail
@@ -111,7 +122,7 @@ $(document).ready(async function() {
         .then(res => {
                 if (res.success) {
                     let product = res.data 
-                    let product_price = product.basePrice 
+                    let product_price = formatedPrice(product)
                     transaction_product_price += parseInt(product_price) * parseInt(item.quantity)
                 }
             })

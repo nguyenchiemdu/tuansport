@@ -1,9 +1,20 @@
 console.log('wishlist')
+
+let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })
+function formatedPrice(item) {
+    let user = document.querySelector('[user]')
+    let price;
+    if (user) {
+        price =  item.priceBooks[0].price
+        return priceFormat.format(price)
+    } else  {
+        price = item.basePrice;
+    return priceFormat.format(price)
+    }
+}
 // render wishlist
 $(document).ready(function () {
-    let wishlist = window.localStorage.getItem('wishlist');
-    wishlist = JSON.parse(wishlist);
-    if (wishlist == null) wishlist = []
+    let wishlist = JSON.parse(window.localStorage.getItem('wishlist')) || [];
     Promise.all(wishlist.map(async skuCode => {
         await fetch('/api/product/code/' + skuCode, {
             headers: {
@@ -15,28 +26,27 @@ $(document).ready(function () {
             .then(res => {
                 response = res;
                 if (response.success) {
-
                     let product = response.data
+                    console.log(product)
                     let isOutOfStock = product.inventories[0].onHand == 0
                     let isHasAttribute = product.attributes
                     let isHasColor 
                     if (isHasAttribute) {
                         isHasColor = product?.attributes[1]?.attributeValue == undefined
                     }
-                    let isHasProduct = res.length == 0
                     let isHasImage = product.images == undefined
                     let htmlTagWeb = `
                     <tr skucode='${product.code}' class=" product-item ${product.code}">
-                        <td> <!-- Image item -->
-                          <img src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" alt="" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
+                        <td class="product-detail" skucode='${product.code}'> <!-- Image item -->
+                          <img src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
                         </td> <!-- Image item -->
-                        <td> <!-- Name item -->
+                        <td skucode='${product.code} class="product-detail"'> <!-- Name item -->
                             <div class="product-name align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                 <h3 class="text-start short-description">${product.name}</h3>
                             </div>
                         </td>  <!-- Name item -->
                         <td class="text-center"> <!-- Price -->
-                          <h3>${product.basePrice}đ</h3>
+                          <h3>${formatedPrice(product)}</h3>
                         </td> <!-- Price -->
                         <td> <!-- Status -->
                         ${isOutOfStock ? '<h5 class="status is-unavaliable p-2 text-center">Hết hàng</h5>' : '<h5 class="status is-avaliable p-2 text-center">Còn hàng</h5>'}
@@ -52,13 +62,13 @@ $(document).ready(function () {
                                 <div skucode='${product.code}' class="my-3 product-item ${product.code}"> <!-- Item -->
                                     <div class="row align-items-center">
                                         <div class="col-7 d-flex align-items-center"> <!--Name-->
-                                        <img src="${!isHasImage ? product.images[0] : ''} alt="${product.name}" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" /> 
+                                        <img src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" /> 
                                         <span class="align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                             <h5 class="ms-2 short-description text-start">${product.name}</h5>
                                         </span>
                                         </div>
                                         <div class="col-5 pt-3 ps-4"> <!-- Price-->
-                                        <h5>${product.basePrice}đ</h5>
+                                        <h5>${formatedPrice(product)}</h5>
                                         </div>
                                     </div>
                                     <div class="row align-items-center">

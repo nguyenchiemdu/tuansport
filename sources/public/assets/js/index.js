@@ -124,7 +124,6 @@ $(document).ready(function () {
                 $('.toast-body a').addClass('d-none')
                 $('#add-to-cart-success').toast('show')
             } else {
-                console.log('con hang')
                 skuCode = skuCode.replace('Master','')
                 let cartItems = JSON.parse(window.localStorage.getItem('cart')) ?? []
                 let index = cartItems.findIndex(item => item.id == skuCode)

@@ -9,6 +9,15 @@ function getParent(element, condition) {
     return element;
 }
 
+function formatedPrice(item) {
+    let user = document.querySelector('[user]')
+    if (user) {
+        return item.priceBooks[0].price
+    } else  {
+        return item.basePrice;
+    }
+}
+
 function updatePrice(amountInput) {
     let product = getParent($(amountInput), 'product')
     let amount = parseInt($(amountInput).val())
@@ -94,13 +103,12 @@ $(document).ready(async function() {
                     if (isHasAttribute) {
                         isHasColor = product?.attributes[1]?.attributeValue == undefined
                     }
-                    let isHasProduct = res.length == 0
                     let isHasImage = product.images == undefined
                     let htmlTagWeb = `  
                       <tr skucode="${product.code}"class="product product-item ${product.code}">  <!-- Item --> 
-                          <td class="product-detail" skucode="${product.code}"> <!-- Name item -->
+                          <td class="product-detail available-hover" skucode="${product.code}"> <!-- Name item -->
                             <img class="" src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" width="120px" height="120px" style="border-radius: 20px; object-fit: cover" />
-                          <td>
+                          <td class="product-detail available-hover" skucode="${product.code}">
                             <div class="product-name text-start align-middle mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
                                 <h3 class="text-start short-description">${product.name}</h3>
                                 ${isHasAttribute ? `
@@ -109,12 +117,11 @@ $(document).ready(async function() {
                                 </p>
                                 ` : ' '
                             }
-                                
                             </div>
                           </td>
                           </td> <!-- Name item -->
                             <td class="product-price text-center"> <!-- Price -->
-                                <h3>${product.basePrice} đ</h3>
+                                <h3>${formatedPrice(product)} đ</h3>
                             </td> <!-- Price -->
                           <td class="product-quantity"> <!-- Amount -->
                             <div class="input-group mb-3 amount-box mx-auto">
@@ -128,7 +135,7 @@ $(document).ready(async function() {
                               </div>
                           </td> <!-- Amount -->
                           <td class="product-total-price text-center">
-                            <h3>${product.basePrice * item.quantity} đ</h3>
+                            <h3>${formatedPrice(product) * item.quantity} đ</h3>
                           </td>
                           <td class="pe-0 me-1 ps-5"> <!-- Icon -->
                           <i skucode="${product.code}"class="ms-lg-3 ms-xl-3 ms-xxl-3 mt-2 mt-lg-0 mt-xl-0 mt-xxl-2 fa-regular fa-x action-icon hover-bigger remove-item-list text-center" style="transform:translateY(-5px)"></i>
@@ -139,10 +146,10 @@ $(document).ready(async function() {
                     let htmlTagMobile = `
                     <div skucode="${product.code}" class="my-3 mx-2 product product-item ${product.code}"> <!-- Item -->
                           <div class="row align-items-center">
-                            <div class="col-8 d-flex align-items-center product-detail" skucode="${product.code}}"> <!--Name-->
+                            <div class="col-8 d-flex align-items-center product-detail" skucode="${product.code}"> <!--Name-->
                               <img class="me-1 hover-bigger" src="${!isHasImage ? product.images[0] : ''}" alt="${product.name}" width="60px" height="60px" style="border-radius: 5px; object-fit: cover" /> 
                               <span class="align-middle text-start mt-3 mt-lg-0 mt-xl-0 mt-xxl-0 ms-0 ms-lg-3 ms-xl-3 ms-xxl-4">
-                                <h5 class="ms-2 short-description">${product.name}</h5>
+                                <h5 class="ms-2 short-description product-detail" skucode="${product.code}">${product.name}</h5>
                                 ${isHasAttribute ? `<h6 class="ms-2 short-description">
                                 ${product.attributes[0].attributeName}: ${product.attributes[0].attributeValue}
                                 ${!isHasColor ? `, ${product.attributes[1]?.attributeName}: ${product.attributes[1]?.attributeValue}`: ``}
@@ -154,7 +161,7 @@ $(document).ready(async function() {
                               </div> <!-- Icon -->
                           </div>
                           <div class="row align-items-center mt-3 product-value">
-                            <div class="product-price d-none">${product.basePrice}</div>
+                            <div class="product-price d-none">${formatedPrice(product)}</div>
                             <div class="col-6 input-group mb-3 amount-box mx-auto" style="background-color: transparent"> <!-- Amount value-->
                               <span skucode="${product.code}" class="input-group-text change-value hover-bigger dec-value" style="border-radius: 23px 0 0 23px">
                                   <i class="fa-solid fa-minus"></i>
@@ -165,7 +172,7 @@ $(document).ready(async function() {
                               </span>
                             </div>
                             <div class="col-5 offset-1 mb-2 product-total-price text-center">
-                              <h3>${product.basePrice * item.quantity} đ</h3>
+                              <h3>${formatedPrice(product) * item.quantity} đ</h3>
                             </div> 
                           </div>
                     </div>
