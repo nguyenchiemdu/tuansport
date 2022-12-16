@@ -39,6 +39,9 @@ class ApiController {
     async getProductBySkuCode(req, res, next) {
         try {
             let url = ApiUrl.getProductBySkuCode(req.params.skucode)
+            let productInMongo = await ApiController.getProductBySkuCodeInMongo(req.params.skucode)
+            let temp 
+            productInMongo.forEach(product => temp = {...product}._doc)
             let response = await KiotvietAPI.callApi(url)
             let kiotvietProduct = response.data;
             let product = await mongoProduct.findOne({
