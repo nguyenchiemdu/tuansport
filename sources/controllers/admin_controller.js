@@ -539,14 +539,14 @@ class AdminController {
                                 i++
                                 htmlDropdown1 = `
                                     <li class="dropend position-relative"> <!-- Dropdown level 1 -->
-                                        <span class="toggle-submenu position-absolute p-3 mt-1" data-index="0">
+                                        <span class="toggle-submenu position-absolute p-3 mt-1" data-index="${i}">
                                         <!-- In mobile  -->
-                                            <i class="toggle-icon fa-regular fa-plus open-menu" data-index="0"></i>
-                                            <i class="toggle-icon fa-regular fa-minus close-menu" data-index="0" style="display: none"></i>
+                                            <i class="toggle-icon fa-regular fa-plus open-menu" data-index="${i}"></i>
+                                            <i class="toggle-icon fa-regular fa-minus close-menu" data-index="${i}" style="display: none"></i>
                                         </span>
-                                        <a class="dropdown-item py-3 px-4" href="/danh-muc/1067572"
+                                        <a class="dropdown-item py-3 px-4" href="/danh-muc/${sub_category._id}"
                                         aria-haspopup="true">
-                                        ÁO BÓNG ĐÁ KHÔNG LOGO
+                                        ${sub_category.categoryName.toUpperCase()}
                                         </a>
                                         <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0">
                                     `
