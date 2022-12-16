@@ -43,6 +43,9 @@
             <% } else { %>
               <li class="nav-item dropdown">
                 <a class="btn nav-link text-color-white px-3 mb-2 mx-auto mx-xl-0 mb-xl-0 me-xl-4 dropdown-toggle"
+                  <% if (user.role == 'Cộng tác viên') { %>
+                  user = "<%=user.role%>"
+                  <% } %>
                   href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
                   style="background-color: var(--black-color); padding-top: 10px; padding-bottom: 10px;">
                   Xin chào: <%=user.username %>
