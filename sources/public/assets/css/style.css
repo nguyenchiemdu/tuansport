@@ -32,7 +32,8 @@ input{
 }
 
 .tag{
-    font-weight: var(--heading5-font-weight);
+    font-size: var(--heading6-font-size);
+    font-weight: var(--heading6-font-weight);
     color: black!important;
 
 }

@@ -1,9 +1,27 @@
+
+function removeElement(e) {
+    e.preventDefault()
+    let parent = $(this).parent().parent().parent().parent()
+    $(parent).remove()
+    let i = 0
+    $('[data-index]').each(function() {
+        $(this).attr('data-index', `${i++}`)
+    })
+}
+
+function preventSpaceCharacter(e) {
+    if(e.keyCode === 32) {
+        return false;
+    }
+}
+
 $(document).ready(function () {
     $('.btn-apply').on('click', async function (e) {
         let body = {
             images: [],
             tags: [],
         }
+
         $("form#edit-form :input").each(function () {
             var input = $(this);
             let inputName = input.attr('name')
@@ -89,62 +107,25 @@ $(document).ready(function () {
         e.preventDefault()
         let id = window.location.pathname.split('/')[3]
         let length = $('.tag-area').children().length || 0
-        await fetch(`/admin/synced-products/${id}/create-tag`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(res => res.json())
-        .then(res => {
-            if (res.success) {
-                let tagElement = `
-                <div class="col-md-3 py-2" >
-                    <div class="input-group">
-                        <input class="form-control" placeholder="Nhập tag sản phẩm" id="tag-name" name="tags" value="" />
-                        <div class="input-group-append">
-                            <span class="remove-tag-icon" data-index="${length++}>">
-                                <i class="fa-solid fa-x remove-icon" style="padding: 11px 10px;"></i>
-                            </span>
-                        </div>
-                    </div>
+        let tagElement = `
+        <div class="col-md-3 py-2" >
+            <div class="input-group">
+                <input class="form-control" placeholder="Nhập tag sản phẩm" id="tag-name" name="tags" value="" />
+                <div class="input-group-append">
+                    <span data-index="${length++}>">
+                        <i class="fa-solid fa-x remove-tag-icon" style="padding: 11px 10px;"></i>
+                    </span>
                 </div>
-                `
-                $('.tag-area').append(tagElement)
-            }
-        })
+            </div>
+        </div>
+        `
+        $('.tag-area').append(tagElement)
     })
 
-    $('.remove-tag-icon').on('click', async function(e) {
-        e.preventDefault()
-        let parent = $(this).parent().parent().parent()
-        let id = window.location.pathname.split('/')[3]
-        let tags = $('[data-index]')
-        let i = 0
-        console.log(tags)
-        let index = parseInt($(this).attr('data-index'))
-        await fetch(`/admin/synced-products/${id}/delete-tag`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                index: index
-            })
-        })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res)
-            if (res.success) {
-                $(parent).remove()
-                $('[data-index]').each(function() {
-                    $(this).attr('data-index', `${i++}`)
-                })
-            } else {
-                alert('Có lỗi hệ thống')
-            }
-        })
-    })
+    $(document).on('click', '.remove-tag-icon', removeElement)
+
+    $(document).on('keydown', 'input[name="tags"]', preventSpaceCharacter)
+
+
 })
+

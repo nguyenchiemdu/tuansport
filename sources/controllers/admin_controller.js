@@ -106,8 +106,6 @@ class AdminController {
             mongoCategory.find({})
             ]
         )
-        let tags = product.tags.filter(tag => tag.trim() != '')
-        product = Object.assign(product, {tags})
         if (product != null) {
             res.render("admin/admin_edit_product", { itemData: product, categories: categories, route: route })
         } else {
