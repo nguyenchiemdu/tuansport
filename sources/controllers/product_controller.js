@@ -44,6 +44,7 @@ class ProductController {
             let mappedProductAttributes = {
 
             }
+            console.log(productAttributes)
             for (let proAttr of productAttributes) {
                 let attribute = {
                     attributeId: proAttr.attributeValueId.attributeId,
