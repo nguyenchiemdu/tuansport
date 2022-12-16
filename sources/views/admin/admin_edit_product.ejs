@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Admin</title>
     <%- include ('../common/lib/bootstrap_css')%>
+    <%- include ('../common/lib/font_awesome_css')%>
         <link rel="stylesheet" href="/assets/css/admin.css">
 
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
@@ -76,17 +77,28 @@
     
                                                 </div>
                                             <% } %>
-                                            <% if (key == 'tags') { %>
+                                            <% if (key == 'tags') {
+                                                let i = 0 %>
                                                 <div class="mb-3">
-                                                    <h4 for="exampleInputEmail1" class="form-label">
-                                                        Tag sản phẩm
+                                                    <h4 for="exampleInputEmail1" class="form-label pb-1">
+                                                        Tag sản phẩm 
+                                                        <span>
+                                                            <button class="btn btn-primary add-tag-btn ms-3" type="submit">Thêm tag sản phẩm</button>
+                                                        </span>
                                                     </h4>
-                                                    <div class="row rows-col-auto">
-                                                        <% for (let tag of itemData[key]){%>
-                                                            <div class="col-md-3">
-                                                                <input class="form-control" name='<%=key%>'value="<%=tag%>" />
+                                                    <div class="row rows-col-auto tag-area">
+                                                        <% for (let tag of itemData[key]){ %>
+                                                            <div class="col-md-3 py-2" >
+                                                                <div class="input-group">
+                                                                    <input class="form-control" placeholder="Nhập tag sản phẩm" name='<%=key%>'value="<%=tag%>" />
+                                                                    <div class="input-group-append">
+                                                                        <span class="remove-tag-icon" data-index="<%=i %>">
+                                                                            <i class="fa-solid fa-x remove-icon" style="padding: 11px 10px;"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        <%}%>
+                                                        <% i++ }%>
                                                     </div>
                                                 </div>
                                             <% } %>

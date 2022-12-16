@@ -52,3 +52,6 @@ input:checked {
 .category-item.selected {
     background-color: var(--primary-color-lighter) ;
 }
+.remove-icon:hover{
+    cursor: pointer;
+}

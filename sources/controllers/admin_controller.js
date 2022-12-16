@@ -106,7 +106,8 @@ class AdminController {
             mongoCategory.find({})
             ]
         )
-        console.log(product)
+        let tags = product.tags.filter(tag => tag.trim() != '')
+        product = Object.assign(product, {tags})
         if (product != null) {
             res.render("admin/admin_edit_product", { itemData: product, categories: categories, route: route })
         } else {
@@ -432,6 +433,46 @@ class AdminController {
         } catch(err){
             console.log(err)
             next(err)
+        }
+    }
+    // POST
+    async addTag(req,res,next) {
+        try {
+            let id = req.params.id
+            let product = await mongoProduct.findOne({_id: id})
+            if (product != null) {
+                let tags = product.tags
+                tags.push('')
+                product = await mongoProduct.findOneAndUpdate({
+                    _id: id
+                }, {
+                    tags: tags
+                })
+            }
+            res.json(baseRespond(true, AppString.ok))
+        } catch (err) {
+            res.error(400)
+            res.json(baseRespond(false, err))
+        }
+    }
+    async deleteTag(req,res,next) {
+        try {
+            let id = req.params.id
+            let index = req.body.index
+            let product = await mongoProduct.findOne({_id: id})
+            if (product != null) {
+                let tags = product.tags
+                tags.splice(index, 1)
+                product = await mongoProduct.findOneAndUpdate({
+                    _id: id
+                }, {
+                    tags: tags
+                })
+            }
+            res.json(baseRespond(true, AppString.ok))
+        } catch (err) { 
+            res.error(400)
+            res.json(baseRespond(false, err))
         }
     }
     async uploadImage(req, res, next) {

@@ -34,6 +34,7 @@ input{
 .tag{
     font-weight: var(--heading5-font-weight);
     color: black!important;
+
 }
 /* reuse this color template in ejs template engine */
 :root {
@@ -308,6 +309,10 @@ footer{
 #cart .btn.disabled{
     background-color: var(--primary-color);
     border-color: var(--primary-color);
+}
+
+.remove-icon:hover{
+    cursor: pointer;
 }
 /* Responsive UI mobile */
 @media screen and (max-width: 1199px) {
