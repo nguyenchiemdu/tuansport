@@ -1,0 +1,78 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tuấn Sport Đà Nẵng – Số 1 Đà Nẵng</title>
+    <%- include ('../common/lib/font_css')%> <%- include ('../common/lib/feather_icon_css')%> <%- include ('../common/lib/bootstrap_css')%> <%- include ('../common/lib/font_awesome_css')%> <%- include ('../common/css/style')%>
+
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/images/logo.png" />
+    <%- include ('../common/css/owl_carousel')%>
+  </head>
+
+  <body style="background-color: var(--white-color)">
+    <%- include ('../common/component/navigator')%>
+    <div class="app-body">
+      <div id="wishlist">
+        <!-- Content wishlist -->
+        <section class="container py-2 pt-4 ps-3" id="breadcrumb">
+          <!-- Path -->
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item text-decoration-none"><a href="/" class="text-color-dark-gray" style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight)"> Trang chủ </a></li>
+              <li class="breadcrumb-item active text-color-primary" aria-current="page">
+                <span style="font-size: var(--heading5-font-size); font-weight: var(--heading5-font-weight)"><%= page.name %></span>
+              </li>
+            </ol>
+          </nav>
+        </section>
+
+        <section class="container py-2 pb-4 text-center align-middle">
+          <!-- Main content wishlist -->
+          <div>
+              <div id="policy">
+                <h2 class="text-start mb-4"><%= page.name %></h2>
+                <div class="row my-4">
+                  <div class="d-flex col-md-auto flex-grow-1 align-items-center">
+                    <p class="col-md-auto my-0 mx-2">Admin</p>
+                    <div class="col-md-auto my-0 mx-2 border-circle" style="width: 5px; height: 5px; background-color: var(--dark-gray-color)"></div>
+                    <p class="col-md-auto my-0 mx-2"><%= page.updatedAt.toISOString().slice(0,10) %></p>
+                  </div>
+                  <div class="d-flex col-md-auto align-items-center r-0">
+                    <div href="#" class="col-md-auto my-0 mx-2" style="color: black">Chia sẻ</div>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=example.org/ccc" target="_blank" style="color: black">
+                        <i class="col-md-auto my-0 mx-2 fa-brands fa-facebook-f"></i>
+                    </a>
+                  </div>
+                </div>
+                <%- page.htmlString %>
+              </div>
+          </div>
+        </section>
+        <section id="tat-ca-bai-viet">
+          <div class="container mt-5">
+                  <div class="row">
+                          <div class="col-8 align-self-start">
+                                  <h2>
+                                          Có thể bạn quan tâm
+                                  </h2>
+                          </div>
+                  </div>
+                  <div id="list-all-newsFeed"
+                          class="row row-cols-2 row-cols-md-4 row-cols-lg-5  row-cols-sm-3 gx-4 gy-4 mt-3 mb-3">
+                          <% for (let news of relatedNewsFeed) {%>
+                                  <%- include('../common/component/newsfeed.ejs',{news: news})
+                                          %>
+                                  <%}%>
+                  </div>
+          </div>
+
+  </section>
+    <div class="my-5 py-2"></div>
+
+      </div>
+    </div>
+
+    <%- include ('../common/component/footer')%> <%- include ('../common/lib/bootstrap_js')%> <%- include ('../common/lib/jquery')%> <%- include ('../common/lib/feather_icon_js')%>
+    <%- include ('../common/js/index')%>
+  </body>
+</html>

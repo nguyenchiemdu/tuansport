@@ -262,6 +262,7 @@
                                                         </div>
                                                         <% } %>
                                         </div>
+                                        
                                 </div>
 
                         </section>
@@ -289,6 +290,25 @@
                                                         <%- include('../common/component/product_item.ejs',{item: item})
                                                                 %>
                                                                 <%}%>
+                                        </div>
+                                </div>
+
+                        </section>
+                        <section id="tat-ca-bai-viet">
+                                <div class="container mt-5">
+                                        <div class="row">
+                                                <div class="col-8 align-self-start">
+                                                        <h2>
+                                                                Tất cả bài viết
+                                                        </h2>
+                                                </div>
+                                        </div>
+                                        <div id="list-all-newsFeed"
+                                                class="row row-cols-2 row-cols-md-4 row-cols-lg-5  row-cols-sm-3 gx-4 gy-4 mt-3 mb-3">
+                                                <% for (let news of newsFeed) {%>
+                                                        <%- include('../common/component/newsfeed.ejs',{news: news})
+                                                                %>
+                                                        <%}%>
                                         </div>
                                 </div>
 
