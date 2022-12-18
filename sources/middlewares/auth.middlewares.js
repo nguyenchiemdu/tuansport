@@ -32,6 +32,14 @@ class AuthMiddleware {
             next(AppString.noPermission)
         }
     }
+    checkPermissionCTV(req, res, next) {
+        if (req.headers['userInfor']?.role != 'Cộng tác viên') {
+            next()
+        } else {
+            res.status(400)
+            next(AppString.noPermission)
+        }
+    }
 }
 
 module.exports = new AuthMiddleware()
