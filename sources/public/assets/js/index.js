@@ -2,23 +2,34 @@
 
 // Dropdown in mobile
 $(document).ready(function(e) {
-    $(".toggle-submenu").on('click', function (e) {
+    $('#dropdownMenuLink').click(function (e) {
+        e.stopPropagation()
+        $(this).attr('aria-expanded', 'false' )
+        $(this).removeClass('show')
+        $(this).siblings('.dropdown-menu').removeClass('show')
 
-        var dropdown = $(this).siblings('ul')
-        var openMenu = document.querySelectorAll('.open-menu')
-        var closeMenu = document.querySelectorAll('.close-menu')
+        window.location.pathname = $(this).attr('href');
+    })
+
+    $(".toggle-submenu").on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
+
+        var dropdown = $(this).siblings('ul')
+        var openMenu = $(this).children('.open-menu')
+        var closeMenu = $(this).children('.close-menu')
         dropdown.toggle()
         dropdown.toggleClass('show')
         if (dropdown.hasClass('show')) {
-            openMenu[e.target.dataset.index].style.display = 'none'
-            closeMenu[e.target.dataset.index].style.display = 'block'
+            openMenu.attr('style', 'display:none')
+            closeMenu.attr('style', 'display:block')
         } else {
-            openMenu[e.target.dataset.index].style.display = 'block'
-            closeMenu[e.target.dataset.index].style.display = 'none'
+
+            openMenu.attr('style', 'display:block')
+            closeMenu.attr('style', 'display:none')
         }
     })
+    
 })
 
 // Dropdown in PC
