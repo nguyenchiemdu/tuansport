@@ -6,6 +6,7 @@ const mongoUser = require("../models/mongo/mongo.user")
 const mongoProduct = require("../models/mongo/mongo.product");
 const mongoCategory = require("../models/mongo/mongo.category");
 const mongoNavbarcategories = require("../models/mongo/mongo.navbarcategories");
+const mongoPolicy = require("../models/mongo/mongo.policy");
 
 class HomeController {
     // GET 
@@ -26,9 +27,15 @@ class HomeController {
 
             }
         })
+
+        let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
+            sortCondition: "-updatedAt"
+        })
+        
         res.render("home/home", {
             data: docs,
             newestProduct,
+            newsFeed,
             user: req.headers.userInfor,
         })
     }
@@ -40,6 +47,19 @@ class HomeController {
     }
     async checkout(req, res) {
         res.render("checkout/checkout", { user: req.headers.userInfor})
+    }
+    async policy(req,res) {
+        let slug = req.params.slug
+        let page = await mongoPolicy.findOne({slug: slug}).exec()
+        let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
+            sortCondition: "-updatedAt"
+        })
+        let relatedNewsFeed
+        if (newsFeed) {
+            relatedNewsFeed = await newsFeed.filter(news => news.slug != page.slug)
+        }
+        let url = req.hostname + '/' + req.originalUrl
+        res.render("policy/policy", { user: req.headers.userInfor, page: page, relatedNewsFeed: relatedNewsFeed, url: url })
     }
 }
 
