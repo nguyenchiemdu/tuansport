@@ -34,8 +34,12 @@ app.use(authMiddlewares.authenticateUser)
 //Router
 route(app);
 // error handler
+app.get('*', function(req , res,next) {
+    next('Can not access this route')
+  })
 app.use(function (err, req, res, next) {
     console.log(err)
-    res.json(baseRespond(false, err))
+    res.render('error/error', {user: req.headers.userInfor})
+    next(err)
 })
 console.log('RESTful API server started on: http://localhost:' + port);
