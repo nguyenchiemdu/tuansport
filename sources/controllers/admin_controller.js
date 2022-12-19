@@ -531,16 +531,16 @@ class AdminController {
                 stack.push(...listChild)
             }
             let html = ''
-            let i = 0
+            let i = 1
             listResult.map(function(category) {
                 let htmlCategory = ''
                 if (category.hasNoChild) {
                     htmlCategory = `
                     <li class="nav-item dropdown text-center p-1" id="nav-redirect">
-                        <a class="nav-link dropdown-toggle" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                        <a class="d-sm-flex  d-xl-block nav-link dropdown-toggle align-items-center" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <img src="/assets/images/icon-navbar/${category.icon}" class="p-1 mb-2"></img>
-                            <h5>${category.categoryName.toUpperCase()}</h5>
+                            <h5 class="ps-xl-0 ps-sm-3">${category.categoryName.toUpperCase()}</h5>
                             <div class="progress" style="height: 2px;">
                                 <div class="progress-bar" role="progressbar" aria-label="Example 1px high" style="width: 100%;"
                                     aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -552,10 +552,15 @@ class AdminController {
                 } else {
                     htmlCategory = `
                     <li class="nav-item dropdown text-center p-1" id="nav-redirect">
-                        <a class="nav-link dropdown-toggle" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                        <span class="toggle-submenu position-absolute p-3 mt-1" data-index="${i}">
+                            <!-- In mobile  -->
+                            <i class="toggle-icon fa-regular fa-plus open-menu" data-index="${i}"></i>
+                            <i class="toggle-icon fa-regular fa-minus close-menu" data-index="${i}" style="display: none"></i>
+                        </span>
+                        <a class="d-flex d-xl-block nav-link dropdown-toggle align-items-center" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <img src="/assets/images/icon-navbar/${category.icon}" class="p-1 mb-2"></img>
-                        <h5>${category.categoryName.toUpperCase()}</h5>
+                        <h5 class="ps-xl-0 ps-sm-3" >${category.categoryName.toUpperCase()}</h5>
                         <div class="progress" style="height: 2px;">
                             <div class="progress-bar" role="progressbar" aria-label="Example 1px high" style="width: 100%;"
                             aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
@@ -576,7 +581,6 @@ class AdminController {
                                     `
                                 htmlCategory += htmlDropdown1
                             } else {
-                                i++
                                 htmlDropdown1 = `
                                     <li class="dropend position-relative"> <!-- Dropdown level 1 -->
                                         <span class="toggle-submenu position-absolute p-3 mt-1" data-index="${i}">
@@ -651,6 +655,7 @@ class AdminController {
                     </li>
                     `
                     html += htmlCategory
+                    i++
                 }
             })
             await mongoNavbarcategories.findByIdAndUpdate(1, {
