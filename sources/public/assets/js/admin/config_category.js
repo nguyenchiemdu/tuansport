@@ -1,7 +1,7 @@
 console.log('category Tree')
 
 
-$(document).ready(function() {
+$(document).ready(function(e) {
 
     
     $(`#tree [aria-level = 1]`).each(function(e) {
@@ -18,6 +18,9 @@ $(document).ready(function() {
         e.originalEvent.dataTransfer.setData('element', e.target.getAttribute('data-bs-target'))
     })
 
+    if ($('#list-free-category [role="treeitem"]').length == 0) {
+        $('#item-test').removeClass('d-none')
+    }
     $('#tree').on('drop', async function(e) {
         // Get element to drop
         let id = e.originalEvent.dataTransfer.getData('element')
@@ -38,7 +41,9 @@ $(document).ready(function() {
             $(groupElement).append($(element))
         }
         
-
+        if ($('#list-free-category [role="treeitem"]').length == 0) {
+            $('#item-test').removeClass('d-none')
+        }
         // Save position of element
         let parentGroupId
         let parentId
@@ -65,13 +70,21 @@ $(document).ready(function() {
     })
 
     $('#list-free-category').on('drop', async function(e) {
+        
+        
         // Get element to drop
         let id = e.originalEvent.dataTransfer.getData('element')
         let element = $(`[data-bs-target="${id}"]`)
         // Config element 
         await $(element).css('padding-left', `${1.25}rem`)
         await $(element).attr('aria-level', `1`)
-        await $(e.target).parent().append($(element))
+        if ($(e.target) == $(this)) {
+            console.log('true')
+            await $(e.target).append($(element))
+        } else {
+            await $(e.target).parent().append($(element))
+        }
+        $('#item-test ').addClass('d-none')
         
         // Save position of element
         let categoryId = await $(element).attr('id')
