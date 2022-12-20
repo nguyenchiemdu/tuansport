@@ -22,11 +22,11 @@
 <body style="background-color:var(--white-color)">
     <%- include ('../common/component/navigator')%>
     <div class="p-4 m-4"></div>
-    <div class="text-center container" style="">
+    <div class="text-center container">
         <div class="text-center" style="font-size:96px; color: var(--tertiary-color); font-weight: var(--heading1-font-weight);">
-            404
+            <%=statusCode %> 
         </div>
-            <h1 class="mb-3">Page not Found</h1>
+            <h1 class="mb-3"><%=err %></h1>
             <div class="row">
                     <p class="py-4 offset-xl-3 col-xl-6">Lỗi này thường do chủ sở hữu chỉ chia sẻ nội dung với một nhóm nhỏ, thay đổi người được xem hoặc đã xóa nội dung</p>
             </div>

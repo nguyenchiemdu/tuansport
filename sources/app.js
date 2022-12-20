@@ -10,6 +10,7 @@ var methodOverride = require('method-override')
 const authMiddlewares = require("./middlewares/auth.middlewares");
 let port = process.env.PORT || 3000;
 let KiotVietToken = require('./common/kiotviet_token');
+const AppString = require('./common/app_string');
 let app = express();
 // Connect to DB
 database.connect();
@@ -35,11 +36,11 @@ app.use(authMiddlewares.authenticateUser)
 route(app);
 // error handler
 app.get('*', function(req , res,next) {
-    next('Can not access this route')
+    res.status(404)
+    next(AppString.pageNotFound)
   })
 app.use(function (err, req, res, next) {
-    console.log(err)
-    res.render('error/error', {user: req.headers.userInfor})
+    res.render('error/error', {user: req.headers.userInfor,err,statusCode: res.statusCode})
     next(err)
 })
 console.log('RESTful API server started on: http://localhost:' + port);
