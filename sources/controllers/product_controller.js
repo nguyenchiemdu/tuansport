@@ -17,6 +17,9 @@ class ProductController {
                 skuCode: skuCode,
                 isSynced: true
             })
+            if (product ==null) {
+                throw AppString.productNotFound
+            }
             let mapAttributes = {
 
             }
@@ -44,7 +47,6 @@ class ProductController {
             let mappedProductAttributes = {
 
             }
-            console.log(productAttributes)
             for (let proAttr of productAttributes) {
                 let attribute = {
                     attributeId: proAttr.attributeValueId.attributeId,

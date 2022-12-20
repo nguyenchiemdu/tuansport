@@ -43,10 +43,11 @@
                   <thead class="table-dark ">
                     <tr>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
-                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Id nhóm hàng</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Ảnh</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Còn hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">
                         <button class="btn btn-primary sync-all" type="button">
                           Đồng bộ tất cả
@@ -65,7 +66,14 @@
                           <%= pageSize*(page-1) +Number(i)+1%>
                         </th>
                         <th>
-                          <%=data[i].masterProductId%>
+                          <% 
+                          let image
+                            try {
+                              image = data[i].images[0]
+                            } catch(e) {
+                              image = null
+                            }%>
+                            <img src="<%=image%>" width="100px" height="100px" alt="<%if (image==null) {%>Không có hình ảnh<%}%>">
                         </th>
                         <th>
                           <%=data[i].code%>
@@ -76,15 +84,34 @@
                         <th>
                           <%=data[i].basePrice%>
                         </th>
+                        <%let onHand
+                          try {
+                                onHand = data[i].inventories[0].onHand;
+                            } catch( e) {
+                                onHand = null
+                            }
+                          let textStyle
+                          if (parseInt(onHand)>0) {
+                            textStyle = 'text-success'
+                          } else {
+                            textStyle = 'text-danger'
+                          }
+                          %> 
+                        <th class="<%=textStyle %>">
+                          
+                          <%=onHand%> 
+                        </th>
                         <th>
                           <div class="form-check form-switch">
 
                             <input class="form-check-input sync-button" value="<%=name%>" type="checkbox"
                               skuCode='<%=data[i].code %>' productid="<%=data[i].id%>" id="flexCheckDefault" <% if
                               (data[i].isSynced) {%> checked <% } %>>
-
+                              <% if (data[i].masterProductId== null) {%>
+                            ✔️ Master
+                            <%}%>
                           </div>
-
+                          
                         </th>
                       </tr>
                       <%} %>

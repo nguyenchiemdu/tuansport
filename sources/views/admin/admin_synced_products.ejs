@@ -40,12 +40,13 @@
               <thead class="table-dark ">
                 <tr>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Id nhóm hàng</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Ảnh</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá CTV</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá chưa giảm</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Sản phẩm gốc</th>
                   <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th> -->
 
                 </tr>
@@ -57,10 +58,17 @@
                       <%= pageSize*(page-1) +Number(i)+1%>
                     </th>
                     <th>
-                      <%=data[i].masterProductId%>
+                      <% 
+                          let image
+                            try {
+                              image = data[i].images[0]
+                            } catch(e) {
+                              image = null
+                            }%>
+                            <img src="<%=image%>" width="100px" height="100px" alt="<%if (image==null) {%>Không có hình ảnh<%}%>">
                     </th>
                     <th>
-                      <%=data[i]._id%>
+                      <%=data[i].skuCode%>
                     </th>
                     <th>
                       <%=data[i].fullName%>
@@ -74,7 +82,11 @@
                       <th class="text-decoration-line-through">
                         <%=priceFormat.format(data[i].salePrice)%>
                       </th>
-                    
+                      <th>
+                        <%if (data[i].masterProductId== null){%>
+                          ✅
+                          <%}%>
+                      </th>
                   </tr>
                   <%} %>
               </tbody>

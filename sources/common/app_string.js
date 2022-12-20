@@ -30,5 +30,6 @@ class AppString {
     static deleteSuccess = 'Xoá dữ liệu thành công!'
     static error = 'Đã có lỗi xảy ra!'
     static newPasswordNotMatch ='Mật khẩu mới không khớp'
+    static productNotFound = 'Không tìm thấy sản phẩm'
 }
 module.exports = AppString

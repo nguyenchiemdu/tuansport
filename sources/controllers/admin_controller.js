@@ -30,7 +30,7 @@ class AdminController {
             categoryParam = {
                 categoryId
             }
-        let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true, name: name, ...categoryParam })
+        let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true,includeInventory: true, name: name, ...categoryParam })
         response.data = await Promise.all(response.data.map(async product => {
             let syncProduct = await mongoProduct.find({
                 skuCode: product.code,
