@@ -103,6 +103,16 @@ function isVietnamesePhoneNumber(number) {
     return /(84|0[3|5|7|8|9])+([0-9]{8})\b/.test(number);
 }
 
+async function sortString(array, element) {
+    array.sort((a,b) => {
+        let name1 =removeAccent(a[element]).toLowerCase().trim()
+        let name2 = removeAccent(b[element]).toLowerCase().trim()
+        if (name1 < name2) return -1;
+        if (name1 > name2) return 1;
+        return 0
+    })
+    return array
+}
 async  function writeFile(filePath, content) {
     // var filePath ='./sources/public/try.js'
     fs.writeFile(filePath, content, err => {
@@ -121,7 +131,7 @@ async  function writeFile(filePath, content) {
 }
 
 
-
+module.exports.sortString = sortString
 module.exports.removeAccent = removeAccent
 module.exports.isVietnamesePhoneNumber = isVietnamesePhoneNumber
 module.exports.hashPassword = hashPassword
