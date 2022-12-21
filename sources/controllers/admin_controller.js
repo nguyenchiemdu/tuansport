@@ -2,7 +2,7 @@ const { response } = require("express");
 const { mongo } = require("mongoose");
 const { default: axios } = require("axios");
 const AppString = require("../common/app_string");
-const { baseRespond, getQueryString, toPathString,writeFile } = require("../common/functions");
+const { baseRespond, getQueryString, toPathString,writeFile, removeAccent, sortString } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
@@ -42,10 +42,24 @@ class AdminController {
             return product
         }));
         let listCategory = await KiotVietCategory.getAllCategory()
+        
         for (let i = 0; i < listCategory.length; i++) {
             KiotVietCategory.modifyCategoryToTree(listCategory[i], categoryId)
         }
+        listCategory = await sortString(listCategory, 'text')
 
+        
+        let stack = [...listCategory]
+        while (stack.length > 0) {
+            let ref = stack.pop()
+            
+            if (!ref.hasChild) {continue} 
+            
+            let listChild = await sortString(ref.nodes, 'text')
+            ref.children = [...listChild]
+            
+            stack.push(...listChild)
+        }
         res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name ,listCategory})
     }
     // GET  /synced-products
@@ -375,6 +389,8 @@ class AdminController {
         let listCategory =  await mongoCategory.find({
                 parentId: null
             })
+            
+
         let listResult = listCategory.map(function(category){
             return {... category._doc}
         })
