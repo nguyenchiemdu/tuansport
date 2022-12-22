@@ -6,6 +6,11 @@ const fs = require('fs')
 
 require('dotenv').config()
 
+
+const getType = obj => Object.prototype.toString.call(obj).slice(8, -1);
+const isArray = obj => getType(obj) === 'Array';
+const isObject = obj => getType(obj) === 'Object';
+
 async function hashPassword(plainTextPassword) {
     let password = await bcrypt.hash(plainTextPassword, 10)
     return password
@@ -129,6 +134,46 @@ async  function writeFile(filePath, content) {
     //     else console.log('deleted file')
     // })
 }
+function mongoProductFromKiotVietProduct(product){
+    let onHand;
+    try {
+        onHand = product.inventories[0].onHand
+    } catch(e) {
+        onHand = 0
+    }
+    let mongoProduct = {
+        _id: product.id,
+        skuCode: product.code,
+        name: product.name,
+        fullName: product.fullName,
+        price: product.basePrice,
+        ctvPrice: product.priceBooks?.find(e => e.priceBookName == 'GIÁ CTV')?.price,
+        salePrice: product.priceBooks?.find(e => e.priceBookName == 'giá khuyến mãi')?.price,
+        size : product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue,
+        images: product.images,
+        categoryId: product.categoryId,
+        isSynced: product.isSynced,
+        masterProductId: product.masterProductId ?? null,
+        attributes: product.attributes,
+        onHand : onHand,
+    }
+    return mongoProduct;
+}
+function lowercaseKey(obj) {
+    if (isObject(obj)) {
+        for (let key in obj) {
+            let newKey  = key.charAt(0).toLowerCase() + key.slice(1)
+            obj[newKey] = lowercaseKey(obj[key]);
+        }
+        return obj
+    }
+    if (isArray(obj)) {
+        obj = obj.map(atr=> lowercaseKey(atr))
+        return obj
+    }
+    return obj
+
+}
 
 
 module.exports.sortString = sortString
@@ -146,3 +191,5 @@ module.exports.removeNullKey = removeNullKey
 module.exports.getQueryString = getQueryString
 module.exports.toPathString = toPathString
 module.exports.writeFile = writeFile
+module.exports.mongoProductFromKiotVietProduct = mongoProductFromKiotVietProduct
+module.exports.lowercaseKey = lowercaseKey

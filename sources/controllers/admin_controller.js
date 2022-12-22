@@ -2,7 +2,8 @@ const { response } = require("express");
 const { mongo } = require("mongoose");
 const { default: axios } = require("axios");
 const AppString = require("../common/app_string");
-const { baseRespond, getQueryString, toPathString,writeFile, removeAccent, sortString } = require("../common/functions");
+const { baseRespond, getQueryString, toPathString, writeFile, removeAccent, sortString } = require("../common/functions");
+const { updateSizeToCategory } = require("../common/model_function")
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
@@ -18,35 +19,36 @@ const KiotVietCategory = require("../models/kiotviet/kiotvet.category");
 const mongoNavbarcategories = require("../models/mongo/mongo.navbarcategories");
 class AdminController {
     // GET  /products
-    async products(req, res) {
-        let route = req.route.path;
-        let query = getQueryString(req)
-        let page = req.query.page ?? 1
-        let pageSize = req.query.pageSize ?? 20
-        let name = req.query.name;
-        let categoryId = req.query.categoryid
-        let categoryParam = {}
-        if (categoryId != null)
-            categoryParam = {
-                categoryId
+    async products(req, res, next) {
+        try {
+            let route = req.route.path;
+            let query = getQueryString(req)
+            let page = req.query.page ?? 1
+            let pageSize = req.query.pageSize ?? 20
+            let name = req.query.name;
+            let categoryId = req.query.categoryid
+            let categoryParam = {}
+            if (categoryId != null)
+                categoryParam = {   
+                    categoryId
+                }
+            // let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true,includeInventory: true, name: name, ...categoryParam })
+            // response.data = await Promise.all(response.data.map(async product => {
+            //     let syncProduct = await mongoProduct.find({
+            //         skuCode: product.code,
+            //         isSynced: true
+            //     })
+            //     if (syncProduct.length > 0) {
+            //         product.isSynced = true
+            //     }
+            //     return product
+            // }));
+            let listCategory = await KiotVietCategory.getAllCategory()
+            if (listCategory == null) throw AppString.kiotVietOverload
+            for (let i = 0; i < listCategory.length; i++) {
+                KiotVietCategory.modifyCategoryToTree(listCategory[i], categoryId)
             }
-        let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true,includeInventory: true, name: name, ...categoryParam })
-        response.data = await Promise.all(response.data.map(async product => {
-            let syncProduct = await mongoProduct.find({
-                skuCode: product.code,
-                isSynced: true
-            })
-            if (syncProduct.length > 0) {
-                product.isSynced = true
-            }
-            return product
-        }));
-        let listCategory = await KiotVietCategory.getAllCategory()
-        
-        for (let i = 0; i < listCategory.length; i++) {
-            KiotVietCategory.modifyCategoryToTree(listCategory[i], categoryId)
-        }
-        listCategory = await sortString(listCategory, 'text')
+            listCategory = await sortString(listCategory, 'text')
 
         
         let stack = [...listCategory]
@@ -60,7 +62,34 @@ class AdminController {
             
             stack.push(...listChild)
         }
-        res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name ,listCategory})
+        listCategory = await sortString(listCategory, 'text')
+
+            let listFindCondition = [
+            ]
+            if (name != null && name.length > 0) {
+                listFindCondition = [
+                    { "name": { $regex: name, $options: 'i' } },
+                    { "fullName": { $regex: name, $options: 'i' } },
+                    { "skuCode": { $regex: name } }
+                ]
+            }
+            let findCondition = {
+                masterProductId: null,
+                ...categoryParam
+                // isSynced: true
+            }
+            if (listFindCondition.length > 0) {
+                findCondition['$or'] = listFindCondition
+            }
+            let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition })
+            res.render("admin/admin_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name, listCategory })
+        } catch (err) {
+            console.log(err)
+            res.status(400)
+            next(err)
+        }
+
+        // res.render("admin/admin_products", { ...response, page: page, route: route, query: query, name: name ,listCategory})
     }
     // GET  /synced-products
     async syncedProducts(req, res) {
@@ -75,11 +104,12 @@ class AdminController {
         if (name != null && name.length > 0) {
             listFindCondition = [
                 { "name": { $regex: name, $options: 'i' } },
-                { "fullName": { $regex: name, $options: 'i' }},
+                { "fullName": { $regex: name, $options: 'i' } },
                 { "skuCode": { $regex: name } }
             ]
         }
         let findCondition = {
+            masterProductId: null,
             isSynced: true
         }
         if (listFindCondition.length > 0) {
@@ -202,151 +232,51 @@ class AdminController {
     // POST /sync-product
     async syncProductPost(req, res) {
         try {
-            let product = req.body;
-            // upsert creates a document if not finds a document
-            let options = { upsert: true, new: true, setDefaultsOnInsert: true }
-            let resProduct = await mongoProduct.find({
-                skuCode: product.skuCode
-            })
+            let id = req.body.id;
+            let resProduct = await mongoProduct.findOne({ _id: id })
+            let listSize = [];
             let response
-            if (resProduct.length > 0) {
-
-                response = await mongoProduct.updateOne({
-                    skuCode: product.skuCode
+            // check if product is exiting
+            if (resProduct != null) {
+                
+                // update subProduct
+                mongoProduct.updateMany({
+                    masterProductId: id,
                 }, {
-                    $set: { isSynced: !resProduct[0].isSynced }
+                    $set: { isSynced: !resProduct.isSynced }
                 })
-                // add size in to category parents
-                let res = await KiotvietAPI.callApi(ApiUrl.getProductById(product.id))
-                product = res.data
-                // product = {
-                //     _id: product.id,
-                //     skuCode: product.code,
-                //     name: product.name,
-                //     fullName: product.fullName,
-                //     price: product.basePrice,
-                //     ctvPrice: product.priceBooks?.find(e => e.priceBookName == 'GIÁ CTV').price,
-                //     salePrice: product.priceBooks?.find(e => e.priceBookName == 'giá khuyến mãi').price,
-                //     images: product.images,
-                //     categoryId: product.categoryId,
-                //     isSynced: product.isSynced,
-                //     masterProductId: product.masterProductId ?? null,
-                //     attributes: product.attributes
-                // }
-                let size = product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue
-                let parentId = product.categoryId;
-                while (parentId != null) {
-                    let category = await mongoCategory.findById(parentId)
-                    if (category == null) {
-                        category = await KiotVietCategory.getCategoryById(parentId)
-                        if (category != null) {
-                            await mongoCategory.create({
-                                _id: category.categoryId,
-                                categoryName: category.categoryName,
-                                parentId: 0
-                            })
-                            category = {
-                                _id: response.categoryId,
-                                categoryName: response.categoryName,
-                                parentId: 0
-                            }
+                let totalOnHand = resProduct.onHand;
+                 {
+                    listSize.push(resProduct.size)
+                    let subProducts = await mongoProduct.find({
+                        masterProductId: id,
+                    })
+                    subProducts.forEach(product => {
+                        listSize.push(product.size)
+                        if (parseInt(product.onHand)>0) {
+                            totalOnHand += product.onHand
                         }
-                    }
-                    if (category != null && size != null) {
-                        let listSize = category.listSize ?? [];
-                        listSize = listSize.filter(e => e != size)
-                        if (!resProduct[0].isSynced) listSize.push(size)
-                        await mongoCategory.updateOne({
-                            _id: parentId
-                        }, {
-                            $set: { listSize: listSize }
-                        })
-                    }
-                    parentId = category?.parentId
+                    });
                 }
+                listSize = Array.from(new  Set(listSize));
+                response = await mongoProduct.updateOne({ _id: id }, {
+                    $set: { isSynced: !resProduct.isSynced, listSize: listSize, totalOnHand: totalOnHand }
+                })
+                // update size to parent category
+                try {
+                    updateSizeToCategory(listSize,resProduct.categoryId,!resProduct.isSynced)
+                } catch (err) {
+                    console.log(err)
+                }
+            } else {
+                throw AppString.productNotFound
             }
-            else {
-                response = await KiotvietAPI.callApi(ApiUrl.getProductById(product.id))
-                product = response.data
-                product = {
-                    _id: product.id,
-                    skuCode: product.code,
-                    name: product.name,
-                    fullName: product.fullName,
-                    price: product.basePrice,
-                    ctvPrice: product.priceBooks?.find(e => e.priceBookName == 'GIÁ CTV').price,
-                    salePrice: product.priceBooks?.find(e => e.priceBookName == 'giá khuyến mãi')?.price,
-                    size : product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue,
-                    images: product.images,
-                    categoryId: product.categoryId,
-                    isSynced: product.isSynced,
-                    masterProductId: product.masterProductId ?? null,
-                    attributes: product.attributes
-                }
-                response
-                    = await mongoProduct.findOneAndUpdate(
-                        {
-                            skuCode: product.skuCode
-                        }, product, options
-                    );
-                if (product.attributes != null)
-                    for (let attribute of product.attributes) {
-                        let resAttribute = await mongoAttribute.findOne({
-                            name: attribute.attributeName
-                        })
-                        let resValue = await mongoAttributeValue.findOne({
-                            attributeId: resAttribute._id,
-                            value: attribute.attributeValue
-                        })
-                        if (resValue == null) {
-                            resValue = await mongoAttributeValue.create({
-                                attributeId: resAttribute._id,
-                                value: attribute.attributeValue
-                            })
-                        }
-                        await mongoProductAttribute.create({
-                            productId: product._id,
-                            attributeValueId: resValue._id
-                        })
-                    }
-                // add size in to category parents
-                let size = product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue
-                let parentId = product.categoryId;
-                while (parentId != null) {
-                    let category = await mongoCategory.findById(parentId)
-                    if (category == null) {
-                        category = await KiotVietCategory.getCategoryById(parentId)
-                        if (category != null) {
-                            await mongoCategory.create({
-                                _id: category.categoryId,
-                                categoryName: category.categoryName,
-                                parentId: 0
-                            })
-                            category = {
-                                _id: response.categoryId,
-                                categoryName: response.categoryName,
-                                parentId: 0
-                            }
-                        }
-                    }
-                    if (category != null && size != null) {
-                        let listSize = category.listSize ?? [];
-                        listSize = listSize.filter(e => e != size)
-                        listSize.push(size)
-                        await mongoCategory.updateOne({
-                            _id: parentId
-                        }, {
-                            $set: { listSize: listSize }
-                        })
-                    }
-                    parentId = category?.parentId
-                }
-            }
+
             res.json(baseRespond(true, AppString.ok, response))
         } catch (e) {
             console.log(e)
             res.status(400)
-            res.json(baseRespond(false, AppString.error, e))
+            res.json(baseRespond(false, e, e))
         }
     }
     // GET /admin/password
@@ -384,19 +314,17 @@ class AdminController {
 
     async category(req, res, next) {
         try {
-        let route = req.route.path;
+            let route = req.route.path;
 
-        let listCategory =  await mongoCategory.find({
+            let listCategory = await mongoCategory.find({
                 parentId: null
             })
-            
-
-        let listResult = listCategory.map(function(category){
-            return {... category._doc}
-        })
-        let stack = [...listResult]
-            while( stack.length > 0) {
-                let ref= stack.pop();
+            let listResult = listCategory.map(function (category) {
+                return { ...category._doc }
+            })
+            let stack = [...listResult]
+            while (stack.length > 0) {
+                let ref = stack.pop();
                 if (ref.hasNoChild) continue
                 let listChild = await mongoCategory.find({
                     parentId: ref._id,
@@ -407,25 +335,25 @@ class AdminController {
                 ref.children = [...listChild]
                 stack.push(...listChild)
             }
-            
+
             await mongoCategory.updateMany({
                 parentId: 0
             }, {
                 hasNoChild: true
             })
-            
-        let freeCategory = await mongoCategory.find({
-            parentId : 0
-        })
-        let listFreeCategory = freeCategory.map(function(category){
-            return {...category._doc}
-        })
-        while (stack.length > 0) 
-            stack.pop()
-        stack = [...listFreeCategory]
-            while( stack.length > 0) {
-                let ref= stack.pop();
-                if (ref.hasNoChild) 
+
+            let freeCategory = await mongoCategory.find({
+                parentId: 0
+            })
+            let listFreeCategory = freeCategory.map(function (category) {
+                return { ...category._doc }
+            })
+            while (stack.length > 0)
+                stack.pop()
+            stack = [...listFreeCategory]
+            while (stack.length > 0) {
+                let ref = stack.pop();
+                if (ref.hasNoChild)
                     continue
                 let listChild = await mongoCategory.find({
                     parentId: ref._id,
@@ -435,25 +363,25 @@ class AdminController {
                 })
                 ref.children = [...listChild]
                 stack.push(...listChild)
-        }
-        
-        for (let i = 0; i < listFreeCategory.length; i++) {
-            KiotVietCategory.modifyCategoryToTree(listFreeCategory[i])
-        }
-        for (let i = 0; i < listResult.length; i++) {
-            KiotVietCategory.modifyCategoryToTree(listResult[i])
-        }
-        res.render("admin/admin_category_tree", { categoryTree: listResult, listFreeCategory,  route})
-        } catch(err){
+            }
+
+            for (let i = 0; i < listFreeCategory.length; i++) {
+                KiotVietCategory.modifyCategoryToTree(listFreeCategory[i])
+            }
+            for (let i = 0; i < listResult.length; i++) {
+                KiotVietCategory.modifyCategoryToTree(listResult[i])
+            }
+            res.render("admin/admin_category_tree", { categoryTree: listResult, listFreeCategory, route })
+        } catch (err) {
             console.log(err)
             next(err)
         }
     }
     // POST
-    async addTag(req,res,next) {
+    async addTag(req, res, next) {
         try {
             let id = req.params.id
-            let product = await mongoProduct.findOne({_id: id})
+            let product = await mongoProduct.findOne({ _id: id })
             if (product != null) {
                 let tags = product.tags
                 tags.push('')
@@ -469,11 +397,11 @@ class AdminController {
             res.json(baseRespond(false, err))
         }
     }
-    async deleteTag(req,res,next) {
+    async deleteTag(req, res, next) {
         try {
             let id = req.params.id
             let index = req.body.index
-            let product = await mongoProduct.findOne({_id: id})
+            let product = await mongoProduct.findOne({ _id: id })
             if (product != null) {
                 let tags = product.tags
                 tags.splice(index, 1)
@@ -484,7 +412,7 @@ class AdminController {
                 })
             }
             res.json(baseRespond(true, AppString.ok))
-        } catch (err) { 
+        } catch (err) {
             res.error(400)
             res.json(baseRespond(false, err))
         }
@@ -532,7 +460,7 @@ class AdminController {
             parentId: null
         })
         try {
-            let listResult = listCategory.map((category) =>category._doc)
+            let listResult = listCategory.map((category) => category._doc)
             let stack = [...listResult]
             while (stack.length > 0) {
                 let ref = stack.pop();
@@ -548,7 +476,7 @@ class AdminController {
             }
             let html = ''
             let i = 1
-            listResult.map(function(category) {
+            listResult.map(function (category) {
                 let htmlCategory = ''
                 if (category.hasNoChild) {
                     htmlCategory = `
@@ -584,10 +512,10 @@ class AdminController {
                     </a>
                         <ul class="dropdown-menu py-xl-3">
                         `
-                        category.children.map(function(sub_category) {
-                            let htmlDropdown1 = ``
-                            if (sub_category.hasNoChild) {
-                                htmlDropdown1 = `
+                    category.children.map(function (sub_category) {
+                        let htmlDropdown1 = ``
+                        if (sub_category.hasNoChild) {
+                            htmlDropdown1 = `
                                     <li class="dropend position-relative"><!-- Dropdown level 1-->
                                         <a class="dropdown-item py-3 px-4" href="/danh-muc/${sub_category._id}"
                                             aria-haspopup="true">
@@ -595,9 +523,9 @@ class AdminController {
                                         </a>
                                     </li><!-- Dropdown level 1 -->
                                     `
-                                htmlCategory += htmlDropdown1
-                            } else {
-                                htmlDropdown1 = `
+                            htmlCategory += htmlDropdown1
+                        } else {
+                            htmlDropdown1 = `
                                     <li class="dropend position-relative"> <!-- Dropdown level 1 -->
                                         <span class="toggle-submenu position-absolute p-3 mt-1" data-index="${i}">
                                         <!-- In mobile  -->
@@ -610,11 +538,11 @@ class AdminController {
                                         </a>
                                         <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0">
                                     `
-                                    sub_category.children.map(function(child_sub_category) {
-                                        let htmlDropdown2 = ''
-                                        if ((child_sub_category).hasNoChild) {
-                                            if ((child_sub_category).logo){
-                                                htmlDropdown2 = `
+                            x.children.map(function (child_sub_category) {
+                                let htmlDropdown2 = ''
+                                if ((child_sub_category).hasNoChild) {
+                                    if ((child_sub_category).logo) {
+                                        htmlDropdown2 = `
                                                 <li>
                                                     <a href="/danh-muc/${child_sub_category._id}" class="dropdown-item ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
                                                         <img src="/assets/images/logo-FC/${child_sub_category.logo}" width="36px" height="36px" class="p-1" alt="">
@@ -622,18 +550,18 @@ class AdminController {
                                                     </a>
                                                 </li>
                                                 `
-                                            } else {
-                                                htmlDropdown2 = `
+                                    } else {
+                                        htmlDropdown2 = `
                                                     <li>
                                                         <a href="/danh-muc/${child_sub_category._id}/" class="dropdown-item ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
                                                             ${child_sub_category.categoryName.toUpperCase()}
                                                         </a>
                                                     </li>
                                                 `
-                                            }
-                                            htmlDropdown1 += htmlDropdown2
-                                        } else {
-                                            htmlDropdown2 = `
+                                    }
+                                    htmlDropdown1 += htmlDropdown2
+                                } else {
+                                    htmlDropdown2 = `
                                             <li class="dropend position-relative"> <!-- Dropdown submenu-->
                                                     <span class="toggle-submenu position-absolute p-2 me-2 mt-1" data-index="1">
                                                     <!-- In mobile  -->
@@ -645,29 +573,29 @@ class AdminController {
                                                         ${child_sub_category.categoryName.toUpperCase()}
                                                     </a>
                                                 <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0"> <!-- Dropdown level 3 -->`
-                                                    child_sub_category.children.map(function(child) {
-                                                        let htmlDropdown3 = `
+                                    child_sub_category.children.map(function (child) {
+                                        let htmlDropdown3 = `
                                                         <li>
                                                             <a href="/danh-muc/${child._id}" class="dropdown-item ms-3 ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
                                                                 ${child.categoryName.toUpperCase()}
                                                             </a>
                                                         </li>
                                                         `
-                                                        htmlDropdown2 += htmlDropdown3
-                                                    })
-                                            htmlDropdown2 += `</ul>
+                                        htmlDropdown2 += htmlDropdown3
+                                    })
+                                    htmlDropdown2 += `</ul>
                                             </li>
                                             `
-                                            htmlDropdown1 += htmlDropdown2
-                                        }
-                                    })
-                                    htmlDropdown1 += `</ul> <!-- Dropdown level 2 -->
+                                    htmlDropdown1 += htmlDropdown2
+                                }
+                            })
+                            htmlDropdown1 += `</ul> <!-- Dropdown level 2 -->
                                 </li> <!-- Dropdown level 1 -->
                                 `
-                                htmlCategory += htmlDropdown1
-                            }
-                        })
-                        htmlCategory += `</ul> 
+                            htmlCategory += htmlDropdown1
+                        }
+                    })
+                    htmlCategory += `</ul> 
                     </li>
                     `
                     html += htmlCategory
@@ -677,30 +605,30 @@ class AdminController {
             await mongoNavbarcategories.findByIdAndUpdate(1, {
                 string: html
             })
-           await  writeFile('./sources/public/assets/category.html',html)
+            await writeFile('./sources/public/assets/category.html', html)
         } catch (error) {
             console.log(error)
-        }   
+        }
     }
     async updateCategoryPosition(req, res, next) {
-       try {
-        let parentId = req.body.parentId
-        let categoryId = req.params.id
-        let category = await mongoCategory.findOneAndUpdate({
-            _id: categoryId,
-        }, {
-            parentId: parentId,
-        })
-        AdminController.updateNavigatorBar()
-        await 
-        res.json(baseRespond(true, AppString.ok))
-       } catch (err){
-        res.status(404)
-        console.log(err)
-        res.json(baseRespond(false, err))
-       }
+        try {
+            let parentId = req.body.parentId
+            let categoryId = req.params.id
+            let category = await mongoCategory.findOneAndUpdate({
+                _id: categoryId,
+            }, {
+                parentId: parentId,
+            })
+            AdminController.updateNavigatorBar()
+            await
+                res.json(baseRespond(true, AppString.ok))
+        } catch (err) {
+            res.status(404)
+            console.log(err)
+            res.json(baseRespond(false, err))
+        }
     }
-    
+
 }
 
 module.exports = new AdminController();

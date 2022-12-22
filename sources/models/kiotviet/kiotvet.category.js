@@ -27,9 +27,14 @@ class KiotVietCategory {
         }
     }
     static async getAllCategory() {
-       let response =  await KiotvietAPI.callApi(ApiUrl.getAllCategory())
-       let {total,data} = response.data;
+       try {
+        let response =  await KiotvietAPI.callApi(ApiUrl.getAllCategory())
+       let {data} = response.data;
        return data;
+       } catch (err) {
+        console.log(err);
+        return null
+       }
     }
     static modifyCategoryToTree (refCategory,selectedId) {
         let isExpanded = false;

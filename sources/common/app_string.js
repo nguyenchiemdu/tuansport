@@ -31,5 +31,6 @@ class AppString {
     static error = 'Đã có lỗi xảy ra!'
     static newPasswordNotMatch ='Mật khẩu mới không khớp'
     static productNotFound = 'Không tìm thấy sản phẩm'
+    static kiotVietOverload = 'Server Kiot Việt Đang quá tải, vui lòng thử lại sau'
 }
 module.exports = AppString

@@ -15,7 +15,8 @@ class HomeController {
         let { docs } = await getTableDataWithPagination(req, mongoProduct, {
             findCondition: {
                 masterProductId: null,
-                isSynced: true
+                isSynced: true,
+                totalOnHand : { $gt: 0 }
 
             }
         })
@@ -23,13 +24,14 @@ class HomeController {
             sortCondition:'-updatedAt',
             findCondition: {
                 masterProductId: null,
-                isSynced: true
-
+                isSynced: true,
+                totalOnHand : { $gt: 0 }
             }
         })
 
         let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
-            sortCondition: "-updatedAt"
+            sortCondition: "-updatedAt",
+            totalOnHand : { $gt: 0 }
         })
         
         res.render("home/home", {
@@ -52,7 +54,8 @@ class HomeController {
         let slug = req.params.slug
         let page = await mongoPolicy.findOne({slug: slug}).exec()
         let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
-            sortCondition: "-updatedAt"
+            sortCondition: "-updatedAt",
+            totalOnHand : { $gt: 0 }
         })
         let relatedNewsFeed
         if (newsFeed) {
