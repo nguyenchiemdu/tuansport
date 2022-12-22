@@ -46,7 +46,8 @@
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá CTV</th>
                   <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá chưa giảm</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Sản phẩm gốc</th>
+                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Tồn kho</th>
+                  <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Sản phẩm gốc</th> -->
                   <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th> -->
 
                 </tr>
@@ -82,11 +83,28 @@
                       <th class="text-decoration-line-through">
                         <%=priceFormat.format(data[i].salePrice)%>
                       </th>
-                      <th>
+                      <%let onHand
+                          try {
+                                onHand = data[i].onHand;
+                            } catch( e) {
+                                onHand = null
+                            }
+                          let textStyle
+                          if (parseInt(onHand)>0) {
+                            textStyle = 'text-success'
+                          } else {
+                            textStyle = 'text-danger'
+                          }
+                          %> 
+                        <th class="<%=textStyle %>">
+                          
+                          <%=onHand%> 
+                        </th>
+                      <!-- <th>
                         <%if (data[i].masterProductId== null){%>
                           ✅
                           <%}%>
-                      </th>
+                      </th> -->
                   </tr>
                   <%} %>
               </tbody>

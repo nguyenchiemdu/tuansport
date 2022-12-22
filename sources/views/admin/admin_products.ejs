@@ -47,7 +47,7 @@
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
-                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Còn hàng</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Tồn kho</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">
                         <button class="btn btn-primary sync-all" type="button">
                           Đồng bộ tất cả
@@ -76,17 +76,17 @@
                             <img src="<%=image%>" width="100px" height="100px" alt="<%if (image==null) {%>Không có hình ảnh<%}%>">
                         </th>
                         <th>
-                          <%=data[i].code%>
+                          <%=data[i].skuCode%>
                         </th>
                         <th>
-                          <%=data[i].fullName%>
+                          <%=data[i].name%>
                         </th>
                         <th>
-                          <%=data[i].basePrice%>
+                          <%=data[i].price%>
                         </th>
                         <%let onHand
                           try {
-                                onHand = data[i].inventories[0].onHand;
+                                onHand = data[i].onHand;
                             } catch( e) {
                                 onHand = null
                             }

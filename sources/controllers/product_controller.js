@@ -15,7 +15,8 @@ class ProductController {
             let skuCode = req.params.code
             let product = await mongoProduct.findOne({
                 skuCode: skuCode,
-                isSynced: true
+                isSynced: true,
+                totalOnHand : { $gt: 0 }
             })
             if (product ==null) {
                 throw AppString.productNotFound
@@ -98,7 +99,7 @@ class ProductController {
                 },
                 masterProductId: null,
                 isSynced: true,
-
+                totalOnHand : { $gt: 0 }
             };
             if (sizes != null && sizes.length > 0) {
                 findCondition = {
@@ -106,10 +107,10 @@ class ProductController {
                         $in: listCategoryid
                     },
                     isSynced: true,
-                    size: {
-                        $in: sizes
-                    }
-                }
+                    totalOnHand : { $gt: 0 }
+            }
+                let listSizeCondition = sizes.map(function(size){ return {listSize: size}})
+                findCondition['$or'] = listSizeCondition;
             }
             let priceParam = 'price';
             if (role == 'Cộng tác viên') {
@@ -154,7 +155,8 @@ class ProductController {
                 ]
             }
             let findCondition = {
-                isSynced: true
+                isSynced: true,
+                totalOnHand : { $gt: 0 }
             }
             if (listFindCondition.length > 0) {
                 findCondition['$or'] = listFindCondition
