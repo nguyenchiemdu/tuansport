@@ -7,7 +7,7 @@ const mongoAttribute = require("../models/mongo/mongo.attribute")
 const mongoAttributeValue = require("../models/mongo/mongo.attribute_value")
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute");
 const kiotVietApi = require("./kiotviet_api")
-const {mongoProductFromKiotVietProduct} = require('./functions');
+const {mongoProductFromKiotVietProduct,writeFile, readFile} = require('./functions');
 const { category } = require("../controllers/admin_controller");
 
 async function importCategories() {
@@ -148,7 +148,20 @@ async function importProduct() {
     
     
 }
+async function backupSyncedProduct (){
+    let products = await mongoProduct.find({masterProductId: null, isSynced: true})
+    let ids = products.map(product => product._id);
+    console.log(ids.length);
+    await writeFile('./sources/public/assets/ids.json',JSON.stringify(ids));
+}
+async function getListSyncedProductIds (){
+  let ids =   await readFile('./sources/public/assets/ids.json')
+  ids = JSON.parse(ids)
+  return ids;
+}
 
 module.exports.importCategories = importCategories
 module.exports.importAttributes = importAttributes
 module.exports.importProduct = importProduct
+module.exports.backupSyncedProduct = backupSyncedProduct
+module.exports.getListSyncedProductIds = getListSyncedProductIds

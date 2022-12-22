@@ -134,6 +134,15 @@ async  function writeFile(filePath, content) {
     //     else console.log('deleted file')
     // })
 }
+async  function readFile(filePath) {
+    // var filePath ='./sources/public/try.js'
+    return await fs.promises.readFile(filePath, 'utf-8', (err,data) => {
+        if (err) {
+            console.error(err);
+        }
+        return data
+    });
+}
 function mongoProductFromKiotVietProduct(product){
     let onHand;
     try {
@@ -193,3 +202,4 @@ module.exports.toPathString = toPathString
 module.exports.writeFile = writeFile
 module.exports.mongoProductFromKiotVietProduct = mongoProductFromKiotVietProduct
 module.exports.lowercaseKey = lowercaseKey
+module.exports.readFile = readFile
