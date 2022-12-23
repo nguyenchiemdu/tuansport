@@ -8,6 +8,7 @@ $(document).ready(function () {
         if ($(this).hasClass('btn-primary')){
                 $(this).removeClass('btn-primary');
                 $(this).addClass('btn-light');
+                $('#product-status').addClass('d-none')
             let attributeId = parseInt($(this).attr('attributeId'))
             delete selecedAttributes[attributeId]
         } else {
@@ -122,6 +123,7 @@ function initCarousel() {
         loop: true,
         center: true,
         margin: 20,
+        autoHeight:true,
         URLhashListener: true,
         // autoplayHoverPause:true,
         responsive: {
@@ -176,20 +178,38 @@ function initCarousel() {
         loop: false,
         margin: 20,
     });
+    // next and previous buttons
+    $('.next-button').click(function() {
+        $(".image-controller").trigger('next.owl.carousel');
+    })
+    // Go to the previous item
+    $('.prev-button').click(function() {
+        $(".image-controller").trigger('prev.owl.carousel');
+    })
 }
 function updateSelectedProduct(product) {
-    $('#skuCode').html(product.code);
+    $('#skuCode').html(product.skuCode);
     $('.btn-cart').each(function(){
-        $(this).attr('skucode',product.code)
+        $(this).attr('skucode',product.skuCode)
     })
     $('.btn-direct-buy').each(function(){
-        $(this).attr('skucode',product.code)
+        $(this).attr('skucode',product.skuCode)
     })
     // $('.product-name').html(product.fullName);
     $('#product-status').removeClass('d-none')
     $('#product-status').html(`Tình Trạng:
-    <span>Còn ${product.inventories[0].onHand} sản
+    <span>Còn ${product.onHand} sản
                     phẩm</span>`)
+    // update price
+    let oldPrice = $('#price').html()
+    let price;
+    if (oldPrice.includes('CTV:')){
+        price = 'CTV: '+`<span class="text-color-tertiary">${priceFormat.format(product.ctvPrice)}</span>`
+    } else  {
+        price = priceFormat.format(product.price)
+    }
+    $('#price').html(price)
+    $('.sale-price').html(priceFormat.format(product.salePrice))
 }
 function removeOnHandTag() {
     $('#product-status').addClass('d-none')
@@ -289,3 +309,5 @@ function getAvailableOtherAttributesValue(newAtrribute) {
     }
     return mapAvailableAttr;
 }
+
+let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' })

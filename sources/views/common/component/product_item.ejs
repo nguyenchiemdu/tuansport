@@ -4,7 +4,7 @@
                        let price;
                        if (user?.role== 'Cộng tác viên'){
                                price =  item.ctvPrice
-                               return  'CTV: '+priceFormat.format(price)
+                               return  'CTV: '+`<span class="text-color-tertiary">${priceFormat.format(price)}</span>`
                        } else  {
                         price =  item.price;
                        return priceFormat.format(price)
@@ -43,7 +43,7 @@
     </div>
     <div>
             <h3>
-                    <%=formatedPrice(item) %>
+                    <%-formatedPrice(item) %>
             </h3>
             <div class="row row-cols-2">
 
