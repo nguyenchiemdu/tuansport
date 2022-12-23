@@ -45,19 +45,30 @@ inputLeft.addEventListener("mousedown", function () {
 });
 inputLeft.addEventListener("mouseup", function () {
 	thumbLeft.classList.remove("active");
+	applyFilter()
 });
+// for mobile
+inputLeft.addEventListener("touchend", function () {
+	applyFilter()
+});
+
 
 inputRight.addEventListener("mouseover", function () {
 	thumbRight.classList.add("hover");
 });
 inputRight.addEventListener("mouseout", function () {
 	thumbRight.classList.remove("hover");
+
 });
 inputRight.addEventListener("mousedown", function () {
 	thumbRight.classList.add("active");
 });
 inputRight.addEventListener("mouseup", function () {
 	thumbRight.classList.remove("active");
+	applyFilter()
+});
+inputRight.addEventListener("touchend", function () {
+	applyFilter()
 });
 // reset button
 $(document).ready(function () {
@@ -130,14 +141,17 @@ $('.size-button').on('click', function () {
 		btn.removeClass('btn-primary');
 		selectedSizes = selectedSizes.filter(size => size != btn.attr('value'))
 	}
+	applyFilter()
 })
 
 // apply filter button
-$('.apply-filter').on('click', function () {
+// $('.apply-filter').on('click',applyFilter)
+
+ function applyFilter() {
 	var loc = window.location.pathname;
 	var dir = loc.substring(0, loc.lastIndexOf('?'));
 	window.location.href = `${dir}?sizes=${JSON.stringify(selectedSizes)}&min=${inputLeft.value}&max=${inputRight.value}`
-})
+}
 
 // init selected filter
 $(document).ready(function () {
