@@ -1,3 +1,4 @@
+console.log('edit product')
 
 function removeElement(e) {
     e.preventDefault()
@@ -14,6 +15,46 @@ function preventSpaceCharacter(e) {
         return false;
     }
 }
+
+// Drag function
+function dragStart(e) {
+    // Get position in list images
+    let index = $(e.target).index()
+    // Hold data for drop
+    e.originalEvent.dataTransfer.setData('index', index)
+}
+
+// Drop function
+function dropped(e) {
+    e.preventDefault()
+    e.stopPropagation()
+    let oldIndex = e.originalEvent.dataTransfer.getData('index')
+    // Check if the user drop outside of image but inside of div
+    let newIndex = $(e.target).hasClass('image-card') ? $(e.target).index() : $(e.target).parent().index() 
+
+    // Check if user drop same position ( remove itself (bug) )
+    if (oldIndex != newIndex) {
+        let element = $(this).parent().children().eq(oldIndex).remove()
+        
+        // Check if the user drop outside of image but inside of div
+        if ($(e.target).hasClass('image-card')) {
+            if (oldIndex > newIndex) {
+                $(e.target).before($(element))
+            } else {
+                $(e.target).after($(element))
+            }
+        }  else {
+            if (oldIndex > newIndex) {
+               ($(e.target).parent()).before($(element))
+            } else {
+                ($(e.target).parent()).after($(element))
+            }
+        } 
+    }
+        
+}
+
+
 
 $(document).ready(function () {
     $('.btn-apply').on('click', async function (e) {
@@ -59,6 +100,7 @@ $(document).ready(function () {
                 })
         }
     })
+
     $('#edit-form input[name="images"]').each(function () {
         $(this).on('blur', function () {
             let parent = $(this).parent()
@@ -78,6 +120,16 @@ $(document).ready(function () {
             // })
         })
     })
+    
+    // After 
+    $(document).on('dragstart', '.image-card', dragStart)
+
+    $(document).on('drop', '.image-card', dropped)
+
+    $(document).on('dragover', '.image-card', function(e) {
+        e.preventDefault()
+    })
+
     $('.btn-delete-img').click(function (e) {
         var url = new URL(window.location.href.split('?')[0]);
         let button = $(this);
