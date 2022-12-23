@@ -65,9 +65,9 @@ class ProductController {
                     isSynced: true
                 }
             })
-
+            let numberAttributes = Object.keys(mapAttributes);
             res.render("product/product_detail", {
-                product, data: docs, mapAttributes, mappedProductAttributes, user: req.headers.userInfor
+                product, data: docs, mapAttributes, mappedProductAttributes, user: req.headers.userInfor,numberAttributes
             })
         } catch (err) {
             console.log(err);
