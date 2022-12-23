@@ -1,6 +1,6 @@
 const { json } = require("express");
 const AppString = require("../common/app_string");
-const { isValidateEmail, baseRespond, generateJWT, getQueryString } = require("../common/functions");
+const { isValidateEmail, baseRespond, generateJWT, getQueryString, mongoProductFromKiotVietProduct } = require("../common/functions");
 const { getTableDataWithPagination } = require("../common/pagination");
 const mongoProduct = require("../models/mongo/mongo.product")
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute");
@@ -24,16 +24,19 @@ class ProductController {
             let mapAttributes = {
 
             }
-            let listIdGroupProduct = await mongoProduct.find({
+            let listGroupProducs = await mongoProduct.find({
                 masterProductId: product._id
-            }).then(products => products.map((product) => { return { productId: product._id } }));
+            });
+            let listIdGroupProduct = listGroupProducs.map((product) => { return { productId: product._id } });
             listIdGroupProduct.push({ productId: product._id })
             let productAttributes;
 
             let dataProductAttributes = await mongoProductAttribute.find({
                 $or: listIdGroupProduct
-            }).populate('attributeValueId').exec()
+            }).populate('attributeValueId productId').exec()
+            dataProductAttributes = dataProductAttributes.filter(attribute => (parseInt(attribute.productId.onHand)>0))
             productAttributes = await Promise.all(dataProductAttributes.map(async attribute => {
+                
                 let attr = await mongoAttribute.find({
                     _id: attribute.attributeValueId.attributeId
                 })
@@ -53,8 +56,8 @@ class ProductController {
                     attributeId: proAttr.attributeValueId.attributeId,
                     value: proAttr.attributeValueId.value
                 }
-                if (mappedProductAttributes[proAttr.productId] == null) mappedProductAttributes[proAttr.productId] = []
-                mappedProductAttributes[proAttr.productId].push(attribute)
+                if (mappedProductAttributes[proAttr.productId._id] == null) mappedProductAttributes[proAttr.productId._id] = []
+                mappedProductAttributes[proAttr.productId._id].push(attribute)
             }
             let { docs } = await getTableDataWithPagination(req, mongoProduct, {
                 findCondition: {
@@ -62,7 +65,7 @@ class ProductController {
                     isSynced: true
                 }
             })
-            // res.json(baseRespond(true,AppString.ok,product))
+
             res.render("product/product_detail", {
                 product, data: docs, mapAttributes, mappedProductAttributes, user: req.headers.userInfor
             })

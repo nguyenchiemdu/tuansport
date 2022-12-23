@@ -181,49 +181,6 @@ $(document).ready(function () {
         }
 
     })
-    $('.btn-cart').on('click', function (e) {
-        e.stopPropagation();
-        
-        let button = $(this)
-        let skuCode = button.attr('skucode')
-        let hasAttr = !(button.attr('noattr')==='true')
-        if (skuCode.includes('Master')&& hasAttr){
-            $('.toast-body span').text('Vui lòng chọn thuộc tính của sản phẩm')
-            $('.toast-body a').addClass('d-none')
-            $('#add-to-cart-success').toast('show')
-        } else {
-            if ($('#product-status span:contains("0")').length > 0) {
-                $('.toast-body span').text('Sản phẩm của bạn hiện đã hết hàng')
-                $('.toast-body a').addClass('d-none')
-                $('#add-to-cart-success').toast('show')
-            } else {
-                skuCode = skuCode.replace('Master','')
-                let cartItems = JSON.parse(window.localStorage.getItem('cart')) ?? []
-                let index = cartItems.findIndex(item => item.id == skuCode)
-                if (index<0) {
-                    cartItems.push({id: skuCode,quantity:1})
-                } else {
-                    cartItems[index].quantity = parseInt(cartItems[index].quantity) +1
-                }
-                window.localStorage.setItem('cart', JSON.stringify(cartItems))
-                
-                if (cartItems.length > 0) {
-                    let badge = `
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        ${cartItems.length}
-                    </span>  
-                    `
-                    $("#shopping-cart-nav-icon").append(badge)
-                }
-                $("#shopping-cart-nav-icon").children('.badge').html(cartItems.length)
-                $('.toast-body span').text('Đã thêm sản phẩm vào giỏ hàng!')
-                $('.toast-body a').removeClass('d-none')
-                $('.toast-body a').text('Đi đến giỏ hàng')
-                $('.toast-body a').attr('href', '/cart')
-                $('#add-to-cart-success').toast('show')
-            }
-        }
-    })
     $('.btn-wishlist').on('click', function (e) {
         e.stopPropagation();
         let button = $(this)

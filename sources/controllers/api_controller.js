@@ -15,9 +15,13 @@ class ApiController {
     // GET
     async getProductByID(req, res, next) {
         try {
-            let url = ApiUrl.getProductById(req.params.id)
-            let response = await KiotvietAPI.callApi(url)
-            res.json(baseRespond(true, AppString.ok, response.data))
+            let userInfor = req.headers.userInfor;
+            let doc = await mongoProduct.findOne({_id: req.params.id})
+            let data = doc._doc;
+            if (userInfor == null) {
+                delete data.ctvPrice
+            }
+            res.json(baseRespond(true, AppString.ok, data))
         } catch (err) {
             console.error(err)
             res.status(400)
