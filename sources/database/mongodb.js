@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Category = require('../models/mongo/mongo.category')
-let {importCategories,importAttributes,importProduct} = require('../common/sync_data');
+let {importCategories,importAttributes,importProduct,backupSyncedProduct} = require('../common/sync_data');
 const mongoProduct = require('../models/mongo/mongo.product');
 async function connect() {
 
     try {        
-        await mongoose.connect('mongodb+srv://tuansport:KqrXhiILksIdAxL0@cluster0.tnljsnn.mongodb.net/test?retryWrites=true&w=majority', {
+        await mongoose.connect(process.env.DB_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             // useCreateIndex: true
@@ -13,6 +13,7 @@ async function connect() {
         // importCategories();
         // importAttributes();
         // importProduct();
+        // backupSyncedProduct()
         console.log('Connect to Mongo DB successfully!');
         // Category.create({
         //     _id: 7,
