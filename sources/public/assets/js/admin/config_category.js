@@ -28,8 +28,8 @@ $(document).ready(function(e) {
         let element = $(`[data-bs-target="${id}"]`)
 
         // Sibling element before drop
-        let prevSiblingBeforeId = $(element).prev().attr('id') || null
-        let nextSiblingBeforeId = $(element).next().attr('id') || null
+        let prevElementId = $(element).prev().attr('id') || null
+        let nextElementId = $(element).next().attr('id') || null
 
         let level = parseInt($(e.target).attr('aria-level'))
         await $(element).css('padding-left', `${level * 1.25}rem`)
@@ -106,11 +106,6 @@ $(document).ready(function(e) {
         if ($('#list-free-category [role="treeitem"]').length == 0) {
             $('#item-test').removeClass('d-none')
         }
-
-        // Get the id of previous element 
-        // let prevSiblingAfterId = e.originalEvent.dataTransfer.getData('prevElement')
-        
-        
         // Save position of element
         let categoryId = $(element).attr('id')
         console.log(`element: ${categoryId} ,prev Sibling after: ${prevSiblingAfterId}, next Sibling after: ${nextSiblingAfterId}, prev Sibling before: ${prevSiblingBeforeId}, next Sibling before: ${nextSiblingBeforeId}`)
