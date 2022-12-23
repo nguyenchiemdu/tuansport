@@ -105,7 +105,7 @@
                           <div class="form-check form-switch">
 
                             <input class="form-check-input sync-button" value="<%=name%>" type="checkbox"
-                              skuCode='<%=data[i].code %>' productid="<%=data[i].id%>" id="flexCheckDefault" <% if
+                              skuCode='<%=data[i].skuCcode %>' productid="<%=data[i]._id%>" id="flexCheckDefault" <% if
                               (data[i].isSynced) {%> checked <% } %>>
                               <% if (data[i].masterProductId== null) {%>
                             ✔️ Master

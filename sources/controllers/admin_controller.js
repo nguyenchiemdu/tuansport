@@ -82,6 +82,20 @@ class AdminController {
                 findCondition['$or'] = listFindCondition
             }
             let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition })
+            docs = await Promise.all(
+                docs.map(async (doc) => {
+                    let data = doc._doc;
+                    let subProducts = await mongoProduct.find({
+                        masterProductId: data._id
+                    })
+                    let sumOnHand = 0
+                    for (let product of subProducts) {
+                        sumOnHand += product.onHand;
+                    }
+                    data.onHand += sumOnHand;
+                    return data
+                })
+            )
             res.render("admin/admin_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name, listCategory })
         } catch (err) {
             console.log(err)
@@ -116,6 +130,21 @@ class AdminController {
             findCondition['$or'] = listFindCondition
         }
         let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition })
+        //calculate sum on hand
+        docs = await Promise.all(
+            docs.map(async (doc) => {
+                let data = doc._doc;
+                let subProducts = await mongoProduct.find({
+                    masterProductId: data._id
+                })
+                let sumOnHand = 0
+                for (let product of subProducts) {
+                    sumOnHand += product.onHand;
+                }
+                data.onHand += sumOnHand;
+                return data
+            })
+        )
         res.render("admin/admin_synced_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name })
     }
     // GET /admin/ctv
