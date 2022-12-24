@@ -344,11 +344,14 @@ class AdminController {
 
     async category(req, res, next) {
         try {
-            let route = req.route.path;
+
+        
+        let route = req.route.path;
 
             let listCategory = await mongoCategory.find({
                 parentId: null
             })
+
             let listResult = listCategory.map(function (category) {
                 return { ...category._doc }
             })
@@ -365,25 +368,25 @@ class AdminController {
                 ref.children = [...listChild]
                 stack.push(...listChild)
             }
-
-            await mongoCategory.updateMany({
-                parentId: 0
-            }, {
-                hasNoChild: true
-            })
-
-            let freeCategory = await mongoCategory.find({
-                parentId: 0
-            })
-            let listFreeCategory = freeCategory.map(function (category) {
-                return { ...category._doc }
-            })
-            while (stack.length > 0)
-                stack.pop()
-            stack = [...listFreeCategory]
-            while (stack.length > 0) {
-                let ref = stack.pop();
-                if (ref.hasNoChild)
+        
+        await mongoCategory.updateMany({
+            parentId: 0
+        }, {
+            hasNoChild: true
+        })
+            
+        let freeCategory = await mongoCategory.find({
+            parentId : 0
+        })
+        let listFreeCategory = freeCategory.map(function(category){
+            return {...category._doc}
+        })
+        while (stack.length > 0) 
+            stack.pop()
+        stack = [...listFreeCategory]
+            while( stack.length > 0) {
+                let ref= stack.pop();
+                if (ref.hasNoChild) 
                     continue
                 let listChild = await mongoCategory.find({
                     parentId: ref._id,
@@ -571,7 +574,7 @@ class AdminController {
                                         </a>
                                         <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0">
                                     `
-                                    sub_category.children.map(function (child_sub_category) {
+                            sub_category.children.map(function (child_sub_category) {
                                 let htmlDropdown2 = ''
                                 if ((child_sub_category).hasNoChild) {
                                     if ((child_sub_category).logo) {
