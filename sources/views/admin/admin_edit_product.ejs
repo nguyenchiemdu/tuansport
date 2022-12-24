@@ -63,17 +63,24 @@
                                                         Ảnh
                                                     </h4>
     
-                                                    <div class="row rows-col-auto">
-                                                        <% for (let link of itemData[key]){%>
-                                                            <div class="col-md-3">
-                                                                <div class="position-relative" style="background-image: url('<%=link%>'); background-size: cover;width: 250px;height: 250px;">
-                                                                    <button url="<%=link%>" class="float-end btn btn-danger btn-close btn-delete-img p-3"></button>
-                                                                <input class="position-absolute bottom-0 form-control align-bottom" name='<%=key%>'value="<%= link%>" />
-    
+                                                    <% for (let link of itemData[key]){%>
+                                                        <div class="row pb-2">
+                                                            <div class="col-md-2" style="background-image: url('<%=link%>'); background-size: cover;width: 150px;height: 150px;">
+                                                            </div>
+                                                            <div class="col-md-10">
+                                                                <div class="row">
+                                                                    <div class="col-md-11">
+                                                                        <input class="form-control align-left" disabled name='<%=key%>'value="<%= link%>" />
+                                                                    </div>
+                                                                    <div class="col-md-1">
+                                                                        <button url="<%=link%>" st class="float-end btn btn-danger btn-close btn-delete-img p-3"></button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                            <!-- <div class="col-md-1 align-left">
+                                                            </div> -->
+                                                        </div>
                                                             <%}%>
-                                                    </div>
     
                                                 </div>
                                             <% } %>

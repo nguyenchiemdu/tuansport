@@ -57,7 +57,7 @@ $(document).ready(function () {
                         $('#update-failed').toast('show')
                     }
                 })
-            }
+        }
     })
     $('#edit-form input[name="images"]').each(function () {
         $(this).on('blur', function () {
@@ -96,7 +96,7 @@ $(document).ready(function () {
         }).then(res=> res.json())
         .then(res=> {
             if (res.success) {
-                button.parent().parent().remove()
+                button.parent().parent().parent().parent().remove()
             } else {
                 alert(response.message)
             }
