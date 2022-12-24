@@ -5,12 +5,12 @@ const KiotVietCategory = require('../models/kiotviet/kiotvet.category')
 const mongoProduct = require('../models/mongo/mongo.product')
 async function updateSizeToCategory(listSize,parentId,isAdd) {
     try {
-        // let res = await KiotvietAPI.callApi(ApiUrl.getProductById(resProduct._id))
+        // let res = await KiotvietAPI.callApi(ApiUrl.getProductById(masterProduct._id))
                 while (parentId != null) {
                     let category = await mongoCategory.findById(parentId)
                     if (category != null) {
                         let currentSizes = new Set(category.listSize);
-
+                        currentSizes.delete(null)
                         if (isAdd) {
                             // add new sizes in to list
                             listSize.forEach(size => {
@@ -35,4 +35,31 @@ async function updateSizeToCategory(listSize,parentId,isAdd) {
         console.log(error)
     }
 }
+async function updateMasterProduct(masterProductId) {
+    let masterProduct = await mongoProduct.findOne({_id : masterProductId})
+
+    if (masterProduct!= null) {
+        let totalOnHand = masterProduct.onHand;
+                 {
+                    if (masterProduct.size!= null && parseInt(masterProduct.onHand)>0) listSize.push(masterProduct.size)
+                    let subProducts = await mongoProduct.find({
+                        masterProductId: masterProductId,
+                    })
+                    subProducts.forEach(product => {
+                        if (parseInt(product.onHand)>0) {
+                            if (product.size!= null) listSize.push(product.size)
+                            totalOnHand += product.onHand
+                        }
+                    });
+                }
+                listSize = Array.from(new Set(listSize));
+                response = await mongoProduct.updateOne({ _id: masterProductId }, {
+                    $set: {listSize: listSize, totalOnHand: totalOnHand }
+                })
+    } else {
+        console.error('Master product not found')
+    }
+    
+}
 module.exports.updateSizeToCategory = updateSizeToCategory
+module.exports.updateMasterProduct = updateMasterProduct

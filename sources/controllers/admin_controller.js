@@ -274,15 +274,16 @@ class AdminController {
                 }, {
                     $set: { isSynced: !resProduct.isSynced }
                 })
+                // update master product
                 let totalOnHand = resProduct.onHand;
                  {
-                    listSize.push(resProduct.size)
+                    if (resProduct.size!= null && parseInt(resProduct.onHand)>0) listSize.push(resProduct.size)
                     let subProducts = await mongoProduct.find({
                         masterProductId: id,
                     })
                     subProducts.forEach(product => {
-                        listSize.push(product.size)
                         if (parseInt(product.onHand)>0) {
+                            if (product.size!= null) listSize.push(product.size)
                             totalOnHand += product.onHand
                         }
                     });

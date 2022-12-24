@@ -5,6 +5,7 @@ const mongoCategory = require("../models/mongo/mongo.category");
 const KiotvietAPI = require("../common/kiotviet_api");
 const ApiUrl = require("../common/api_url");
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute");
+const { updateMasterProduct } = require("../common/model_function");
 
 class WebhookController {
     async updateProduct(req, res, next) {
@@ -42,7 +43,7 @@ class WebhookController {
                 let masterId = newProduct.MasterProductId != null ? newProduct.MasterProductId :newProduct.Id;
                 let oldTotal = checkProduct?.onHand?? 0
                 let newTotal = mongoNewProd.onHand
-                WebhookController.updateTotalOnHand(masterId,oldTotal,newTotal)
+                updateMasterProduct(masterId)
                 // end of update total onHand
 
                 let category = await mongoCategory.findById(newProduct.CategoryId)
@@ -122,7 +123,7 @@ class WebhookController {
                 let masterId = checkProduct.masterProductId != null ? checkProduct.masterProductId :checkProduct._id;
                 let oldTotal = checkProduct?.onHand?? 0
                 let newTotal = newProduct.OnHand
-                WebhookController.updateTotalOnHand(masterId,oldTotal,newTotal)
+                updateMasterProduct(masterId)
                 // end of update total onHand
                 }
                 
