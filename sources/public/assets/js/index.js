@@ -2,7 +2,7 @@
 
 // Dropdown in mobile
 $(document).ready(function(e) {
-    $('#dropdownMenuLink').click(function (e) {
+    $('.dropdownMenuLink').click(function (e) {
         e.stopPropagation()
         $(this).attr('aria-expanded', 'false' )
         $(this).removeClass('show')
@@ -36,7 +36,7 @@ $(document).ready(function(e) {
 $(document).ready(function() {
     var width = $(document).width() 
     if (width >=1200) {
-        let navRedirect = document.querySelectorAll('#nav-redirect')
+        let navRedirect = document.querySelectorAll('.nav-redirect')
         $(navRedirect).hover(function() {
             let tag = $(this).children('a')
             let dropdown = $(this).children('ul')
@@ -57,7 +57,7 @@ $(document).ready(function() {
             dropdown.removeClass('show')
         })
 
-        $(navRedirect).click(function() {
+        $('.nav-redirect').click(function() {
             let port
             if (window.location.port) 
                 port = window.location.port

@@ -156,7 +156,7 @@
         border: 0;
     }
 
-    #nav-redirect{
+    .nav-redirect{
         border-bottom: 2px solid var(--dark-gray-color);
     }
 }

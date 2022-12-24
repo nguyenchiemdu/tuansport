@@ -510,8 +510,8 @@ class AdminController {
                 let htmlCategory = ''
                 if (category.hasNoChild) {
                     htmlCategory = `
-                    <li class="nav-item dropdown text-center p-1" id="nav-redirect">
-                        <a class="d-sm-flex  d-xl-block nav-link dropdown-toggle align-items-center" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                    <li class="nav-item dropdown text-center p-1 nav-redirect" >
+                        <a class="d-sm-flex  d-xl-block nav-link dropdown-toggle align-items-center dropdownMenuLink" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <img src="/assets/images/icon-navbar/${category.icon}" class="p-1 mb-2"></img>
                             <h5 class="ps-xl-0 ps-sm-3">${category.categoryName.toUpperCase()}</h5>
@@ -525,13 +525,13 @@ class AdminController {
                     html.concat(htmlCategory)
                 } else {
                     htmlCategory = `
-                    <li class="nav-item dropdown text-center p-1" id="nav-redirect">
+                    <li class="nav-item dropdown text-center p-1 nav-redirect" >
                         <span class="toggle-submenu position-absolute p-3 mt-1" data-index="${i}">
                             <!-- In mobile  -->
                             <i class="toggle-icon fa-regular fa-plus open-menu" data-index="${i}"></i>
                             <i class="toggle-icon fa-regular fa-minus close-menu" data-index="${i}" style="display: none"></i>
                         </span>
-                        <a class="d-flex d-xl-block nav-link dropdown-toggle align-items-center" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                        <a class="d-flex d-xl-block nav-link dropdown-toggle align-items-center dropdownMenuLink" href="/danh-muc/${category._id}" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <img src="/assets/images/icon-navbar/${category.icon}" class="p-1 mb-2"></img>
                         <h5 class="ps-xl-0 ps-sm-3" >${category.categoryName.toUpperCase()}</h5>
