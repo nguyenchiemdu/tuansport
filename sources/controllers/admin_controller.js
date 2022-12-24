@@ -448,7 +448,7 @@ class AdminController {
         }
     }
     async uploadImage(req, res, next) {
-        let path = req.headers.host;
+        let path = process.env.DOMAIN ?? req.headers.host;
         let id = req.params.id
         path = 'http://' + path + '/' + req.file.path.split('/').slice(2).join('/')
         let product = await mongoProduct.findOne({ _id: id })
