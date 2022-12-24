@@ -19,7 +19,18 @@ function preventSpaceCharacter(e) {
 // Drag function
 function dragStart(e) {
     // Get position in list images
-    let index = $(e.target).index()
+    let index
+
+    if ($(e.target).hasClass('image-card')) {
+       index = $(e.target).index()
+    } else {
+        if ($(e.target).hasClass('image') || $(e.target).attr('class').includes('col')) {
+            index = $(e.target).parent().index()
+        } else {
+            index = $(e.target).parent().parent().index()
+        }
+        
+    } 
     // Hold data for drop
     e.originalEvent.dataTransfer.setData('index', index)
 }
@@ -30,26 +41,47 @@ function dropped(e) {
     e.stopPropagation()
     let oldIndex = e.originalEvent.dataTransfer.getData('index')
     // Check if the user drop outside of image but inside of div
-    let newIndex = $(e.target).hasClass('image-card') ? $(e.target).index() : $(e.target).parent().index() 
+    let newIndex
+
+    if ($(e.target).hasClass('image-card')) {
+        // console.log('vao div')
+            newIndex = $(e.target).index()
+        } else {
+            if ($(e.target).hasClass('image') || $(e.target).attr('class').includes('col')) {
+                newIndex = ($(e.target).parent()).index()
+            } else {
+                newIndex = ($(e.target).parent().parent()).index()
+        }
+    }
 
     // Check if user drop same position ( remove itself (bug) )
     if (oldIndex != newIndex) {
         let element = $(this).parent().children().eq(oldIndex).remove()
         
         // Check if the user drop outside of image but inside of div
+        
         if ($(e.target).hasClass('image-card')) {
-            if (oldIndex > newIndex) {
-                $(e.target).before($(element))
+                if (oldIndex > newIndex) {
+                    $(e.target).before($(element))
+                } else {
+                    $(e.target).after($(element))
+                }
             } else {
-                $(e.target).after($(element))
-            }
-        }  else {
-            if (oldIndex > newIndex) {
-               ($(e.target).parent()).before($(element))
-            } else {
-                ($(e.target).parent()).after($(element))
-            }
-        } 
+                if ($(e.target).hasClass('image') || $(e.target).attr('class').includes('col')) {
+                    if (oldIndex > newIndex) {
+                        $(e.target).parent().before($(element))
+                    } else {
+                        $(e.target).parent().after($(element))
+                    }
+                } else {
+                    if (oldIndex > newIndex) {
+                        $(e.target).parent().parent().before($(element))
+                    } else {
+                        $(e.target).parent().parent().after($(element))
+                    }
+                }
+                
+            } 
     }
         
 }
@@ -148,7 +180,7 @@ $(document).ready(function () {
         }).then(res=> res.json())
         .then(res=> {
             if (res.success) {
-                button.parent().parent().parent().parent().remove()
+                button.parent().parent().remove()
             } else {
                 alert(response.message)
             }

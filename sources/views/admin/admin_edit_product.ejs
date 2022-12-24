@@ -63,24 +63,26 @@
                                                         Ảnh
                                                     </h4>
     
-                                                    <% for (let link of itemData[key]){%>
-                                                        <div class="row pb-2">
-                                                            <div class="col-md-2" style="background-image: url('<%=link%>'); background-size: cover;width: 150px;height: 150px;">
-                                                            </div>
-                                                            <div class="col-md-10">
-                                                                <div class="row">
-                                                                    <div class="col-md-11">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <% for (let link of itemData[key]){%>
+                                                                <div class="row pb-2 image-card" draggable="true">
+                                                                    <div class="col-md-2 image" style="background-image: url('<%=link%>'); background-size: cover;width: 150px;height: 150px;">
+                                                                    </div>
+                                                                    <div class="col-md-8">
                                                                         <input class="form-control align-left" disabled name='<%=key%>'value="<%= link%>" />
                                                                     </div>
                                                                     <div class="col-md-1">
-                                                                        <button url="<%=link%>" st class="float-end btn btn-danger btn-close btn-delete-img p-3"></button>
+                                                                        <button url="<%=link%>" style="transform:translateY(-5px)" class="float-end btn btn-danger btn-close btn-delete-img p-3"></button>
                                                                     </div>
+                                                                       
+                                                                    <!-- <div class="col-md-1 align-left">
+                                                                    </div> -->
                                                                 </div>
-                                                            </div>
-                                                            <!-- <div class="col-md-1 align-left">
-                                                            </div> -->
-                                                        </div>
                                                             <%}%>
+                                                        </div>
+                                                    </div>
+                                                    
     
                                                 </div>
                                             <% } %>
