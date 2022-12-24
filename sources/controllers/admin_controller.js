@@ -568,7 +568,7 @@ class AdminController {
                                         </a>
                                         <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0">
                                     `
-                            x.children.map(function (child_sub_category) {
+                                    sub_category.children.map(function (child_sub_category) {
                                 let htmlDropdown2 = ''
                                 if ((child_sub_category).hasNoChild) {
                                     if ((child_sub_category).logo) {
