@@ -160,27 +160,6 @@ $(document).ready(function () {
     })
     
 
-    $('.btn-direct-buy').on('click', function (e) {
-        e.stopPropagation();
-        
-        let button = $(this)
-        let skuCode = button.attr('skucode')
-        if (skuCode.includes('Master')){
-            $('.toast-body span').text('Vui lòng chọn thuộc tính của sản phẩm')
-            $('.toast-body a').addClass('d-none')
-            $('#add-to-cart-success').toast('show')
-        } else {
-            if ($('#product-status span:contains("0")').length > 0) {
-                $('.toast-body span').text('Sản phẩm của bạn hiện đã hết hàng')
-                $('.toast-body a').addClass('d-none')
-                $('#add-to-cart-success').toast('show')
-            } else {
-                
-                window.location.pathname= '/checkout'
-            }
-        }
-
-    })
     $('.btn-wishlist').on('click', function (e) {
         e.stopPropagation();
         let button = $(this)
