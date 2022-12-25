@@ -3,6 +3,7 @@ const ApiUrl = require('./api_url')
 const mongoCategory = require('../models/mongo/mongo.category')
 const KiotVietCategory = require('../models/kiotviet/kiotvet.category')
 const mongoProduct = require('../models/mongo/mongo.product')
+const AppString = require('./app_string')
 async function updateSizeToCategory(listSize,parentId,isAdd) {
     try {
         // let res = await KiotvietAPI.callApi(ApiUrl.getProductById(masterProduct._id))
@@ -61,5 +62,25 @@ async function updateMasterProduct(masterProductId) {
     }
     
 }
+async function mapRangePrice(products,req) {
+    let userInfor = req.headers.userInfor;
+    products = products.map(product =>product._doc)
+    products = await Promise.all(products.map(async (product) =>{
+       let prices = await mongoProduct.find({masterProductId: product._id})
+                            .then(products => products.map(product=>{
+                                if (userInfor?.role == AppString.ctv) {
+                                  return  parseInt(product.ctvPrice)
+                                } else {
+                                  return  parseInt(product.price)
+                                }
+                            }));
+            prices.push(parseInt(product.price));
+            product.minPrice = Math.min(...prices)
+            product.maxPrice = Math.max(...prices)
+            return product;
+    }));
+    return products;
+}
 module.exports.updateSizeToCategory = updateSizeToCategory
 module.exports.updateMasterProduct = updateMasterProduct
+module.exports.mapRangePrice = mapRangePrice

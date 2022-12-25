@@ -7,6 +7,7 @@ const mongoProduct = require("../models/mongo/mongo.product");
 const mongoCategory = require("../models/mongo/mongo.category");
 const mongoNavbarcategories = require("../models/mongo/mongo.navbarcategories");
 const mongoPolicy = require("../models/mongo/mongo.policy");
+const { mapRangePrice } = require("../common/model_function");
 
 class HomeController {
     // GET 
@@ -20,6 +21,7 @@ class HomeController {
 
             }
         })
+        docs = await mapRangePrice(docs,req)
         let { docs: newestProduct } = await getTableDataWithPagination(req, mongoProduct, {
             sortCondition:'-updatedAt',
             findCondition: {
@@ -28,6 +30,7 @@ class HomeController {
                 totalOnHand : { $gt: 0 }
             }
         })
+        newestProduct = await mapRangePrice(newestProduct,req)
 
         let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
             sortCondition: "-updatedAt",

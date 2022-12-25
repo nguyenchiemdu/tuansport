@@ -274,6 +274,14 @@ footer{
     -webkit-box-orient: vertical;
  }
 
+ .range-price {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
+    -webkit-box-orient: vertical;
+ }
+
 .hover-bigger:hover {
     /* -webkit-transform: scale(1.1); */
     transform: scale(1.1);
