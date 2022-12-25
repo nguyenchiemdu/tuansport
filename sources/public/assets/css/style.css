@@ -224,7 +224,10 @@ input.product-amount:focus {
 }
 
 
-
+/* Background */
+.bg-light{
+    background-color: var(--light-gray-color) !important;
+}
 /* Chips */
 /* Progress bar */
 /* Floating action button */

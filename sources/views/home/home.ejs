@@ -258,7 +258,7 @@
                                                 <% for (let item of newestProduct){ %>
                                                         <div class="p-3">
                                                                 <%- include('../common/component/product_item.ejs',{item:
-                                                                        item}) %>
+                                                                        item,showSizes: true}) %>
                                                         </div>
                                                         <% } %>
                                         </div>
@@ -287,7 +287,7 @@
                                         <div id="list-all-products"
                                                 class="row row-cols-2 row-cols-md-4 row-cols-lg-5  row-cols-sm-3 gx-4 gy-4 mt-3 mb-3">
                                                 <% for (let item of data) {%>
-                                                        <%- include('../common/component/product_item.ejs',{item: item})
+                                                        <%- include('../common/component/product_item.ejs',{item: item,showSizes:true})
                                                                 %>
                                                                 <%}%>
                                         </div>
