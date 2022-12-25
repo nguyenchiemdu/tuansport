@@ -160,72 +160,7 @@ $(document).ready(function () {
     })
     
 
-    $('.btn-wishlist').on('click', function (e) {
-        e.stopPropagation();
-        let button = $(this)
-
-        if (button.hasClass('btn-light')) {
-            button.removeClass('btn-light')
-            button.addClass('btn-primary')
-            let skuCode = button.attr('skucode')
-            let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
-            for (let button of sameSkuCodeButtons) {
-                $(button).removeClass('btn-light')
-                $(button).addClass('btn-primary')
-            }
-            let wishlist = window.localStorage.getItem('wishlist');
-            wishlist = JSON.parse(wishlist);
-           
-            if (wishlist == null) wishlist = [];
-            wishlist.push(skuCode)
-            wishlist = new Set(wishlist)
-            wishlist = Array.from(wishlist)
-            window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
-            if (wishlist.length > 0) {
-                let badge = `
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                    ${wishlist.length}
-                </span>  
-                `
-                $("#wishlist-nav-icon").append(badge)
-            }
-            $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
-            
-        } else {
-            button.removeClass('btn-primary')
-            button.addClass('btn-light')
-            let skuCode = button.attr('skucode')
-            let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
-            for (let button of sameSkuCodeButtons) {
-                $(button).removeClass('btn-primary')
-                $(button).addClass('btn-light')
-            }
-            let wishlist = window.localStorage.getItem('wishlist');
-            wishlist = JSON.parse(wishlist);
-           
-            if (wishlist == null) wishlist = [];
-            wishlist = wishlist.filter(function(item) {
-                return item !== skuCode
-            })
-            wishlist = new Set(wishlist)
-            wishlist = Array.from(wishlist)
-            window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
-            if (wishlist.length == 0) {
-                $("#wishlist-nav-icon").children('.badge').remove()
-            }
-            $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
-        }
-        $('.toast-body a').text('Đi đến wishlist')
-        $('.toast-body a').attr('href', '/wishlist')
-        if (!$(button).hasClass('btn-light')) {
-            $('.toast-body span').text('Đã thêm sản phẩm vào wishlist! ')
-        } else {
-            $('.toast-body span').text('Đã gỡ sản phẩm ra khỏi wishlist! ')
-
-        }
-            
-        $('#add-to-cart-success').toast('show')
-    })
+    $('.btn-wishlist').on('click',addToWishlist)
     // update porduct that in wishlists
     let wishlist = window.localStorage.getItem('wishlist');
     wishlist = JSON.parse(wishlist);
@@ -283,4 +218,71 @@ mybutton.addEventListener("click", backToTop);
 function backToTop() {
   document.body.scrollTop = 0;
   document.documentElement.scrollTop = 0;
+}
+// add to wish List
+function addToWishlist (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    let button = $(this)
+    if (button.hasClass('btn-light')) {
+        button.removeClass('btn-light')
+        button.addClass('btn-primary')
+        let skuCode = button.attr('skucode')
+        let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+        for (let button of sameSkuCodeButtons) {
+            $(button).removeClass('btn-light')
+            $(button).addClass('btn-primary')
+        }
+        let wishlist = window.localStorage.getItem('wishlist');
+        wishlist = JSON.parse(wishlist);
+       
+        if (wishlist == null) wishlist = [];
+        wishlist.push(skuCode)
+        wishlist = new Set(wishlist)
+        wishlist = Array.from(wishlist)
+        window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+        if (wishlist.length > 0) {
+            let badge = `
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                ${wishlist.length}
+            </span>  
+            `
+            $("#wishlist-nav-icon").append(badge)
+        }
+        $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+        
+    } else {
+        button.removeClass('btn-primary')
+        button.addClass('btn-light')
+        let skuCode = button.attr('skucode')
+        let sameSkuCodeButtons = $('.btn-wishlist.' + skuCode)
+        for (let button of sameSkuCodeButtons) {
+            $(button).removeClass('btn-primary')
+            $(button).addClass('btn-light')
+        }
+        let wishlist = window.localStorage.getItem('wishlist');
+        wishlist = JSON.parse(wishlist);
+       
+        if (wishlist == null) wishlist = [];
+        wishlist = wishlist.filter(function(item) {
+            return item !== skuCode
+        })
+        wishlist = new Set(wishlist)
+        wishlist = Array.from(wishlist)
+        window.localStorage.setItem('wishlist', JSON.stringify(wishlist))
+        if (wishlist.length == 0) {
+            $("#wishlist-nav-icon").children('.badge').remove()
+        }
+        $("#wishlist-nav-icon").children('.badge').html(wishlist.length)
+    }
+    $('.toast-body a').text('Đi đến wishlist')
+    $('.toast-body a').attr('href', '/wishlist')
+    if (!$(button).hasClass('btn-light')) {
+        $('.toast-body span').text('Đã thêm sản phẩm vào wishlist! ')
+    } else {
+        $('.toast-body span').text('Đã gỡ sản phẩm ra khỏi wishlist! ')
+
+    }
+        
+    $('#add-to-cart-success').toast('show')
 }

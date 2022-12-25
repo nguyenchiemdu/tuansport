@@ -284,12 +284,17 @@
                                                 </div>
 
                                         </div>
-                                        <div id="list-all-products"
+                                        <div>
+                                                <div id="list-all-products"
                                                 class="row row-cols-2 row-cols-md-4 row-cols-lg-5  row-cols-sm-3 gx-4 gy-4 mt-3 mb-3">
                                                 <% for (let item of data) {%>
                                                         <%- include('../common/component/product_item.ejs',{item: item,showSizes:true})
                                                                 %>
                                                                 <%}%>
+                                                </div>
+                                        </div>
+                                        <div class="d-grid gap-2 my-3">
+                                        <button type="button" class="btn btn-primary see-more">Xem thêm</button>
                                         </div>
                                 </div>
 
@@ -340,5 +345,6 @@
                         <%- include ('../common/js/index')%>
                                 <%- include ('../common/js/owl_carousel')%>
                                         <script src="/assets/js/home/home.js"></script>
+                                        <script src="/assets/js/product/load_more.js"></script>
 
 </html>

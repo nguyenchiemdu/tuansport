@@ -90,7 +90,38 @@ $(document).ready(function () {
         }
     });
 });
+// load more
+var threshold = 1297;
+var isLoading = false;
+var page = 2;
+var pages = 2;
+$('.see-more').on('click',async  function() {
+    if (page> pages) return;
+    // // the height of the entire content (including overflow)
+    // var contentHeight = document.documentElement.scrollHeight;
+    // // current scroll is height of content that's above the viewport plus
+    // // height of the viewport.
+    // var contentScrolled = document.body.scrollTop;
+    // var distanceToBottom = contentHeight - contentScrolled;
+    // var closeToBottomOfPage = distanceToBottom < threshold;
+    // var shouldLoadMoreContent = !isLoading && closeToBottomOfPage;
 
+    if(!isLoading) {
+        isLoading = true;
+		
+        try {
+				let queryParams = {
+					page : page,
+				}
+                pages = await loadMore(queryParams,'#list-all-products')
+                page+=1;
+        } catch (e){
+                console.log(e)
+                page = pages+1;
+        }
+        isLoading = false;
+    }
+})
 
 
 

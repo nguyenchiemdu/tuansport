@@ -294,6 +294,54 @@ footer{
     position: relative;
     transition: all 0.3s ease-in-out;
 }
+a {
+    color: var(--black-color)!important; 
+    text-decoration: none!important;
+}
+
+a:hover {
+    color: var(--black-color) !important; 
+    text-decoration:none !important; 
+    cursor:pointer !important;  
+}
+.fade-in {
+    animation: fadein 2s;
+}
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein {
+    /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein {
+    /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein {
+    /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
 
 .available-hover:hover{
     cursor: pointer;

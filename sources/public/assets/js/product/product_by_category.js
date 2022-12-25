@@ -73,17 +73,19 @@ inputRight.addEventListener("touchend", function () {
 // reset button
 $(document).ready(function () {
 	$('.btn-reset').on('click', function (e) {
-		resetLeftValue();
-		resetRightValue();
-		let sizeButtons = $('.size-button')
-		for (let button of sizeButtons) {
-			let btn = $(button)
-			if (btn.hasClass('btn-primary')) {
-				btn.addClass('btn-light')
-				btn.removeClass('btn-primary');
-			}
-		}
-		selectedSizes = []
+		let uri = new URL(window.location.href);
+		window.location.href = uri.pathname;
+		// resetLeftValue();
+		// resetRightValue();
+		// let sizeButtons = $('.size-button')
+		// for (let button of sizeButtons) {
+		// 	let btn = $(button)
+		// 	if (btn.hasClass('btn-primary')) {
+		// 		btn.addClass('btn-light')
+		// 		btn.removeClass('btn-primary');
+		// 	}
+		// }
+		// selectedSizes = []
 	})
 })
 function resetLeftValue() {
@@ -166,4 +168,42 @@ $(document).ready(function () {
 		$(`.size-button[value='${size}']`).removeClass('btn-light')
 		$(`.size-button[value='${size}']`).addClass('btn-primary')
 	});
+})
+// load more
+var threshold = 1297;
+var isLoading = false;
+var page = 2;
+var pages = 2;
+window.addEventListener('scroll',async  function() {
+    if (page> pages) return;
+    // the height of the entire content (including overflow)
+    var contentHeight = document.documentElement.scrollHeight;
+    // current scroll is height of content that's above the viewport plus
+    // height of the viewport.
+    var contentScrolled = document.body.scrollTop;
+    var distanceToBottom = contentHeight - contentScrolled;
+    var closeToBottomOfPage = distanceToBottom < threshold;
+    var shouldLoadMoreContent = !isLoading && closeToBottomOfPage;
+
+    if(shouldLoadMoreContent) {
+        isLoading = true;
+		
+        try {
+				let uri = new URL(window.location.href);
+				let categoryId = uri.pathname.split('/').at(-1);
+				let queryParams = {
+					page : page,
+					categoryid: categoryId,
+					sizes:JSON.stringify(selectedSizes),
+					min:inputLeft.value,
+					max:inputRight.value
+				}
+                pages = await loadMore(queryParams,'.list-product')
+                page+=1;
+        } catch (e){
+                console.log(e)
+                page = pages+1;
+        }
+        isLoading = false;
+    }
 })

@@ -147,7 +147,7 @@
                                                         <div class="py-2">
                                                                 <h5 class=""><%=countResult %>  Sản phẩm phù hợp</h5>
                                                         </div>
-                                                        <div class="py-2 ">
+                                                        <div class="py-2 d-none ">
                                                                 <h5 class="">
                                                                         Giá từ cao -> thấp
                                                                 </h5>
@@ -158,7 +158,7 @@
                                                         <%- include('../common/component/product_item', {item: item,showSizes: true}) %> 
                                                         <%}%> 
                                                 </div>
-                                                <%- include('product_pagination')  %> 
+                                               
 
                                         </div>
                                 </div>
@@ -189,6 +189,7 @@
                                 <%- include ('../common/js/index')%>
                                         <script type="text/javascript"
                                                 src="/assets/js/product/product_by_category.js"></script>
+                                        <script  type="text/javascript"      src="/assets/js/product/load_more.js"></script>
 
 
 </html>
