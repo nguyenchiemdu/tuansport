@@ -28,7 +28,7 @@ $(document).ready(function () {
                 if (response.success) {
                     let product = response.data
                     console.log(product)
-                    let isOutOfStock = product.inventories[0].onHand == 0
+                    let isOutOfStock = product.totalOnHand <= 0
                     let isHasAttribute = product.attributes
                     let isHasColor 
                     if (isHasAttribute) {
