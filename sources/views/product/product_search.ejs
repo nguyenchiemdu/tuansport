@@ -69,7 +69,7 @@
                         <div
                             class="list-product row row-cols-2 row-cols-md-5 row-cols-lg-5  row-cols-sm-4 gx-4 gy-4 mt-3 mb-4">
                             <% for (let item of docs){ %>
-                                <%- include('../common/component/product_item', {item: item}) %>
+                                <%- include('../common/component/product_item', {item: item,showSizes: true}) %>
 
                                     <%}%>
                         </div>

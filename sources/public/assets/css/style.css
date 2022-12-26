@@ -224,7 +224,10 @@ input.product-amount:focus {
 }
 
 
-
+/* Background */
+.bg-light{
+    background-color: var(--light-gray-color) !important;
+}
 /* Chips */
 /* Progress bar */
 /* Floating action button */
@@ -271,6 +274,14 @@ footer{
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+ }
+
+ .range-price {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1; /* number of lines to show */
     -webkit-box-orient: vertical;
  }
 

@@ -6,6 +6,7 @@ const mongoProduct = require("../models/mongo/mongo.product")
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute");
 const mongoAttribute = require("../models/mongo/mongo.attribute");
 const mongoCategory = require("../models/mongo/mongo.category");
+const { mapRangePrice } = require("../common/model_function");
 
 class ProductController {
     // GET 
@@ -65,6 +66,8 @@ class ProductController {
                     isSynced: true
                 }
             })
+            docs = await mapRangePrice(docs,req)
+
             let numberAttributes = Object.keys(mapAttributes);
             res.render("product/product_detail", {
                 product, data: docs, mapAttributes, mappedProductAttributes, user: req.headers.userInfor,numberAttributes
@@ -136,6 +139,7 @@ class ProductController {
             let response = await getTableDataWithPagination(req, mongoProduct, {
                 findCondition: findCondition
             })
+            response.docs = await mapRangePrice(response.docs,req)
             res.render('product/product_by_category', { user: req.headers.userInfor, ...response, page, query, category: parent })
         } catch (err) {
             console.log(err);
@@ -173,6 +177,7 @@ class ProductController {
                 sortCondition:sortCondition,
                 findCondition: findCondition
             })
+            response.docs = await mapRangePrice(response.docs,req)
             res.render('product/product_search', { user: req.headers.userInfor, ...response, page, query, searchText,newest })
         } catch (err) {
             console.log(err);

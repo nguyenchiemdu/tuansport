@@ -1,15 +1,19 @@
 <% 
  let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
  function formatedPrice(item) {
-                       let price;
-                       if (user?.role== 'Cộng tác viên'){
-                               price =  item.ctvPrice
-                               return  'CTV: '+`<span class="text-color-tertiary">${priceFormat.format(price)}</span>`
-                       } else  {
-                        price =  item.price;
-                       return priceFormat.format(price)
+                       let textPrice = '';
+                       textPrice  = textPrice + priceFormat.format(item.minPrice);
+                       if (item.minPrice!= item.maxPrice) {
+                        textPrice = textPrice +' - '+ priceFormat.format(item.maxPrice);
+
                        }
-        }
+                       if (item.minPrice== null) {
+                        textPrice =  priceFormat.format(item.price)
+                       }
+                       let textStyle = user?.role== 'Cộng tác viên' ? 'text-color-tertiary': ''
+
+                       return `<span class="${textStyle}">${textPrice}</span>`
+        };
         function secondaryPrice(item){
                 let price;
                        if (user?.role== 'Cộng tác viên'){
@@ -42,9 +46,12 @@
             </h4>
     </div>
     <div>
-            <h3>
-                    <%-formatedPrice(item) %>
-            </h3>
+            <h5  class="range-price">
+                <% if (user?.role== 'Cộng tác viên'){%> 
+                CTV: 
+                <%} %> 
+                <%-formatedPrice(item)%>
+            </h5>
             <div class="row row-cols-2">
 
                     <div class="col-8">
@@ -69,6 +76,18 @@
                             </div>
 
                     </div>
+            </div>
+            <div class="row row-cols-auto my-2">
+               <% 
+                item.listSize = item.listSize?.filter(size=>size!=null)
+               if (item.listSize?.length > 0 && (typeof showSizes !== 'undefined'))
+                        for (let size of item.listSize.sort()) {%>
+                                <div class="col mb-3 p-1">
+                        <div class="bg-light btn  rounded-pill px-3 py-2 162354">
+                                <%=size%>
+                       </div>
+                </div>
+                <%}%>
             </div>
     </div>
 </div>
