@@ -3,6 +3,7 @@ const ApiUrl = require("../common/api_url");
 const AppString = require("../common/app_string");
 const { baseRespond } = require("../common/functions");
 const KiotvietAPI = require("../common/kiotviet_api");
+const { mapRangePrice } = require("../common/model_function");
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietOrder = require("../models/kiotviet/kiotviet.order");
 const mongoCategory = require("../models/mongo/mongo.category");
@@ -173,6 +174,7 @@ class ApiController {
                     delete doc.ctvPrice
                     return doc
                 })
+            response.docs = await mapRangePrice(response.docs,req)
             res.json(baseRespond(true,AppString.ok,response))
         } catch (err){
             console.log(err)

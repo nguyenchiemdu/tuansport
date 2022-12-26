@@ -1,14 +1,18 @@
 let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' });
 function formatedPrice(item) {
-    let user = document.querySelector('[user]')
-    let price;
-    if (user){
-            price =  item.ctvPrice
-            return  'CTV: '+`<span class="text-color-tertiary">${priceFormat.format(price)}</span>`
-    } else  {
-     price =  item.price;
-    return priceFormat.format(price)
-    }
+                        let user = document.querySelector('[user]')
+                        let textPrice = '';
+                       textPrice  = textPrice + priceFormat.format(item.minPrice);
+                       if (item.minPrice!= item.maxPrice) {
+                        textPrice = textPrice +' - '+ priceFormat.format(item.maxPrice);
+
+                       }
+                       if (item.minPrice== null) {
+                        textPrice =  priceFormat.format(item.price)
+                       }
+                       let textStyle = user ? 'text-color-tertiary': ''
+
+                       return `<span class="${textStyle}">${textPrice}</span>`
 }
 function secondaryPrice(item){
     let user = document.querySelector('[user]')
@@ -24,6 +28,30 @@ let price;
 }
 
 function renderProductItem(item) {
+item.listSize = item.listSize?.filter(size=>size!=null)
+item.listSize.sort();
+let listSizesHTML ='';
+let user = document.querySelector('[user]')
+if (item.listSize?.length > 0)
+                for (let size of item.listSize.sort()) {
+                        listSizesHTML+= `<div class="col mb-3 p-1">
+                        <div class="bg-light btn  rounded-pill px-3 py-2 162354">
+                                ${size}
+                       </div>
+                </div>`
+}
+`<div class="row row-cols-auto my-2">
+               <% 
+                item.listSize = item.listSize?.filter(size=>size!=null)
+               if (item.listSize?.length > 0 && (typeof showSizes !== 'undefined'))
+                        for (let size of item.listSize.sort()) {%>
+                                <div class="col mb-3 p-1">
+                        <div class="bg-light btn  rounded-pill px-3 py-2 162354">
+                                <%=size%>
+                       </div>
+                </div>
+                <%}%>
+            </div>`
  
 return `<a href="/san-pham/${item.skuCode}"/> <div skucode='${item.skuCode} '
     class="product-item col hover-bigger fade-in" onload="document.body.style.opacity='1'">
@@ -46,9 +74,10 @@ return `<a href="/san-pham/${item.skuCode}"/> <div skucode='${item.skuCode} '
             </h4>
     </div>
     <div>
-            <h3>
+            <h5 class="range-price">
+                        ${user? ' CTV: ': ''}
                     ${formatedPrice(item)}
-            </h3>
+            </h5>
             <div class="row row-cols-2">
 
                     <div class="col-8">
@@ -73,6 +102,9 @@ return `<a href="/san-pham/${item.skuCode}"/> <div skucode='${item.skuCode} '
                             </div>
 
                     </div>
+            </div>
+            <div class="row row-cols-auto my-2">
+            ${listSizesHTML}
             </div>
     </div>
 </div></a>`

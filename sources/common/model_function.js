@@ -64,6 +64,7 @@ async function updateMasterProduct(masterProductId) {
 }
 async function mapRangePrice(products,req) {
     let userInfor = req.headers.userInfor;
+    if (products.at(0)?._doc!= null)
     products = products.map(product =>product._doc)
     products = await Promise.all(products.map(async (product) =>{
        let prices = await mongoProduct.find({masterProductId: product._id})
