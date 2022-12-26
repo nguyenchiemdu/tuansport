@@ -147,7 +147,7 @@ function initCarousel() {
         loop: true,
         center: true,
         margin: 20,
-        autoHeight:true,
+        autoHeight:false,
         URLhashListener: true,
         // autoplayHoverPause:true,
         responsive: {
@@ -234,6 +234,48 @@ function updateSelectedProduct(product) {
     }
     $('#price').html(price)
     $('.sale-price').html(priceFormat.format(product.salePrice))
+    // update thumb image
+    // let listThumbnail = ''
+    // if ((product.images).length == 0)
+    //     listThumbnail = `<div class="">
+    //                         <img class="rounded-4" alt="${product.name}"/>
+    //                     </div>`
+    // else {
+    //     for (let i=product.images.length-1;i >=0;i--) {
+    //         listThumbnail+= `<div class="" data-hash="image-${i}">
+    //                                 <img class="rounded-4"
+    //                                         src="${product.images[i]}" />
+    //                         </div>`
+    //     }
+    // }
+    // reload thumbslider
+    let numberThumb = $('.thumb-slider .owl-item').length;
+
+    for (let i=0; i<numberThumb; i++) {
+       $(".thumb-slider").trigger('remove.owl.carousel', i).trigger('refresh.owl.carousel');
+    }
+    for (let i=product.images.length-1;i >=0;i--) {
+       let  data = `<div class="" data-hash="image-${i}">
+                                <img class="rounded-4"
+                                        src="${product.images[i]}" />
+                        </div>`
+        $(".thumb-slider").trigger('add.owl.carousel', [data,i]).trigger('refresh.owl.carousel')
+    }
+    // reload image controller
+    let numberImgController = $('.image-controller .owl-item').length;
+    
+    for (let i=0; i<numberImgController; i++) {
+        $(".image-controller").trigger('remove.owl.carousel', [0])
+     }
+     $('.image-controller').trigger('refresh.owl.carousel');
+     for (let i=product.images.length-1;i >=0;i--) {
+        let  data = `<a href="#image-${i}">
+                            <img class="rounded-4"
+                                    src="${product.images[i]}" />
+                    </a>`
+         $(".image-controller").trigger('add.owl.carousel', [data,i]).trigger('refresh.owl.carousel')
+     }
+
 }
 function removeOnHandTag() {
     $('#product-status').addClass('d-none')
