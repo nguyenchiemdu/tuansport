@@ -369,11 +369,6 @@ class AdminController {
                 stack.push(...listChild)
             }
         
-        await mongoCategory.updateMany({
-            parentId: 0
-        }, {
-            hasNoChild: true
-        })
             
         let freeCategory = await mongoCategory.find({
             parentId : 0
