@@ -401,6 +401,9 @@ class AdminController {
             for (let i = 0; i < listResult.length; i++) {
                 KiotVietCategory.modifyCategoryToTree(listResult[i])
             }
+            listFreeCategory.sort(function (a, b) {
+               return removeAccent(a.categoryName.toUpperCase()) < removeAccent(b.categoryName.toUpperCase()) ? -1 : 1
+            })
             res.render("admin/admin_category_tree", { categoryTree: listResult, listFreeCategory, route })
         } catch (err) {
             console.log(err)

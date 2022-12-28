@@ -35,6 +35,12 @@ async function importCategories() {
                     categoryName: category.categoryName,
                     parentId: 0
                 })
+            } else {
+                mongoCategory.updateOne({
+                    _id: category.categoryId,
+                }, {
+                    categoryName: category.categoryName,
+                })
             }
         })
         
@@ -50,23 +56,36 @@ async function importCategories() {
                         categoryName: child.categoryName,
                         parentId: child.parentId,
                     }).then(res => console.log(res))
-                    if (child.hasChild) {
-                        let childrens = child.children;
-                        childrens.forEach(child => {
-                            mongoCategory.findOne({
-                                _id: child.categoryId,
-                            }).then (res=> {
-                                if (res==null) {
-                                    mongoCategory.create({
-                                        _id: child.categoryId,
-                                        categoryName: child.categoryName,
-                                        parentId: child.parentId,
-                                    }).then(res => console.log(res))
-                                }
-                            })
-                            
+                }else {
+                    mongoCategory.updateOne({
+                        _id:  child.categoryId,
+                    }, {
+                        categoryName: child.categoryName,
+                    }).then(res => console.log(res))
+
+                }
+                if (child.hasChild) {
+                    let childrens = child.children;
+                    childrens.forEach(child => {
+                        mongoCategory.findOne({
+                            _id: child.categoryId,
+                        }).then (res=> {
+                            if (res==null) {
+                                mongoCategory.create({
+                                    _id: child.categoryId,
+                                    categoryName: child.categoryName,
+                                    parentId: child.parentId,
+                                }).then(res => console.log(res))
+                            } else {
+                                mongoCategory.updateOne({
+                                    _id:  child.categoryId,
+                                }, {
+                                    categoryName: child.categoryName,
+                                }).then(res => console.log(res))
+                            }
                         })
-                    }
+                        
+                    })
                 }
             })
             
