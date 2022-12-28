@@ -199,7 +199,7 @@ function initCarousel() {
     });
     $(".image-controller").owlCarousel({
         items: 3,
-        loop: false,
+        loop: true,
         margin: 20,
     });
     // next and previous buttons
