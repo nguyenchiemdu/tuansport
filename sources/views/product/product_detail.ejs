@@ -81,8 +81,16 @@
                                                                 <% } else {%>
                                                                         <% for (let i=0;i < product.images.length;i++) {%>
                                                                                 <div class="" data-hash="image-<%=i%>">
-                                                                                      <img class="rounded-4"
-                                                                                                src="<%=product.images[i]%>" />
+                                                                                        <%if (user?.role== 'Cộng tác viên'){%>
+                                                                                        <a href="<%=product.images[i]%>" download>
+                                                                                        <% } %> 
+                                                                                <img class="rounded-4"
+                                                                                src="<%=product.images[i]%>" />
+                                                                                <%if (user?.role== 'Cộng tác viên'){%>
+                                                                                </a>
+                                                                                        <% } %> 
+                                                                                       
+                                                                                      
                                                                                 </div>
                                                                                 <% } %>
                                                                         <% } %>

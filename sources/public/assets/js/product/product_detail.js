@@ -256,9 +256,13 @@ function updateSelectedProduct(product) {
     }
     for (let i=product.images.length-1;i >=0;i--) {
        let  data = `<div class="" data-hash="image-${i}">
+       ${oldPrice.includes('CTV:') ?
+        `<a href="${product.images[i]}" download>` : ""}
                                 <img class="rounded-4"
                                         src="${product.images[i]}" />
-                        </div>`
+                        </div>
+                        ${oldPrice.includes('CTV:') ?
+                        `</a>` : ""}`
         $(".thumb-slider").trigger('add.owl.carousel', [data,i]).trigger('refresh.owl.carousel')
     }
     // reload image controller
