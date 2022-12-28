@@ -87,7 +87,7 @@ class WebhookController {
                     })
                 }
 
-                // await writeFile('./sources/public/delete-product.json', JSON.stringify(body))
+                await writeFile('./sources/public/delete-product.json', JSON.stringify(body))
                 res.json(baseRespond(true, AppString.ok))
 
             } else {

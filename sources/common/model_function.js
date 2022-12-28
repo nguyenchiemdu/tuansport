@@ -38,7 +38,7 @@ async function updateSizeToCategory(listSize,parentId,isAdd) {
 }
 async function updateMasterProduct(masterProductId) {
     let masterProduct = await mongoProduct.findOne({_id : masterProductId})
-
+    let listSize = []
     if (masterProduct!= null) {
         let totalOnHand = masterProduct.onHand;
                  {
