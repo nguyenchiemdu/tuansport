@@ -22,6 +22,13 @@
                        return priceFormat.format(price)
                        }
         }
+                function  getMaxNum(str) {
+                       return Math.max(
+                                ...str.toString()
+                                .split(/\D|-+$/)
+                                .filter(i=> i.length!=0)
+                                .map(i=> parseInt(i,0))) 
+                }
         %>
 <head>
         <meta charset="utf-8">
@@ -144,8 +151,17 @@
                                                                                 <%=key.split(':')[0]%>
                                                                         </h3>
                                                                         <div class="row row-cols-auto my-2">
-                                                                                <%for (let attribute of
-                                                                                        mapAttributes[key].sort()){%>
+                                                                                <%
+                                                                                mapAttributes[key].sort();
+                                                                                if (key == 'BỘ') {
+                                                                                        mapAttributes[key].sort(function(a,b) { 
+                                                                                                let maxA = getMaxNum(a.value);
+                                                                                                let maxB = getMaxNum(b.value);
+                                                                                                return maxA - maxB;
+                                                                                        });
+                                                                                };
+                                                                                for (let attribute of
+                                                                                        mapAttributes[key]){%>
                                                                                         <div class="col mb-3">
                                                                                                 <button type="button"
                                                                                                         class="btn btn-light px-3 py-2 attribute-button <%=attribute.attributeId%>"

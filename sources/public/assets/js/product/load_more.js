@@ -35,23 +35,11 @@ let user = document.querySelector('[user]')
 if (item.listSize?.length > 0)
                 for (let size of item.listSize.sort()) {
                         listSizesHTML+= `<div class="col mb-3 p-1">
-                        <div class="bg-light btn  rounded-pill px-3 py-2 162354">
+                        <div class="bg-light btn  rounded-pill px-2 py-1 162354">
                                 ${size}
                        </div>
                 </div>`
 }
-`<div class="row row-cols-auto my-2">
-               <% 
-                item.listSize = item.listSize?.filter(size=>size!=null)
-               if (item.listSize?.length > 0 && (typeof showSizes !== 'undefined'))
-                        for (let size of item.listSize.sort()) {%>
-                                <div class="col mb-3 p-1">
-                        <div class="bg-light btn  rounded-pill px-3 py-2 162354">
-                                <%=size%>
-                       </div>
-                </div>
-                <%}%>
-            </div>`
  
 return `<a href="/san-pham/${item.skuCode}"/> <div skucode='${item.skuCode} '
     class="product-item col hover-bigger fade-in" onload="document.body.style.opacity='1'">
