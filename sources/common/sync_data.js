@@ -130,7 +130,7 @@ async function importProduct() {
             total = Math.floor(parseInt(response.data.total) / 100) + 1
             page += 1;
             // add to mongo db
-            let products = response.data.data;
+            let products = response.data;
             for (let product of products) {
                 let mongoPr = mongoProductFromKiotVietProduct(product);
                 mongoPr.isSynced = false;

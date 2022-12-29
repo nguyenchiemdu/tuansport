@@ -6,6 +6,8 @@ const KiotvietAPI = require("../common/kiotviet_api");
 const ApiUrl = require("../common/api_url");
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute");
 const { updateMasterProduct } = require("../common/model_function");
+const KiotVietWebhook = require("../models/kiotviet/kiotviet.webhook");
+const { response } = require("express");
 
 class WebhookController {
     async updateProduct(req, res, next) {
@@ -69,7 +71,7 @@ class WebhookController {
     async deleteProduct(req, res, next) {
         try {
             let body = req.body;
-            console.log(body)
+            console.log(body);
             let deletedId;
             try {
                 deletedId = body?.RemoveId;
@@ -86,7 +88,6 @@ class WebhookController {
                         productId: deletedId
                     })
                 }
-
                 await writeFile('./sources/public/delete-product.json', JSON.stringify(body))
                 res.json(baseRespond(true, AppString.ok))
 
@@ -158,6 +159,20 @@ class WebhookController {
 
 
         
+    }
+    async reRegistWebhook() {
+       let res  =  await KiotVietWebhook.getAllWebhooks();
+        let listWebhooks = res.data;
+        if (listWebhooks!= null)
+        for (let webhook of listWebhooks) { 
+            await KiotVietWebhook.deleteWebhook(webhook.id);
+        }
+        let listTypes = ['stock.update','product.update','product.delete']
+        for (let type of listTypes) {
+                let response =  await KiotVietWebhook.registWebhook(type);
+                console.log(response);
+        }
+
     }
 }
 

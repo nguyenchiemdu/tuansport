@@ -29,7 +29,7 @@ class KiotVietCategory {
     static async getAllCategory() {
        try {
         let response =  await KiotvietAPI.callApi(ApiUrl.getAllCategory())
-       let {data} = response.data;
+       let {data} = response;
        return data;
        } catch (err) {
         console.log(err);

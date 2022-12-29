@@ -41,7 +41,7 @@ class KiotvietAPI {
     }
 
   }
-  static async  callApi(url, {method = 'get',body,params = {},headers = {}} = {}) {
+  static async callApi(url, {method = 'get',body,params = {},headers = {}} = {}) {
     try {
         let accessToken = await KiotvietAPI.token();
         let response = await axios({
@@ -55,7 +55,7 @@ class KiotvietAPI {
             data: body,
             params:params
         })
-        return response;
+        return response.data;
     } catch (e) {
         console.log(e);
         return baseRespond(false,e)

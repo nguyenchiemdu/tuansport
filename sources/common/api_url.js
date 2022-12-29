@@ -15,5 +15,8 @@ class ApiUrl {
     }
     static getAttributes = 'https://public.kiotapi.com/attributes/allwithdistinctvalue';
     static createOrder = 'https://public.kiotapi.com/orders';
+    static getAllWebhooks = 'https://public.kiotapi.com/webhooks'
+    static deleteWebhookById(id)  { return `https://public.kiotapi.com/webhooks/${id}`}
+    static registerWebhook = 'https://public.kiotapi.com/webhooks';
 }
 module.exports = ApiUrl

@@ -50,7 +50,7 @@ class ApiController {
             let temp 
             productInMongo.forEach(product => temp = {...product}._doc)
             let response = await KiotvietAPI.callApi(url)
-            let kiotvietProduct = response.data;
+            let kiotvietProduct = response;
             let product = await mongoProduct.findOne({
                 skuCode: req.params.skucode
             });
@@ -71,7 +71,7 @@ class ApiController {
             let listCallApi = listProduct.map(async product => {
                 let url = ApiUrl.getProductBySkuCode(product.productCode)
                 let response = await KiotvietAPI.callApi(url)
-                let price = role == 'Cộng tác viên' ? response.data.priceBooks[0].price : response.data.basePrice
+                let price = role == 'Cộng tác viên' ? response.priceBooks[0].price : response.basePrice
                 return {
                     productCode: product.productCode,
                     quantity: product.quantity,

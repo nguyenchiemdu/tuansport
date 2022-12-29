@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Category = require('../models/mongo/mongo.category')
 let {importCategories,importAttributes,importProduct,backupSyncedProduct} = require('../common/sync_data');
 const mongoProduct = require('../models/mongo/mongo.product');
+const webhookController = require('../controllers/webhook_controller');
 async function connect() {
 
     try {        
@@ -14,6 +15,7 @@ async function connect() {
         // importAttributes();
         // importProduct();
         // backupSyncedProduct()
+        if ((process.env.WEBHOOK ?? 'false') == 'true') webhookController.reRegistWebhook()
         console.log('Connect to Mongo DB successfully!');
         // Category.create({
         //     _id: 7,
