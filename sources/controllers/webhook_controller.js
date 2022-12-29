@@ -37,7 +37,7 @@ class WebhookController {
                     }, updateFields)
                 } else {
                     newProduct = lowercaseKey(newProduct)
-                    let mongoProduct = mongoProductFromKiotVietProduct(newProduct);
+                    let newProduct = mongoProductFromKiotVietProduct(newProduct);
                     await mongoProduct.create(newProduct)
                 }
                 // update total onHand

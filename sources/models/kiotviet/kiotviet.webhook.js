@@ -41,7 +41,7 @@ class KiotVietWebhook {
             let body = {
                 "Webhook": {
                     "Type": "product.update",
-                    "Url": "http://tuansportdanang.com/webhook/update-product",
+                    "Url": "https://tuansportdanang.com/webhook/update-product",
                     "IsActive": true,
                     "Description": "This is the Webhook that update product"
                 }
@@ -59,7 +59,7 @@ class KiotVietWebhook {
             let body = {
                 "Webhook": {
                     "Type": "stock.update",
-                    "Url": "http://tuansportdanang.com/webhook/update-onhand",
+                    "Url": "https://tuansportdanang.com/webhook/update-onhand",
                     "IsActive": true,
                     "Description": "This is the Webhook that update on hand of the product"
                 }
@@ -77,7 +77,7 @@ class KiotVietWebhook {
             let body = {
                 "Webhook": {
                     "Type": "product.delete",
-                    "Url": "http://tuansportdanang.com/webhook/delete-product",
+                    "Url": "https://tuansportdanang.com/webhook/delete-product",
                     "IsActive": true,
                     "Description": "This is the Webhook that delete product"
                 }
