@@ -161,7 +161,7 @@ function mongoProductFromKiotVietProduct(product){
         size : product.attributes?.find(item => item.attributeName == 'SIZE')?.attributeValue,
         images: product.images,
         categoryId: product.categoryId,
-        isSynced: product.isSynced,
+        isSynced: product.isSynced?? false,
         masterProductId: product.masterProductId ?? null,
         attributes: product.attributes,
         onHand : onHand,

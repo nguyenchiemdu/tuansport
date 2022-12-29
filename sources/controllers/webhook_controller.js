@@ -37,8 +37,8 @@ class WebhookController {
                     }, updateFields)
                 } else {
                     newProduct = lowercaseKey(newProduct)
-                    let newProduct = mongoProductFromKiotVietProduct(newProduct);
-                    await mongoProduct.create(newProduct)
+                    let mongoPrd = mongoProductFromKiotVietProduct(newProduct);
+                    await mongoProduct.create(mongoPrd)
                 }
                 // update total onHand
                 let mongoNewProd = mongoProductFromKiotVietProduct(newProduct)
@@ -64,8 +64,8 @@ class WebhookController {
             }
         } catch (err) {
             console.error(err);
-            res.status(400)
-            res.json(baseRespond(false, err))
+            // res.status(400)
+            res.json(baseRespond(true, err))
         }
     }
     async deleteProduct(req, res, next) {
@@ -74,7 +74,7 @@ class WebhookController {
             console.log(body);
             let deletedId;
             try {
-                deletedId = body?.RemoveId;
+                deletedId = req?.body?.Notifications[0]?.Data[0];
             } catch (err) {
                 deletedId = null
             }
@@ -96,8 +96,8 @@ class WebhookController {
             }
         } catch (err) {
             console.error(err);
-            res.status(400)
-            res.json(baseRespond(false, err))
+            // res.status(400)
+            res.json(baseRespond(true, err))
         }
     }
     async updateOnHand(req, res, next) {
@@ -135,8 +135,8 @@ class WebhookController {
             }
         } catch (err) {
             console.error(err);
-            res.status(400)
-            res.json(baseRespond(false, err))
+            // res.status(400)
+            res.json(baseRespond(true, err))
         }
     }
     static async updateTotalOnHand(masterId,oldTotal,newTotal) {
