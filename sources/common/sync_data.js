@@ -127,7 +127,7 @@ async function importProduct() {
         let url = ApiUrl.getProducts
         while (page <= total) {
             let response = await kiotVietApi.callApi(url, { params: { currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true, includeInventory: true, } })
-            total = Math.floor(parseInt(response.data.total) / 100) + 1
+            total = Math.floor(parseInt(response.total) / 100) + 1
             page += 1;
             // add to mongo db
             let products = response.data;
