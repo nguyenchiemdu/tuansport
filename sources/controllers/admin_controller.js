@@ -586,7 +586,7 @@ class AdminController {
                                     } else {
                                         htmlDropdown2 = `
                                                     <li>
-                                                        <a href="/danh-muc/${child_sub_category._id}/" class="dropdown-item ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
+                                                        <a href="/danh-muc/${child_sub_category._id}" class="dropdown-item ms-xl-0 ms-xxl-0 px-5 px-xl-4 px-xxl-4 py-2">
                                                             ${child_sub_category.categoryName.toUpperCase()}
                                                         </a>
                                                     </li>
