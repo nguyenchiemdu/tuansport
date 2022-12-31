@@ -81,7 +81,7 @@ class AdminController {
             if (listFindCondition.length > 0) {
                 findCondition['$or'] = listFindCondition
             }
-            let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition })
+            let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition,sortCondition: '-updatedAt' })
             docs = await Promise.all(
                 docs.map(async (doc) => {
                     let data = doc._doc;
@@ -129,7 +129,7 @@ class AdminController {
         if (listFindCondition.length > 0) {
             findCondition['$or'] = listFindCondition
         }
-        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition })
+        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition,sortCondition: '-updatedAt' })
         //calculate sum on hand
         docs = await Promise.all(
             docs.map(async (doc) => {
