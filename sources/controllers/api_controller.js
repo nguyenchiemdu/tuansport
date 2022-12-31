@@ -1,7 +1,7 @@
 const { json, response } = require("express");
 const ApiUrl = require("../common/api_url");
 const AppString = require("../common/app_string");
-const { baseRespond } = require("../common/functions");
+const { baseRespond,isPositiveInteger } = require("../common/functions");
 const KiotvietAPI = require("../common/kiotviet_api");
 const { mapRangePrice } = require("../common/model_function");
 const { getTableDataWithPagination } = require("../common/pagination");
@@ -134,11 +134,11 @@ class ApiController {
             }
             let priceCondition = {}
             // query min value 
-            if (min != null) {
-                priceCondition['$gte'] = min
+            if (min != null && isPositiveInteger(min)) {
+                priceCondition['$gte'] = parseInt(min)
             }
-            if (max != null) {
-                priceCondition['$lte'] = max
+            if (max != null && isPositiveInteger(max)) {
+                priceCondition['$lte'] = parseInt(max)  
 
             }
             if (Object.keys(priceCondition).length > 0) {
