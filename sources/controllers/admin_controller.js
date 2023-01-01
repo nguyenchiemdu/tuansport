@@ -344,11 +344,16 @@ class AdminController {
 
     async category(req, res, next) {
         try {
-            let route = req.route.path;
+
+        
+        let route = req.route.path;
+
+        
 
             let listCategory = await mongoCategory.find({
                 parentId: null
             })
+
             let listResult = listCategory.map(function (category) {
                 return { ...category._doc }
             })
@@ -365,25 +370,20 @@ class AdminController {
                 ref.children = [...listChild]
                 stack.push(...listChild)
             }
-
-            await mongoCategory.updateMany({
-                parentId: 0
-            }, {
-                hasNoChild: true
-            })
-
-            let freeCategory = await mongoCategory.find({
-                parentId: 0
-            })
-            let listFreeCategory = freeCategory.map(function (category) {
-                return { ...category._doc }
-            })
-            while (stack.length > 0)
-                stack.pop()
-            stack = [...listFreeCategory]
-            while (stack.length > 0) {
-                let ref = stack.pop();
-                if (ref.hasNoChild)
+        
+            
+        let freeCategory = await mongoCategory.find({
+            parentId : 0
+        })
+        let listFreeCategory = freeCategory.map(function(category){
+            return {...category._doc}
+        })
+        while (stack.length > 0) 
+            stack.pop()
+        stack = [...listFreeCategory]
+            while( stack.length > 0) {
+                let ref= stack.pop();
+                if (ref.hasNoChild) 
                     continue
                 let listChild = await mongoCategory.find({
                     parentId: ref._id,
@@ -401,6 +401,9 @@ class AdminController {
             for (let i = 0; i < listResult.length; i++) {
                 KiotVietCategory.modifyCategoryToTree(listResult[i])
             }
+
+            
+
             listFreeCategory.sort(function (a, b) {
                return removeAccent(a.categoryName.toUpperCase()) < removeAccent(b.categoryName.toUpperCase()) ? -1 : 1
             })
@@ -408,6 +411,57 @@ class AdminController {
         } catch (err) {
             console.log(err)
             next(err)
+        }
+    }
+    async createFolder(req, res, next) {
+        try {
+            let categoryId = req.params.id
+            let folder = await mongoCategory.updateMany({_id: categoryId}, {
+                hasNoChild: false
+            })
+            res.json(baseRespond(true,AppString.ok))
+        } catch (error) {
+            res.status(404)
+            console.log(error)
+            res.json(baseRespond(false,error))
+        }
+    }
+    async deleteFolder(req, res, next) {
+        try {
+            let categoryId = req.params.id
+            let folder = await mongoCategory.updateMany({_id: categoryId}, {
+                hasNoChild: true
+            })
+            let children = await mongoCategory.updateMany({parentId: categoryId}, {
+                parentId: 0
+            })
+            res.json(baseRespond(true,AppString.ok))
+        } catch (error) {
+            res.status(404)
+            console.log(error)
+            res.json(baseRespond(false,error))
+        }
+    }
+    async addNewCategory(req, res, next) {
+        try {
+            let categoryName = req.body.categoryName
+            let isOldCategory = await mongoCategory.findOne({categoryName: categoryName})
+
+            if (isOldCategory) throw res.json(baseRespond(false,AppString.isExistedCategory))
+
+            let options = { upsert: true, new: true, setDefaultsOnInsert: true }
+            let newCategory = await mongoCategory.findOneAndUpdate({categoryName}, {
+                categoryName,
+                parentId: 0
+            },
+            options
+            )
+
+            res.json(baseRespond(true,AppString.ok))
+        } catch (err) {
+            console.log(err)
+            res.status(404)
+            res.json(baseRespond(false, AppString.error))
         }
     }
     // POST
@@ -571,7 +625,7 @@ class AdminController {
                                         </a>
                                         <ul class="dropdown-menu py-xl-3 dropdown-submenu my-sm-2 my-md-2 my-lg-0 my-xl-0">
                                     `
-                                    sub_category.children.map(function (child_sub_category) {
+                            sub_category.children.map(function (child_sub_category) {
                                 let htmlDropdown2 = ''
                                 if ((child_sub_category).hasNoChild) {
                                     if ((child_sub_category).logo) {
@@ -662,6 +716,7 @@ class AdminController {
         }
     }
 
+   
 }
 
 module.exports = new AdminController();

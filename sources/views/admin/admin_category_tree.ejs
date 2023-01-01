@@ -16,26 +16,7 @@
   <!-- Navbar -->
   <%- include ('admin_navbar')%>
 
-  <!-- Modal -->
-  <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          Vui long nhap lua chon
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="1">Add vao con</button>
-          <button type="button" class="btn btn-primary" id="2">Add vao tree</button>
-
-        </div>
-      </div>
-    </div>
-  </div>
+  
   <!-- App body -->
   <div class="wrapper min-vh-100">
     <!-- Sidebar  -->
@@ -46,6 +27,10 @@
           <h4> Cây danh mục</h4>
           <div id="tree" class="text-start">
             
+          </div>
+          <div class="p-3">
+            <button class="btn btn-primary change-category-tree" data-bs-toggle="modal" data-bs-target="#listFullCategory">Chỉnh sửa</button>
+            <!-- <button type="button" class="btn btn-primary create-category" data-bs-toggle="modal" data-bs-target="#create-category">Tạo thêm danh mục</button> -->
           </div>
         </div>
         <div class="col-md-6 h-75">
@@ -59,24 +44,84 @@
     </div>
        
           
+  </div>
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg ">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Thông báo</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Vui lòng click vào lựa chọn của bạn
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+          <button type="button" class="btn btn-primary" id="1"></button>
+          <button type="button" class="btn btn-primary" id="2"></button>
+
+        </div>
+      </div>
     </div>
   </div>
+
+    <!-- Modal -->
+  <div class="modal fade" id="listFullCategory" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div id="list-full-category" class="text-start">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ bỏ</button>
+          <button type="button" class="btn btn-action btn-primary" id="createFolder" disabled>Chuyển thành thư mục</button>
+          <button type="button" class="btn btn-action btn-primary" id="deleteFolder" disabled>Chuyển thành danh mục bình thường</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <!-- <div class="modal fade" id="create-category" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="/admin/category/add-new-category" method="POST">
+              <label for="categoryName" class="p-2">Tên danh mục</label>
+              <input type="text" id="categoryName" name="categoryName" class="form-control input-box p-2 w-100" placeholder="Nhập tên thư mục">
+              <div class="invalid-feedback d-none"></div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="create-new-category">Tạo danh mục mới </button>
+        </div>
+      </div>
+    </div>
+  </div> -->
   <!-- /#wrapper -->
 </body>
 <%- include ('../common/lib/bootstrap_js')%>
   <%- include ('../common/lib/jquery')%>
-  <%- include ('../common/js/index')%>  
     <script src="/assets/js/bstreeview/bstreeview.js"></script>
     <script>
       var listCategory = JSON.parse('<%-JSON.stringify(categoryTree)%>')
       var listFreeCategory = JSON.parse('<%-JSON.stringify(listFreeCategory)%>')
-
+      let listFullCategory = Array.from(new Set(listCategory.concat(listFreeCategory)))
       $(document).ready(function () {
         $('#tree').bstreeview({ data: listCategory });
         $('#list-free-category').bstreeview({ data: listFreeCategory});
+        $('#list-full-category').bstreeview({ data: listFullCategory});
       })
-      console.log(listCategory)
-      console.log(listFreeCategory);
     </script>
     <script src="/assets/js/admin/config_category.js"></script>
 
