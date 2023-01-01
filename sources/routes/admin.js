@@ -23,7 +23,10 @@ router.put("/ctv/:id", adminController.updateCtv);
 router.delete("/ctv/:id", adminController.deleteCtv);
 router.get("/ctv", adminController.ctv);
 router.get("/category", adminController.category);
+// router.post("/category/add-new-category", adminController.addNewCategory);
 router.patch("/category/:id/position", adminController.updateCategoryPosition);
+router.post("/category/:id/create-folder", adminController.createFolder);
+router.post("/category/:id/delete-folder", adminController.deleteFolder);
 router.post("/sync-product", adminController.syncProductPost);
 
 module.exports = router;

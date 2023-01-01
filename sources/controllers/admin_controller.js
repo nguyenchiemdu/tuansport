@@ -348,6 +348,8 @@ class AdminController {
         
         let route = req.route.path;
 
+        
+
             let listCategory = await mongoCategory.find({
                 parentId: null
             })
@@ -399,6 +401,9 @@ class AdminController {
             for (let i = 0; i < listResult.length; i++) {
                 KiotVietCategory.modifyCategoryToTree(listResult[i])
             }
+
+            
+
             listFreeCategory.sort(function (a, b) {
                return removeAccent(a.categoryName.toUpperCase()) < removeAccent(b.categoryName.toUpperCase()) ? -1 : 1
             })
@@ -406,6 +411,57 @@ class AdminController {
         } catch (err) {
             console.log(err)
             next(err)
+        }
+    }
+    async createFolder(req, res, next) {
+        try {
+            let categoryId = req.params.id
+            let folder = await mongoCategory.updateMany({_id: categoryId}, {
+                hasNoChild: false
+            })
+            res.json(baseRespond(true,AppString.ok))
+        } catch (error) {
+            res.status(404)
+            console.log(error)
+            res.json(baseRespond(false,error))
+        }
+    }
+    async deleteFolder(req, res, next) {
+        try {
+            let categoryId = req.params.id
+            let folder = await mongoCategory.updateMany({_id: categoryId}, {
+                hasNoChild: true
+            })
+            let children = await mongoCategory.updateMany({parentId: categoryId}, {
+                parentId: 0
+            })
+            res.json(baseRespond(true,AppString.ok))
+        } catch (error) {
+            res.status(404)
+            console.log(error)
+            res.json(baseRespond(false,error))
+        }
+    }
+    async addNewCategory(req, res, next) {
+        try {
+            let categoryName = req.body.categoryName
+            let isOldCategory = await mongoCategory.findOne({categoryName: categoryName})
+
+            if (isOldCategory) throw res.json(baseRespond(false,AppString.isExistedCategory))
+
+            let options = { upsert: true, new: true, setDefaultsOnInsert: true }
+            let newCategory = await mongoCategory.findOneAndUpdate({categoryName}, {
+                categoryName,
+                parentId: 0
+            },
+            options
+            )
+
+            res.json(baseRespond(true,AppString.ok))
+        } catch (err) {
+            console.log(err)
+            res.status(404)
+            res.json(baseRespond(false, AppString.error))
         }
     }
     // POST
@@ -660,6 +716,7 @@ class AdminController {
         }
     }
 
+   
 }
 
 module.exports = new AdminController();
