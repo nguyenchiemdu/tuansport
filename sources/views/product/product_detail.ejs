@@ -131,7 +131,7 @@
                                                                 </div>
                                                         </div>
                                                 </div>
-                                                <div class="col col-md-7 ps-md-5 product-detail">
+                                                <div class="col col-md-7 ps-md-5 product-detail" masterCategoryId="<%=product.masterCategoryId %>">
                                                         <h1 class="product-name">
                                                                 <%=product.name%>
                                                         </h1>
@@ -267,8 +267,7 @@
 
                                                                                         </ul>
                                                                                         <div id="description"
-                                                                                                class="mt-4">
-                                                                                                <h3>Mô tả sản phẩm</h3>
+                                                                                                class="mt-2">
                                                                                                 <h4 class="p-2 pb-0">Tag sản phẩm: 
                                                                                                         <div class="row ps-4 pt-2">
                                                                                                                 <% for (let i=0; i<(product.tags).length; i++) {%>
@@ -277,49 +276,22 @@
                                                                                                         </div>
                                                                                                         
                                                                                                 </h4>
-                                                                                                <p class="p-2">
-                                                                                                        Thân giày là
-                                                                                                        chất liệu da
-                                                                                                        tổng hợp mềm mại
-                                                                                                        được kết hợp với
-                                                                                                        bề mặt vân nổi
-                                                                                                        hỗ trợ cầu thủ
-                                                                                                        trong việc kiểm
-                                                                                                        soát và cảm giác
-                                                                                                        bóng tốt trong
-                                                                                                        các điều kiện
-                                                                                                        thời tiết khác
-                                                                                                        nhau
+                                                                                                <h4 class="p-2 pb-0">Mô tả sản phẩm: </h4>
+                                                                                                <pre class="ps-4 product-description" style="white-space:pre-wrap;word-break: keep-all">
+                                                                                                        <% if (product.description == null || product.description.length == 0) {%> 
+                                                                                                                <p>Mua giày tặng ngay <span class="text-color-tertiary">tất ngắn & hộp đựng giày</span>
 
-                                                                                                        ♦ Đế giày được
-                                                                                                        bố trí đều lớp
-                                                                                                        đinh tròn nhằm
-                                                                                                        tạo độ bám với
-                                                                                                        bề mặt tiếp xúc,
-                                                                                                        giữ thăng bằng
-                                                                                                        và tránh trơn
-                                                                                                        trượt kể cả khi
-                                                                                                        trời mưa.
+Nếu sản phẩm hết hàng tại Website bạn có thể inbox trực tiếp cho shop để chuẩn bị số lượng hàng bạn cần.
 
-                                                                                                        ♦ Phía bên trong
-                                                                                                        giày có lớp lót
-                                                                                                        mềm mại, thoáng
-                                                                                                        khí.
+Chúng tôi cam kết hình ảnh sản phẩm mang tính thực tế và được cửa hàng tự quay, chụp tại shop.
+Nếu sản phẩm không giống hình chúng tôi đền gấp 10 lần giá trị sản phẩm.
+                                                                                                                </p>
+                                                                                                       <% } else {%>
+                                                                                                                <p><%=product.description%></p>
+                                                                                                        <% } %>
 
-                                                                                                        ♦ Form giày ôm
-                                                                                                        chân, giúp người
-                                                                                                        có cảm giác bóng
-                                                                                                        tốt nhất.
-
-                                                                                                        ♦ Chất liệu nhẹ
-                                                                                                        và bền rất ôm
-                                                                                                        chân, tăng độ
-                                                                                                        bám sàn giúp ôm
-                                                                                                        chân, cho cảm
-                                                                                                        giác bóng tốt
-                                                                                                        hơn
-                                                                                                </p>
-                                                                                        </div>
+                                                                                                </pre>
+                                                                                        </div>  
                                                                                 </div>
                                                                         </div>
                                                 </div>
@@ -327,6 +299,56 @@
                                 </div>
 
                         </div>
+                        <section id="more-information">
+                                <div class="container">
+                                        <div id="navbar-information">
+                                                <div class="d-flex justify-content-center align-items-center border-top border-bottom">
+                                                        <div class="hover-bigger">
+                                                                <h3 class="p-4 m-0 information selected" id="long-description" style="color: var(--dark-gray-color)">
+                                                                        Mô tả
+                                                                </h3>
+                                                        </div>
+                                                        <div class="hover-bigger">
+                                                                <h3 class="p-4 m-0 information" id="size-information" style="color: var(--dark-gray-color)">
+                                                                        Thông tin thêm
+                                                                </h3>
+                                                        </div>
+                                                </div>
+                                        </div>
+
+                                        <div id="content">
+                                                <div class="long-description">
+                                                        <pre style="white-space:pre-wrap;word-break: keep-all">
+                                                                <h4 class="mt-2"><%=product.name%></h4>
+                                                            <P><%=product.long_description%></p>
+                                                        </pre>
+                                                </div>
+                                                <div class="size-information d-none">
+                                                        <% for (let key in mapAttributes) { 
+                                                                var count = mapAttributes[key].length %>
+                                                                <div class="d-flex align-items-center py-2">
+                                                                        <div class="col-2 p-3" style="background-color: var(--light-gray-color); font-size: var(--heading5-font-size);font-weight: var(--heading5-font-weight);">
+                                                                                
+                                                                                        <%=key.split(':')[0]%>
+                                                                                
+                                                                        </div>
+                                                                        <div class="col-10 p-3">
+                                                                                        <% for (let attribute of mapAttributes[key]) { 
+                                                                                                if (--count) { %>
+                                                                                                        <%= attribute.value.toUpperCase() %>
+                                                                                                        <span>,</span>
+                                                                                                <% } else { %>
+                                                                                                        <%= attribute.value.toUpperCase() %>
+                                                                                                <% } %> 
+                                                                                        <% } %>
+
+                                                                        </div>
+                                                                </div>
+                                                                <% } %>
+                                                </div>
+                                        </div>
+                                </div>
+                        </section>
                         <section id="san-pham-moi-nhat">
                                 <div class="container">
                                         <div class="row">

@@ -179,6 +179,7 @@ class AdminController {
             mongoCategory.find({})
             ]
         )
+        console.log(product)
         if (product != null) {
             res.render("admin/admin_edit_product", { itemData: product, categories: categories, route: route })
         } else {
@@ -206,6 +207,7 @@ class AdminController {
         try {
             let route = req.route.path;
             let id = req.params.id
+            console.log(req.body)
             let product = await mongoProduct.findOneAndUpdate({
                 _id: id
             }, req.body)

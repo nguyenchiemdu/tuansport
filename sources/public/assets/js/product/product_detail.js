@@ -1,25 +1,41 @@
-console.log('product_detail');
+console.log("product_detail");
 
 let selecedAttributes = {};
 $(document).ready(function () {
-    initCarousel();
-    // selected attribute and show product left
-    $('.attribute-button').on('click', async function (e) {
-        if ($(this).hasClass('btn-primary')){
-                $(this).removeClass('btn-primary');
-                $(this).addClass('btn-light');
-                $('#product-status').addClass('d-none')
-            let attributeId = parseInt($(this).attr('attributeId'))
-            delete selecedAttributes[attributeId]
-        } else {
-            let attributeId = parseInt($(this).attr('attributeId'))
-            let value = $(this).attr('value')
-            let newValue = {
-                attributeId: attributeId,
-                value: value
-            }
-            // get available attributes with new selected value
-            let mapAvailableAttr = getAvailableOtherAttributesValue(newValue)
+  initCarousel();
+
+    // $('#navbar-information .size-information').click(function() {
+    //     $('.information').each(function() {
+    //         $(this).removeClass('selected')
+    //     })
+    //     $(this).addClass('selected')
+    //     $('#content').children().each(function() {
+    //         $(this).addClass('d-none')
+    //     })
+    //     $()
+    // })
+
+    $('#navbar-information .information').click(function(e) {
+        let id = $(e.target).attr('id')
+        $('#navbar-information .information').each(function() {
+            if ($(this).hasClass('selected')) 
+                $(this).removeClass('selected')
+        })
+        $(this).addClass('selected')
+
+        $(`#content`).children().addClass('d-none')
+        $(`#content .${id}`).removeClass('d-none')
+    })
+  // selected attribute and show product left
+  $(".attribute-button").on("click", async function (e) {
+    let attributeId = parseInt($(this).attr("attributeId"));
+    let value = $(this).attr("value");
+    let newValue = {
+      attributeId: attributeId,
+      value: value,
+    };
+    // get available attributes with new selected value
+    let mapAvailableAttr = getAvailableOtherAttributesValue(newValue);
 
             // condition to reduce spam
             let isNew = !(JSON.stringify(newValue) == JSON.stringify(selecedAttributes[attributeId]))
@@ -66,9 +82,8 @@ $(document).ready(function () {
             } else if (Object.keys(selecedAttributes).length != Object.keys(mapAttributes).length) {
                 removeOnHandTag()
             }
-            }
-        
     })
+        
     $('.btn-cart').on('click', function (e) {
         e.stopPropagation();
         
@@ -138,8 +153,9 @@ $(document).ready(function () {
 
     })
     
+    if ($('.product-description').text().trim() == '')
+     $('.product-description').html('Rất tiếc, sản phẩm hiện tại chưa có mô tả')
 });
-
 
 function initCarousel() {
     $(".thumb-slider").owlCarousel({
@@ -282,50 +298,46 @@ function updateSelectedProduct(product) {
 
 }
 function removeOnHandTag() {
-    $('#product-status').addClass('d-none')
+  $("#product-status").addClass("d-none");
 }
 function updateSelectedAttributeButton(button, mapAvailableAttr) {
-    let allAttrBtn = $('.attribute-button');
-    for (let btn of allAttrBtn) {
-        $(btn).parent().addClass('d-none')
+  let allAttrBtn = $(".attribute-button");
+  for (let btn of allAttrBtn) {
+    $(btn).parent().addClass("d-none");
 
-        // if ($(btn).hasClass('btn-primary')) {
-        // $(btn).removeClass('btn-primary')
-        // $(btn).addClass('btn-light')
-        // }
-
-    }
-    for (let key in mapAvailableAttr) {
-        let AttrBtns = $('.attribute-button.' + key);
-        for (let btn of AttrBtns) {
-            let value = $(btn).attr('value')
-            if (mapAvailableAttr[key].includes(value)) {
-                $(btn).parent().removeClass('d-none')
-
-            } else {
-                if ($(btn).hasClass('btn-primary')) {
-                    $(btn).removeClass('btn-primary')
-                    $(btn).addClass('btn-light')
-                }
-            }
-            // if ($(btn).hasClass('btn-primary')) {
-            // $(btn).removeClass('btn-primary')
-            // $(btn).addClass('btn-light')
-            // }
-
+    // if ($(btn).hasClass('btn-primary')) {
+    // $(btn).removeClass('btn-primary')
+    // $(btn).addClass('btn-light')
+    // }
+  }
+  for (let key in mapAvailableAttr) {
+    let AttrBtns = $(".attribute-button." + key);
+    for (let btn of AttrBtns) {
+      let value = $(btn).attr("value");
+      if (mapAvailableAttr[key].includes(value)) {
+        $(btn).parent().removeClass("d-none");
+      } else {
+        if ($(btn).hasClass("btn-primary")) {
+          $(btn).removeClass("btn-primary");
+          $(btn).addClass("btn-light");
         }
+      }
+      // if ($(btn).hasClass('btn-primary')) {
+      // $(btn).removeClass('btn-primary')
+      // $(btn).addClass('btn-light')
+      // }
     }
-    let attributeId = parseInt($(button).attr('attributeId'))
-    let listBtn = $('.attribute-button.' + attributeId);
-    for (let btn of listBtn) {
-        if ($(btn).hasClass('btn-primary')) {
-            $(btn).removeClass('btn-primary')
-            $(btn).addClass('btn-light')
-        }
-
+  }
+  let attributeId = parseInt($(button).attr("attributeId"));
+  let listBtn = $(".attribute-button." + attributeId);
+  for (let btn of listBtn) {
+    if ($(btn).hasClass("btn-primary")) {
+      $(btn).removeClass("btn-primary");
+      $(btn).addClass("btn-light");
     }
-    $(button).removeClass('btn-light')
-    $(button).addClass('btn-primary')
+  }
+  $(button).removeClass("btn-light");
+  $(button).addClass("btn-primary");
 }
 
 function getAvailableOtherAttributesValue(newAtrribute) {
@@ -377,6 +389,7 @@ function getAvailableOtherAttributesValue(newAtrribute) {
 
         }
     }
+    // console.log(mapAvailableAttr)
     return mapAvailableAttr;
 }
 

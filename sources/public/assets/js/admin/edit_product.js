@@ -89,6 +89,7 @@ function dropped(e) {
 
 
 $(document).ready(function () {
+
     $('.btn-apply').on('click', async function (e) {
         let body = {
             images: [],
@@ -105,6 +106,8 @@ $(document).ready(function () {
                 body[inputName].push(input.val())
             }
         });
+
+        console.log(body)
         let flag = true
         for (let key of body.tags) {
             if (key.trim() == '') {

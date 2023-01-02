@@ -1,4 +1,4 @@
-<html lang="en">
+    <html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -23,9 +23,9 @@
 
                     <div class="container mt-5">
                         <form id="edit-form" method="POST" action="?_method=PUT">
-                            <% let mapName={ 'name' : 'Tên sản phẩm' ,'fullName': 'Tên đầy đủ' } %>
-                                <% for (let key of ['name','fullName','categoryId','images', 'tags']) { 
-                                    if (['name','fullName','images','categoryId','color', 'tags'].includes(key)) { 
+                            <% let mapName={ 'name' : 'Tên sản phẩm' ,'fullName': 'Tên đầy đủ', 'description': 'Mô tả sản phẩm', 'long_description': 'Mô tả' } %>
+                                <% for (let key of ['name','fullName','description', 'long_description', 'categoryId','images', 'tags']) { 
+                                    if (['name','fullName','description','images','categoryId','color', 'tags', 'long_description'].includes(key)) { 
                                         if (key!='images' && key!= 'tags') { 
                                             if (key=='categoryId' ){%>
                                                 <div class="mb-3">
@@ -48,13 +48,22 @@
                                                             <% } %>
                                                     </select>
                                                 </div>
-                                            <%} else {%>
-                                                <div class="mb-3 <%if(key== 'fullName'){%>d-none <%}%>">
-                                                    <h4 for="exampleInputEmail1" class="form-label">
-                                                        <%=mapName[key]%>
-                                                    </h4>
-                                                    <input class="form-control" name='<%=key%>' value="<%= itemData[key]%>" />
-                                                </div>
+                                            <%} else {
+                                                if (key =='description' || key == 'long_description') {%>
+                                                    <div class="mb-3">
+                                                        <h4 for="exampleInputEmail1" class="form-label">
+                                                            <%=mapName[key]%>
+                                                        </h4>
+                                                        <textarea class="form-control" rows="8" name='<%=key%>' value=""><%= itemData[key]%></textarea>
+                                                    </div>
+                                                <% } else {%>
+                                                    <div class="mb-3">
+                                                        <h4 for="exampleInputEmail1" class="form-label">
+                                                            <%=mapName[key]%>
+                                                        </h4>
+                                                        <input class="form-control" name='<%=key%>' value="<%= itemData[key]%>" />
+                                                    </div>
+                                                <% } %>
                                             <%}%>
                                         <%} else {%>
                                             <% if (key == 'images') {%>

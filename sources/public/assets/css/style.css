@@ -22,6 +22,14 @@ a{
 .text-color-dark-gray{
     color: var(--dark-gray-color);
 }
+
+.selected{
+    color: var(--black-color)!important;
+}
+
+.information:hover{
+    color: var(--black-color)!important;
+}
 .text-bg-primary{
     color: var(--black-color)!important;
     background-color: var(--primary-color)!important;

@@ -20,6 +20,9 @@ const Product = new Schema({
     tags: { type: Array, default: []},
     onHand: {type: Number},
     totalOnHand: {type: Number},
+    description: {type: String, default: ''},
+    long_description: {type: String, default: ''}
+
 }, {
     timestamps: true,
 }, { collection: 'products' }
