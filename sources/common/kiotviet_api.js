@@ -6,6 +6,7 @@ const { baseRespond } = require('./functions');
 class KiotvietAPI {
   static accessToken = '';
   static async getAccessToken() {
+    console.log('Getting access token')
     var data = qs.stringify({
       'scopes': 'PublicApi.Access',
       'grant_type': 'client_credentials',
