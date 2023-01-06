@@ -32,7 +32,6 @@ class ProductController {
                         listCategoryid.push(node._id)
                     }
                 }
-                console.log(listCategoryid)
                 if (listCategoryid.length > 0) {
                     mapCategory = {
                         'categoryId':{

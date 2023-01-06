@@ -62,23 +62,28 @@ async function updateMasterProduct(masterProductId) {
     }
     
 }
-async function mapRangePrice(products,req) {
+async function mapRangePrice(products, req) {
     let userInfor = req.headers.userInfor;
-    if (products.at(0)?._doc!= null)
-    products = products.map(product =>product._doc)
-    products = await Promise.all(products.map(async (product) =>{
-       let prices = await mongoProduct.find({masterProductId: product._id})
-                            .then(products => products.map(product=>{
-                                if (userInfor?.role == AppString.ctv) {
-                                  return  parseInt(product.ctvPrice)
-                                } else {
-                                  return  parseInt(product.price)
-                                }
-                            }));
+    if (products.at(0)?._doc != null)
+        products = products.map(product => product._doc)
+    products = await Promise.all(products.map(async (product) => {
+        let prices = await mongoProduct.find({ masterProductId: product._id })
+            .then(products => products.map(product => {
+                if (userInfor?.role == AppString.ctv) {
+                    return parseInt(product.ctvPrice)
+                } else {
+                    return parseInt(product.price)
+                }
+            }));
+        if (userInfor?.role == AppString.ctv) {
+            prices.push(parseInt(product.ctvPrice));
+        } else {
             prices.push(parseInt(product.price));
-            product.minPrice = Math.min(...prices)
-            product.maxPrice = Math.max(...prices)
-            return product;
+
+        }
+        product.minPrice = Math.min(...prices)
+        product.maxPrice = Math.max(...prices)
+        return product;
     }));
     return products;
 }
