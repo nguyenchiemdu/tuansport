@@ -13,6 +13,31 @@ class ProductController {
     async productDetail(req, res, next) {
         // res.json(req.headers.userInfor)
         try {
+            let categoryId = req.query.categoryId;
+            let mapCategory = {
+
+            }
+            if (categoryId!= null) {
+                // get all children of category
+                let listCategoryid = []
+                let parent = await mongoCategory.findOne({ _id: categoryId })
+                let stack = [parent]
+                while (stack.length > 0) {
+                    let node = stack.pop()
+                    let categories = await mongoCategory.find({ parentId: node._id })
+                    if (categories.length > 0) {
+                        stack.push(...categories)
+                    } else {
+                        listCategoryid.push(node._id)
+                    }
+                }
+            
+                mapCategory = {
+                    'categoryId':{
+                        $in: listCategoryid
+                    }
+                }
+            }
             let skuCode = req.params.code
             let product = await mongoProduct.findOne({
                 skuCode: skuCode,
@@ -63,7 +88,8 @@ class ProductController {
             let { docs } = await getTableDataWithPagination(req, mongoProduct, {
                 findCondition: {
                     masterProductId: null,
-                    isSynced: true
+                    isSynced: true,
+                    ...mapCategory
                 }
             })
             docs = await mapRangePrice(docs,req)

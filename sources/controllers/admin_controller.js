@@ -28,10 +28,14 @@ class AdminController {
             let name = req.query.name;
             let categoryId = req.query.categoryid
             let categoryParam = {}
-            if (categoryId != null)
-                categoryParam = {   
-                    categoryId
+            if (categoryId != null) {
+                let targetCategory = await KiotVietCategory.getCategoryById(categoryId)
+                let listCategoryId = KiotVietCategory.getListCategoryIdInTree(targetCategory)
+                categoryParam = {
+                    categoryId : {'$in': listCategoryId}
                 }
+            }
+
             // let response = await KiotVietProduct.getProducts({ currentItem: (page - 1) * pageSize, pageSize: pageSize, includePricebook: true,includeInventory: true, name: name, ...categoryParam })
             // response.data = await Promise.all(response.data.map(async product => {
             //     let syncProduct = await mongoProduct.find({
@@ -49,20 +53,18 @@ class AdminController {
                 KiotVietCategory.modifyCategoryToTree(listCategory[i], categoryId)
             }
             listCategory = await sortString(listCategory, 'text')
+            let stack = [...listCategory]
+            while (stack.length > 0) {
+                let ref = stack.pop()
 
-        
-        let stack = [...listCategory]
-        while (stack.length > 0) {
-            let ref = stack.pop()
-            
-            if (!ref.hasChild) {continue} 
-            
-            let listChild = await sortString(ref.nodes, 'text')
-            ref.children = [...listChild]
-            
-            stack.push(...listChild)
-        }
-        listCategory = await sortString(listCategory, 'text')
+                if (!ref.hasChild) { continue }
+
+                let listChild = await sortString(ref.nodes, 'text')
+                ref.children = [...listChild]
+
+                stack.push(...listChild)
+            }
+            listCategory = await sortString(listCategory, 'text')
 
             let listFindCondition = [
             ]
@@ -81,7 +83,7 @@ class AdminController {
             if (listFindCondition.length > 0) {
                 findCondition['$or'] = listFindCondition
             }
-            let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition,sortCondition: '-updatedAt' })
+            let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition, sortCondition: '-updatedAt' })
             docs = await Promise.all(
                 docs.map(async (doc) => {
                     let data = doc._doc;
@@ -111,10 +113,37 @@ class AdminController {
         let query = getQueryString(req)
         let page = req.query.page ?? 1
         let pageSize = req.query.pageSize ?? 20
-
+        let categoryId = req.query.categoryid
         let name = req.query.name;
         let listFindCondition = [
         ]
+        let categoryParam = {}
+            if (categoryId != null) {
+                let targetCategory = await KiotVietCategory.getCategoryById(categoryId)
+                let listCategoryId = KiotVietCategory.getListCategoryIdInTree(targetCategory)
+                categoryParam = {
+                    categoryId : {'$in': listCategoryId}
+                }
+            }
+        let listCategory = await KiotVietCategory.getAllCategory()
+            if (listCategory == null) throw AppString.kiotVietOverload
+            for (let i = 0; i < listCategory.length; i++) {
+                KiotVietCategory.modifyCategoryToTree(listCategory[i], categoryId)
+            }
+            listCategory = await sortString(listCategory, 'text')
+            let stack = [...listCategory]
+            while (stack.length > 0) {
+                let ref = stack.pop()
+
+                if (!ref.hasChild) { continue }
+
+                let listChild = await sortString(ref.nodes, 'text')
+                ref.children = [...listChild]
+
+                stack.push(...listChild)
+            }
+            listCategory = await sortString(listCategory, 'text')
+
         if (name != null && name.length > 0) {
             listFindCondition = [
                 { "name": { $regex: name, $options: 'i' } },
@@ -124,12 +153,13 @@ class AdminController {
         }
         let findCondition = {
             masterProductId: null,
-            isSynced: true
+            isSynced: true,
+            ...categoryParam
         }
         if (listFindCondition.length > 0) {
             findCondition['$or'] = listFindCondition
         }
-        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition,sortCondition: '-updatedAt' })
+        let { docs, currentPage, pages, countResult } = await getTableDataWithPagination(req, mongoProduct, { findCondition: findCondition, sortCondition: '-updatedAt' })
         //calculate sum on hand
         docs = await Promise.all(
             docs.map(async (doc) => {
@@ -145,7 +175,7 @@ class AdminController {
                 return data
             })
         )
-        res.render("admin/admin_synced_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name })
+        res.render("admin/admin_synced_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name,listCategory })
     }
     // GET /admin/ctv
     async ctv(req, res) {
@@ -269,7 +299,7 @@ class AdminController {
             let response
             // check if product is exiting
             if (resProduct != null) {
-                
+
                 // update subProduct
                 mongoProduct.updateMany({
                     masterProductId: id,
@@ -278,25 +308,25 @@ class AdminController {
                 })
                 // update master product
                 let totalOnHand = resProduct.onHand;
-                 {
-                    if (resProduct.size!= null && parseInt(resProduct.onHand)>0) listSize.push(resProduct.size)
+                {
+                    if (resProduct.size != null && parseInt(resProduct.onHand) > 0) listSize.push(resProduct.size)
                     let subProducts = await mongoProduct.find({
                         masterProductId: id,
                     })
                     subProducts.forEach(product => {
-                        if (parseInt(product.onHand)>0) {
-                            if (product.size!= null) listSize.push(product.size)
+                        if (parseInt(product.onHand) > 0) {
+                            if (product.size != null) listSize.push(product.size)
                             totalOnHand += product.onHand
                         }
                     });
                 }
-                listSize = Array.from(new  Set(listSize));
+                listSize = Array.from(new Set(listSize));
                 response = await mongoProduct.updateOne({ _id: id }, {
                     $set: { isSynced: !resProduct.isSynced, listSize: listSize, totalOnHand: totalOnHand }
                 })
                 // update size to parent category
                 try {
-                    updateSizeToCategory(listSize,resProduct.categoryId,!resProduct.isSynced)
+                    updateSizeToCategory(listSize, resProduct.categoryId, !resProduct.isSynced)
                 } catch (err) {
                     console.log(err)
                 }
@@ -347,10 +377,10 @@ class AdminController {
     async category(req, res, next) {
         try {
 
-        
-        let route = req.route.path;
 
-        
+            let route = req.route.path;
+
+
 
             let listCategory = await mongoCategory.find({
                 parentId: null
@@ -372,20 +402,20 @@ class AdminController {
                 ref.children = [...listChild]
                 stack.push(...listChild)
             }
-        
-            
-        let freeCategory = await mongoCategory.find({
-            parentId : 0
-        })
-        let listFreeCategory = freeCategory.map(function(category){
-            return {...category._doc}
-        })
-        while (stack.length > 0) 
-            stack.pop()
-        stack = [...listFreeCategory]
-            while( stack.length > 0) {
-                let ref= stack.pop();
-                if (ref.hasNoChild) 
+
+
+            let freeCategory = await mongoCategory.find({
+                parentId: 0
+            })
+            let listFreeCategory = freeCategory.map(function (category) {
+                return { ...category._doc }
+            })
+            while (stack.length > 0)
+                stack.pop()
+            stack = [...listFreeCategory]
+            while (stack.length > 0) {
+                let ref = stack.pop();
+                if (ref.hasNoChild)
                     continue
                 let listChild = await mongoCategory.find({
                     parentId: ref._id,
@@ -404,10 +434,10 @@ class AdminController {
                 KiotVietCategory.modifyCategoryToTree(listResult[i])
             }
 
-            
+
 
             listFreeCategory.sort(function (a, b) {
-               return removeAccent(a.categoryName.toUpperCase()) < removeAccent(b.categoryName.toUpperCase()) ? -1 : 1
+                return removeAccent(a.categoryName.toUpperCase()) < removeAccent(b.categoryName.toUpperCase()) ? -1 : 1
             })
             res.render("admin/admin_category_tree", { categoryTree: listResult, listFreeCategory, route })
         } catch (err) {
@@ -418,48 +448,48 @@ class AdminController {
     async createFolder(req, res, next) {
         try {
             let categoryId = req.params.id
-            let folder = await mongoCategory.updateMany({_id: categoryId}, {
+            let folder = await mongoCategory.updateMany({ _id: categoryId }, {
                 hasNoChild: false
             })
-            res.json(baseRespond(true,AppString.ok))
+            res.json(baseRespond(true, AppString.ok))
         } catch (error) {
             res.status(404)
             console.log(error)
-            res.json(baseRespond(false,error))
+            res.json(baseRespond(false, error))
         }
     }
     async deleteFolder(req, res, next) {
         try {
             let categoryId = req.params.id
-            let folder = await mongoCategory.updateMany({_id: categoryId}, {
+            let folder = await mongoCategory.updateMany({ _id: categoryId }, {
                 hasNoChild: true
             })
-            let children = await mongoCategory.updateMany({parentId: categoryId}, {
+            let children = await mongoCategory.updateMany({ parentId: categoryId }, {
                 parentId: 0
             })
-            res.json(baseRespond(true,AppString.ok))
+            res.json(baseRespond(true, AppString.ok))
         } catch (error) {
             res.status(404)
             console.log(error)
-            res.json(baseRespond(false,error))
+            res.json(baseRespond(false, error))
         }
     }
     async addNewCategory(req, res, next) {
         try {
             let categoryName = req.body.categoryName
-            let isOldCategory = await mongoCategory.findOne({categoryName: categoryName})
+            let isOldCategory = await mongoCategory.findOne({ categoryName: categoryName })
 
-            if (isOldCategory) throw res.json(baseRespond(false,AppString.isExistedCategory))
+            if (isOldCategory) throw res.json(baseRespond(false, AppString.isExistedCategory))
 
             let options = { upsert: true, new: true, setDefaultsOnInsert: true }
-            let newCategory = await mongoCategory.findOneAndUpdate({categoryName}, {
+            let newCategory = await mongoCategory.findOneAndUpdate({ categoryName }, {
                 categoryName,
                 parentId: 0
             },
-            options
+                options
             )
 
-            res.json(baseRespond(true,AppString.ok))
+            res.json(baseRespond(true, AppString.ok))
         } catch (err) {
             console.log(err)
             res.status(404)
@@ -718,7 +748,7 @@ class AdminController {
         }
     }
 
-   
+
 }
 
 module.exports = new AdminController();

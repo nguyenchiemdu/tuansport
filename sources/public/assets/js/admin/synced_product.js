@@ -6,11 +6,20 @@ $(document).ready(function() {
             window.location.href = '/admin/synced-products/'+id
         })
     })
+    $('.category-item').on('dblclick', function (e) {
+        e.preventDefault()
+        // console.log($(this).attr('id'))
+        var url = new URL(window.location.href.split('?')[0]);
+        url.searchParams.set('categoryid', $(this).attr('id'));
+    window.location.replace(url.toString());
+
+    })
 })
 
 async function searchProduct() {
-    let text = document.querySelector('#search-text').value;
-    var url = new URL(window.location.href.split('?')[0]);
+   let text = document.querySelector('#search-text').value;
+    var url = new URL(window.location.href);
     url.searchParams.set('name', text);
+    url.searchParams.delete('page');
     window.location.replace(url.toString());
 }

@@ -6,8 +6,11 @@
   <title>Admin</title>
   <%- include ('../common/lib/bootstrap_css')%>
   <%- include ('../common/css/admin_css')%>
-
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
+    <link rel="stylesheet" type="text/css" href="/assets/css/bstreeview/bstreeview.css">
+
 </head>
 <%
  let priceFormat =  Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }) 
@@ -20,7 +23,7 @@
       <%- include ('admin_navbar')%>
       <!-- Page Content  -->
       <div id="content">
-        <div class="container min-vh-100" style="text-align: center">
+        <div class="container-fluid min-vh-100" style="text-align: center">
           <h3>Danh sách sản phẩm đã đồng bộ</h3>
           <div class="row row-cols-md-2 row-cols-md-1 justify-content-between">
             <div clas="col col-md-8 d-flex content-left"style="text-align: left">
@@ -36,79 +39,84 @@
             </div>
           </div>
           <div class="row justify-content-center bg-blue flex-grow-1">
-            <table class="table table-bordered table-striped table-hover">
-              <thead class="table-dark ">
-                <tr>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Ảnh</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá CTV</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá chưa giảm</th>
-                  <th scope="col" style="position: sticky; top: 0; z-index: 9">Tồn kho</th>
-                  <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Sản phẩm gốc</th> -->
-                  <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th> -->
-
-                </tr>
-              </thead>
-              <tbody>
-                <% for (let i in data) { delete data[i]['description'];%>
-                  <tr class="product-row" id="<%=data[i]._id%>">
-                    <th>
-                      <%= pageSize*(page-1) +Number(i)+1%>
-                    </th>
-                    <th>
-                      <% 
-                          let image
-                            try {
-                              image = data[i].images[0]
-                            } catch(e) {
-                              image = null
-                            }%>
-                            <img src="<%=image%>" width="100px" height="100px" alt="<%if (image==null) {%>Không có hình ảnh<%}%>">
-                    </th>
-                    <th>
-                      <%=data[i].skuCode%>
-                    </th>
-                    <th>
-                      <%=data[i].name%>
-                    </th>
-                    <th>
-                      <%=priceFormat.format(data[i].price)%>
-                    </th>
-                    <th>
-                        <%=priceFormat.format(data[i].ctvPrice)%>
-                      </th>
-                      <th class="text-decoration-line-through">
-                        <%=priceFormat.format(data[i].salePrice)%>
-                      </th>
-                      <%let onHand
-                          try {
-                                onHand = data[i].onHand;
-                            } catch( e) {
-                                onHand = null
-                            }
-                          let textStyle
-                          if (parseInt(onHand)>0) {
-                            textStyle = 'text-success'
-                          } else {
-                            textStyle = 'text-danger'
-                          }
-                          %> 
-                        <th class="<%=textStyle %>">
-                          
-                          <%=onHand%> 
-                        </th>
-                      <!-- <th>
-                        <%if (data[i].masterProductId== null){%>
-                          ✅
-                          <%}%>
-                      </th> -->
+            <div class=" col-md-3 h-75">
+              <div id="tree" class="  text-start"></div>
+            </div>
+            <div class="col-md-9">
+              <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark ">
+                  <tr>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Ảnh</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá CTV</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá chưa giảm</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Tồn kho</th>
+                    <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Sản phẩm gốc</th> -->
+                    <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th> -->
+  
                   </tr>
-                  <%} %>
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  <% for (let i in data) { delete data[i]['description'];%>
+                    <tr class="product-row" id="<%=data[i]._id%>">
+                      <th>
+                        <%= pageSize*(page-1) +Number(i)+1%>
+                      </th>
+                      <th>
+                        <% 
+                            let image
+                              try {
+                                image = data[i].images[0]
+                              } catch(e) {
+                                image = null
+                              }%>
+                              <img src="<%=image%>" width="100px" height="100px" alt="<%if (image==null) {%>Không có hình ảnh<%}%>">
+                      </th>
+                      <th>
+                        <%=data[i].skuCode%>
+                      </th>
+                      <th>
+                        <%=data[i].name%>
+                      </th>
+                      <th>
+                        <%=priceFormat.format(data[i].price)%>
+                      </th>
+                      <th>
+                          <%=priceFormat.format(data[i].ctvPrice)%>
+                        </th>
+                        <th class="text-decoration-line-through">
+                          <%=priceFormat.format(data[i].salePrice)%>
+                        </th>
+                        <%let onHand
+                            try {
+                                  onHand = data[i].onHand;
+                              } catch( e) {
+                                  onHand = null
+                              }
+                            let textStyle
+                            if (parseInt(onHand)>0) {
+                              textStyle = 'text-success'
+                            } else {
+                              textStyle = 'text-danger'
+                            }
+                            %> 
+                          <th class="<%=textStyle %>">
+                            
+                            <%=onHand%> 
+                          </th>
+                        <!-- <th>
+                          <%if (data[i].masterProductId== null){%>
+                            ✅
+                            <%}%>
+                        </th> -->
+                    </tr>
+                    <%} %>
+                </tbody>
+              </table>
+            </div>
           </div>
           <div class="pt-5">
             <%- include ('pagination')%>
@@ -122,6 +130,15 @@
 </body>
 <%- include ('../common/lib/bootstrap_js')%>
   <%- include ('../common/lib/jquery')%>
+  <script src="/assets/js/bstreeview/bstreeview.js"></script>
+
+    <script>
+      var listCategory = JSON.parse('<%-JSON.stringify(listCategory)%>')
+      $(document).ready(function () {
+        $('#tree').bstreeview({ data: listCategory });
+      })
+      console.log(listCategory)
+    </script>
     <script src="/assets/js/admin/synced_product.js"></script>
     <%- include ('../common/js/index')%>
 

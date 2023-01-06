@@ -70,5 +70,20 @@ class KiotVietCategory {
         }
         return isExpanded
     }
+    static  getListCategoryIdInTree(parent){
+        let listId = []
+        let stack = [parent]
+        let node;
+        while(stack.length > 0){
+            node = stack.pop();
+            listId.push(node.categoryId);
+            if(node.children!= null ) {
+                for (let child of node.children){
+                    stack.push(child);
+                }
+            }
+        }
+        return listId;
+    }
 }
 module.exports = KiotVietCategory;
