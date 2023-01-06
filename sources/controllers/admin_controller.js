@@ -177,6 +177,27 @@ class AdminController {
         )
         res.render("admin/admin_synced_products", { data: docs, page: currentPage, pageSize: pageSize, total: countResult, route: route, query: query, name: name,listCategory })
     }
+
+    async markedProduct(req, res, next) {
+        try {
+            let id = req.body.id;
+            let resProduct = await mongoProduct.findOne({ _id: id })
+            // check if product is exiting
+            if (resProduct != null) {
+                
+                // update subProduct
+                await mongoProduct.updateMany({
+                   _id: id,
+                }, {
+                    isMarked: !resProduct.isMarked
+                })
+                res.json(baseRespond(true, AppString.ok))
+            }
+        } catch (error) {
+            res.status(400)
+            next(AppString.dataNotFound)
+        }
+    }
     // GET /admin/ctv
     async ctv(req, res) {
         let route = req.route.path;
@@ -209,7 +230,6 @@ class AdminController {
             mongoCategory.find({})
             ]
         )
-        console.log(product)
         if (product != null) {
             res.render("admin/admin_edit_product", { itemData: product, categories: categories, route: route })
         } else {
@@ -237,7 +257,6 @@ class AdminController {
         try {
             let route = req.route.path;
             let id = req.params.id
-            console.log(req.body)
             let product = await mongoProduct.findOneAndUpdate({
                 _id: id
             }, req.body)

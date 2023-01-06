@@ -3,6 +3,7 @@ const Category = require('../models/mongo/mongo.category')
 let {importCategories,importAttributes,importProduct,backupSyncedProduct} = require('../common/sync_data');
 const mongoProduct = require('../models/mongo/mongo.product');
 const webhookController = require('../controllers/webhook_controller');
+const mongoCategory = require('../models/mongo/mongo.category');
 async function connect() {
 
     try {        
@@ -22,6 +23,10 @@ async function connect() {
         //     categoryName: 'Phụ kiện thể thao',
         // })
 
+        
+        // await mongoProduct.updateMany({}, {
+        //     isMarked: false
+        // }).then(res => console.log(res))
 //         let count = await mongoProduct.countDocuments({})
 //         let docs = []
 //         await mongoProduct.find({})

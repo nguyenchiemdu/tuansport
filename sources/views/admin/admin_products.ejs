@@ -6,6 +6,8 @@
   <title>Admin</title>
   <%- include ('../common/lib/bootstrap_css')%>
     <%- include ('../common/css/admin_css')%>
+    <%- include ('../common/lib/font_awesome_css')%>
+    
       <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
         integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
       <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
@@ -44,6 +46,13 @@
                     <tr>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Ảnh</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">
+                        <button class="btn btn-primary marked-all" type="button">
+                          Đánh dấu tất cả
+                        </button>
+                        <button class="btn btn-danger unmarked-all d-none" type="button">
+                          Huỷ đánh dấu tất cả
+                        </button></th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
@@ -76,6 +85,9 @@
                             <img src="<%=image%>" width="100px" height="100px" alt="<%if (image==null) {%>Không có hình ảnh<%}%>">
                         </th>
                         <th>
+                          <i productId="<%=data[i]._id%>" skucode="<%=data[i].skuCode%>" class="fa-solid fa-check marked-point rounded-circle hover-bigger <%if (data[i].isMarked) { %> selected <% } %>"></i>
+                        </th>
+                        <th>
                           <%=data[i].skuCode%>
                         </th>
                         <th>
@@ -105,7 +117,7 @@
                           <div class="form-check form-switch">
 
                             <input class="form-check-input sync-button" value="<%=name%>" type="checkbox"
-                              skuCode='<%=data[i].skuCcode %>' productid="<%=data[i]._id%>" id="flexCheckDefault" <% if
+                              skuCode='<%=data[i].skuCode %>' productid="<%=data[i]._id%>" id="flexCheckDefault" <% if
                               (data[i].isSynced) {%> checked <% } %>>
                               <% if (data[i].masterProductId== null) {%>
                             ✔️ Master

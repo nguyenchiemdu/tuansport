@@ -28,5 +28,6 @@ router.patch("/category/:id/position", adminController.updateCategoryPosition);
 router.post("/category/:id/create-folder", adminController.createFolder);
 router.post("/category/:id/delete-folder", adminController.deleteFolder);
 router.post("/sync-product", adminController.syncProductPost);
+router.post("/sync-marked", adminController.markedProduct)
 
 module.exports = router;

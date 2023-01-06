@@ -6,8 +6,9 @@
   <title>Admin</title>
   <%- include ('../common/lib/bootstrap_css')%>
   <%- include ('../common/css/admin_css')%>
-  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
-        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <%- include ('../common/lib/font_awesome_css')%>
+
+
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/logo.png">
     <link rel="stylesheet" type="text/css" href="/assets/css/bstreeview/bstreeview.css">
 
@@ -38,7 +39,7 @@
               </div>
             </div>
           </div>
-          <div class="row justify-content-center bg-blue flex-grow-1">
+          <div class="row">
             <div class=" col-md-3 h-75">
               <div id="tree" class="  text-start"></div>
             </div>
@@ -48,6 +49,14 @@
                   <tr>
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">#</th>
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">Ảnh</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">
+                      <button class="btn btn-primary marked-all" type="button">
+                        Đánh dấu tất cả
+                      </button>
+                      <button class="btn btn-danger unmarked-all d-none" type="button">
+                        Huỷ đánh dấu tất cả
+                      </button>
+                    </th>
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">Mã hàng</th>
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
@@ -74,6 +83,9 @@
                                 image = null
                               }%>
                               <img src="<%=image%>" width="100px" height="100px" alt="<%if (image==null) {%>Không có hình ảnh<%}%>">
+                      </th>
+                      <th>
+                        <i productid="<%=data[i]._id%>" skucode="<%=data[i].skuCode%>" class="fa-solid fa-check marked-point rounded-circle hover-bigger <%if (data[i].isMarked) { %> selected <% } %>"></i>
                       </th>
                       <th>
                         <%=data[i].skuCode%>
@@ -118,6 +130,8 @@
               </table>
             </div>
           </div>
+            
+          </div>
           <div class="pt-5">
             <%- include ('pagination')%>
 
@@ -131,16 +145,15 @@
 <%- include ('../common/lib/bootstrap_js')%>
   <%- include ('../common/lib/jquery')%>
   <script src="/assets/js/bstreeview/bstreeview.js"></script>
-
-    <script>
-      var listCategory = JSON.parse('<%-JSON.stringify(listCategory)%>')
-      $(document).ready(function () {
+  <script src="/assets/js/admin/synced_product.js"></script>
+  <script>
+    var listCategory = JSON.parse('<%-JSON.stringify(listCategory)%>')
+    $(document).ready(function () {
         $('#tree').bstreeview({ data: listCategory });
       })
       console.log(listCategory)
-    </script>
-    <script src="/assets/js/admin/synced_product.js"></script>
-    <%- include ('../common/js/index')%>
+      </script>
 
+<%- include ('../common/js/index')%>
 
 </html>

@@ -21,8 +21,8 @@ const Product = new Schema({
     onHand: {type: Number},
     totalOnHand: {type: Number},
     description: {type: String, default: ''},
-    long_description: {type: String, default: ''}
-
+    long_description: {type: String, default: ''},
+    isMarked: {type: Boolean, default: false},
 }, {
     timestamps: true,
 }, { collection: 'products' }

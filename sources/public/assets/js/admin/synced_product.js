@@ -6,6 +6,71 @@ $(document).ready(function() {
             window.location.href = '/admin/synced-products/'+id
         })
     })
+
+    let isFullCheckedMarked = $('.marked-point').length == $('.marked-point.selected').length
+    if (isFullCheckedMarked) {
+        $('.marked-all').addClass('d-none')
+        $('.unmarked-all').removeClass('d-none')
+    } else {
+        $('.marked-all').removeClass('d-none')
+        $('.unmarked-all').addClass('d-none')
+    }
+    
+    $('.marked-point').on('click', async (e) => {
+        let button = $(e.target)
+        let body = {
+            id: button.attr('productid'),
+            skuCode: button.attr('skucode'),
+        };
+        await fetch('/admin/sync-marked', {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            method: "POST",
+            body: JSON.stringify(body)
+        }).then(res => res.json())
+            .then(res => {
+                response = res;
+                if (response.success) {
+                    let isChecked = button.hasClass('selected')
+                    button.toggleClass('selected', !isChecked)
+                    let isFullChecked = $('.marked-point').length == $('.marked-point.selected').length
+                    if (isFullChecked) {
+                        $('.marked-all').addClass('d-none')
+                        $('.unmarked-all').removeClass('d-none')
+                    } else {
+                        $('.marked-all').removeClass('d-none')
+                        $('.unmarked-all').addClass('d-none')
+                    }
+                } else alert(response.message);
+            })
+    })
+
+    
+    $('.marked-all').on('click', function (e) {
+        $('.marked-point').each(function (item) {
+            let button = $(this)
+            let isChecked = button.hasClass('selected')
+            if (!isChecked) {
+                button.click()
+            }
+        })
+        $(this).addClass('d-none')
+        $('.unmarked-all').removeClass('d-none')
+
+    })
+    $('.unmarked-all').on('click', function (e) {
+        $('.marked-point').each(function (item) {
+            let button = $(this)
+            let isChecked = button.hasClass('selected')
+            if (isChecked) {
+                button.click()
+            }
+        })
+        $(this).addClass('d-none')
+        $('.marked-all').removeClass('d-none')
+    })
     $('.category-item').on('dblclick', function (e) {
         e.preventDefault()
         // console.log($(this).attr('id'))

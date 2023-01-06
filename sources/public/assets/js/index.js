@@ -159,7 +159,7 @@ $(document).ready(function () {
         let path = window.location.href;
         let categoryId ='';
         if (path.includes('danh-muc')) {
-            categoryId = path.split('/').at(-1);
+            categoryId = path.split('/').at(-1).split('?')[0];
         }
         if (path.includes('san-pham')) {
             let url = new URL(path);
