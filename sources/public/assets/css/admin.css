@@ -71,3 +71,20 @@ input:checked {
 .input-box:focus-visible{
     outline: none;
 }
+.hover-bigger:hover {
+    /* -webkit-transform: scale(1.1); */
+    transform: scale(1.1);
+    cursor: pointer;
+}
+.hover-bigger {
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.marked-point{
+    padding: 5px;
+    background-color: var(--dark-gray-color);
+}
+.marked-point.selected{ 
+    background-color: var(--primary-color);
+}
