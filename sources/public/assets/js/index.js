@@ -157,7 +157,10 @@ $(document).ready(function () {
     $(".product-item").on('click', function (e) {
         let skuCode = ($(this).attr('skucode')).trim()
         let path = window.location.href;
-        let categoryId = path.split('/').at(-1);
+        let categoryId ='';
+        if (path.includes('danh-muc')) {
+            categoryId = path.split('/').at(-1);
+        }
         if (path.includes('san-pham')) {
             let url = new URL(path);
             categoryId = url.searchParams.get('categoryId')

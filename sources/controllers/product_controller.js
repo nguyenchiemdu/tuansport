@@ -24,6 +24,7 @@ class ProductController {
                 let stack = [parent]
                 while (stack.length > 0) {
                     let node = stack.pop()
+                    if (node == null) break;
                     let categories = await mongoCategory.find({ parentId: node._id })
                     if (categories.length > 0) {
                         stack.push(...categories)
@@ -31,12 +32,15 @@ class ProductController {
                         listCategoryid.push(node._id)
                     }
                 }
-            
-                mapCategory = {
-                    'categoryId':{
-                        $in: listCategoryid
+                console.log(listCategoryid)
+                if (listCategoryid.length > 0) {
+                    mapCategory = {
+                        'categoryId':{
+                            $in: listCategoryid
+                        }
                     }
                 }
+                
             }
             let skuCode = req.params.code
             let product = await mongoProduct.findOne({
