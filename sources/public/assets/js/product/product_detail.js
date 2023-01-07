@@ -238,7 +238,7 @@ function updateSelectedProduct(product) {
     // $('.product-name').html(product.fullName);
     $('#product-status').removeClass('d-none')
     $('#product-status').html(`Tình Trạng:
-    <span>Còn ${product.onHand} sản
+    <span>Còn ${product.onHand-product.reserved} sản
                     phẩm</span>`)
     // update price
     let oldPrice = $('#price').html()

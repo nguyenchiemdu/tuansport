@@ -178,7 +178,7 @@
                                                                                 <h5 id="product-status"
                                                                                         class="field-name <%if (numberAttributes!=0){%> d-none <%}%> ">Tình
                                                                                         Trạng:
-                                                                                        <span>Còn <%=product.onHand%> sản
+                                                                                        <span>Còn <%=product.onHand - product.reserved%> sản
                                                                                                         phẩm</span>
                                                                                 </h5>
                                                                         </div>

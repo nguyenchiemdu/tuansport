@@ -115,7 +115,7 @@ class ApiController {
             let findCondition = {
                 masterProductId: null,
                 isSynced: true,
-                totalOnHand : { $gt: 0 }
+                totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
             };
             if (categoryId!= null) findCondition['categoryId'] =  {
                                                     $in: listCategoryid
@@ -123,7 +123,7 @@ class ApiController {
             if (sizes != null && sizes.length > 0) {
                 findCondition = {
                     isSynced: true,
-                    totalOnHand : { $gt: 0 }
+                    totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
             }
                 let listSizeCondition = sizes.map(function(size){ return {listSize: size}})
                 findCondition['$or'] = listSizeCondition;

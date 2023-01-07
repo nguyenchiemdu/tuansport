@@ -19,6 +19,8 @@ const Product = new Schema({
     color: { type: String },
     tags: { type: Array, default: []},
     onHand: {type: Number},
+    reserved : {type: Number,default: 0},
+    totalReserved : {type: Number,default:0},
     totalOnHand: {type: Number},
     description: {type: String, default: ''},
     long_description: {type: String, default: ''},

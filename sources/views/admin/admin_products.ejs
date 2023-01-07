@@ -57,6 +57,7 @@
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Tên hàng</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá bán</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">Tồn kho</th>
+                      <th scope="col" style="position: sticky; top: 0; z-index: 9">Khách đặt</th>
                       <th scope="col" style="position: sticky; top: 0; z-index: 9">
                         <button class="btn btn-primary sync-all" type="button">
                           Đồng bộ tất cả
@@ -112,6 +113,9 @@
                         <th class="<%=textStyle %>">
                           
                           <%=onHand%> 
+                        </th>
+                        <th class="text-primary">
+                          <%=data[i].totalReserved%>
                         </th>
                         <th>
                           <div class="form-check form-switch">

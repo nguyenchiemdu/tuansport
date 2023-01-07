@@ -41,6 +41,7 @@ async function updateMasterProduct(masterProductId) {
     let listSize = []
     if (masterProduct!= null) {
         let totalOnHand = masterProduct.onHand;
+        let totalReserved= masterProduct.reserved;
                  {
                     if (masterProduct.size!= null && parseInt(masterProduct.onHand)>0) listSize.push(masterProduct.size)
                     let subProducts = await mongoProduct.find({
@@ -50,12 +51,14 @@ async function updateMasterProduct(masterProductId) {
                         if (parseInt(product.onHand)>0) {
                             if (product.size!= null) listSize.push(product.size)
                             totalOnHand += product.onHand
+                            totalReserved += product.reserved
+                            
                         }
                     });
                 }
                 listSize = Array.from(new Set(listSize));
                 response = await mongoProduct.updateOne({ _id: masterProductId }, {
-                    $set: {listSize: listSize, totalOnHand: totalOnHand }
+                    $set: {listSize: listSize, totalOnHand: totalOnHand,totalReserved:totalReserved }
                 })
     } else {
         console.error('Master product not found')

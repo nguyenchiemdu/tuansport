@@ -146,10 +146,13 @@ async  function readFile(filePath) {
 }
 function mongoProductFromKiotVietProduct(product){
     let onHand;
+    let reserved;
     try {
         onHand = product.inventories[0].onHand
+        reserved = product.inventories[0].reserved
     } catch(e) {
         onHand = 0
+        reserved = 0
     }
     let mongoProduct = {
         _id: product.id,
@@ -166,6 +169,7 @@ function mongoProductFromKiotVietProduct(product){
         masterProductId: product.masterProductId ?? null,
         attributes: product.attributes,
         onHand : onHand,
+        reserved:reserved
     }
     return mongoProduct;
 }

@@ -8,6 +8,7 @@ const mongoProductAttribute = require("../models/mongo/mongo.product_attribute")
 const { updateMasterProduct } = require("../common/model_function");
 const KiotVietWebhook = require("../models/kiotviet/kiotviet.webhook");
 const { response } = require("express");
+const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 
 class WebhookController {
     async updateProduct(req, res, next) {
@@ -147,7 +148,20 @@ class WebhookController {
     async updateOrder(req,res,next) {
             let body = req.body;
             console.log(body);
-            await writeFile('./sources/public/update-order.json', JSON.stringify(body))
+            try{
+                let orderDetials = body?.Notifications[0].Data[0].OrderDetails;
+                let listIds = orderDetials.map((e)=> e.ProductId)
+                await Promise.all(listIds.map(async (id)=> {
+                   let product = await  KiotVietProduct.getProductById(id)
+                   let convertedProduct = mongoProductFromKiotVietProduct(product);
+                   let masterId = convertedProduct.masterProductId ?? convertedProduct._id
+                   await mongoProduct.findOneAndUpdate({_id : id}, convertedProduct)
+                   updateMasterProduct(masterId)
+                }));
+                await writeFile('./sources/public/update-order.json', JSON.stringify(body))
+            } catch (err){
+                console.log(err);
+            }
             res.json(baseRespond(true,AppString.ok))
     }
     static async updateTotalOnHand(masterId,oldTotal,newTotal) {

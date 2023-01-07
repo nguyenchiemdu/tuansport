@@ -63,6 +63,7 @@
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá CTV</th>
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">Giá chưa giảm</th>
                     <th scope="col" style="position: sticky; top: 0; z-index: 9">Tồn kho</th>
+                    <th scope="col" style="position: sticky; top: 0; z-index: 9">Khách đặt</th>
                     <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Sản phẩm gốc</th> -->
                     <!-- <th scope="col" style="position: sticky; top: 0; z-index: 9">Đồng bộ hoá</th> -->
   
@@ -118,6 +119,9 @@
                           <th class="<%=textStyle %>">
                             
                             <%=onHand%> 
+                          </th>
+                          <th class="text-primary">
+                            <%=data[i].totalReserved%>
                           </th>
                         <!-- <th>
                           <%if (data[i].masterProductId== null){%>

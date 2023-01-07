@@ -17,7 +17,7 @@ class HomeController {
             findCondition: {
                 masterProductId: null,
                 isSynced: true,
-                totalOnHand : { $gt: 0 }
+                totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
 
             }
         })
@@ -27,14 +27,14 @@ class HomeController {
             findCondition: {
                 masterProductId: null,
                 isSynced: true,
-                totalOnHand : { $gt: 0 }
+                totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
             }
         })
         newestProduct = await mapRangePrice(newestProduct,req)
 
         let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
             sortCondition: "-updatedAt",
-            totalOnHand : { $gt: 0 }
+            totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
         })
         
         res.render("home/home", {
@@ -58,7 +58,7 @@ class HomeController {
         let page = await mongoPolicy.findOne({slug: slug}).exec()
         let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
             sortCondition: "-updatedAt",
-            totalOnHand : { $gt: 0 }
+            totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
         })
         let relatedNewsFeed
         if (newsFeed) {

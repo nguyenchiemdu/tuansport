@@ -327,6 +327,8 @@ class AdminController {
                 })
                 // update master product
                 let totalOnHand = resProduct.onHand;
+                let totalReserved= resProduct.reserved;
+
                 {
                     if (resProduct.size != null && parseInt(resProduct.onHand) > 0) listSize.push(resProduct.size)
                     let subProducts = await mongoProduct.find({
@@ -336,12 +338,13 @@ class AdminController {
                         if (parseInt(product.onHand) > 0) {
                             if (product.size != null) listSize.push(product.size)
                             totalOnHand += product.onHand
+                            totalReserved += product.reserved
                         }
                     });
                 }
                 listSize = Array.from(new Set(listSize));
                 response = await mongoProduct.updateOne({ _id: id }, {
-                    $set: { isSynced: !resProduct.isSynced, listSize: listSize, totalOnHand: totalOnHand }
+                    $set: { isSynced: !resProduct.isSynced, listSize: listSize, totalOnHand: totalOnHand,totalReserved:totalReserved }
                 })
                 // update size to parent category
                 try {

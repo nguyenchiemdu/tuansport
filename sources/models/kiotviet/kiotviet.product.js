@@ -24,5 +24,25 @@ class KiotVietProduct {
             throw err
         }
     }
+    // Get products
+    static async getProductById(id) {
+        try {
+            let accessToken = await KiotvietToken.token();
+            let response = await axios({
+                method: "get",
+                url: ApiUrl.getProductById(id),
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    Retailer: process.env.RETAILER
+                },
+                // params: params
+
+            }).then(response => response.data)
+            return response;
+        } catch (err) { 
+            console.log(err)
+            throw err
+        }
+    }
 }
 module.exports = KiotVietProduct;

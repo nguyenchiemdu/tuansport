@@ -45,7 +45,7 @@ class ProductController {
             let product = await mongoProduct.findOne({
                 skuCode: skuCode,
                 isSynced: true,
-                totalOnHand : { $gt: 0 }
+                totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
             })
             if (product ==null) {
                 throw AppString.productNotFound
@@ -63,7 +63,10 @@ class ProductController {
             let dataProductAttributes = await mongoProductAttribute.find({
                 $or: listIdGroupProduct
             }).populate('attributeValueId productId').exec()
-            dataProductAttributes = dataProductAttributes.filter(attribute => (parseInt(attribute.productId.onHand)>0))
+            dataProductAttributes = dataProductAttributes
+                    .filter(attribute => (
+                        (parseInt(attribute.productId.onHand)
+                        -parseInt(attribute.productId.reserved))>0))
             productAttributes = await Promise.all(dataProductAttributes.map(async attribute => {
                 
                 let attr = await mongoAttribute.find({
@@ -134,7 +137,7 @@ class ProductController {
                 },
                 masterProductId: null,
                 isSynced: true,
-                totalOnHand : { $gt: 0 }
+                totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
             };
             if (sizes != null && sizes.length > 0) {
                 findCondition = {
@@ -142,7 +145,7 @@ class ProductController {
                         $in: listCategoryid
                     },
                     isSynced: true,
-                    totalOnHand : { $gt: 0 }
+                    totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
             }
                 let listSizeCondition = sizes.map(function(size){ return {listSize: size}})
                 findCondition['$or'] = listSizeCondition;
@@ -192,7 +195,7 @@ class ProductController {
             }
             let findCondition = {
                 isSynced: true,
-                totalOnHand : { $gt: 0 }
+                totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
             }
             if (listFindCondition.length > 0) {
                 findCondition['$or'] = listFindCondition
