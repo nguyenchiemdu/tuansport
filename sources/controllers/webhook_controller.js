@@ -144,6 +144,12 @@ class WebhookController {
             res.json(baseRespond(true, err))
         }
     }
+    async updateOrder(req,res,next) {
+            let body = req.body;
+            console.log(body);
+            await writeFile('./sources/public/update-order.json', JSON.stringify(body))
+            res.json(baseRespond(true,AppString.ok))
+    }
     static async updateTotalOnHand(masterId,oldTotal,newTotal) {
         if (oldTotal < 0) oldTotal = 0
         if (newTotal < 0) newTotal = 0
