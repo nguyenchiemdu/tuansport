@@ -24,14 +24,19 @@ class WebhookController {
                 newProduct = lowercaseKey(newProduct)
                 let checkProduct = await mongoProduct.findOne({ _id: newProduct.Id })
                 if (checkProduct != null) {
+                    let convertProduct = mongoProductFromKiotVietProduct(newProduct);
                     let updateFields = {
                         masterProductId : newProduct.MasterProductId,
                         skuCode: newProduct.Code,
                         name: newProduct.Name,
                         fullName: newProduct.FullName,
                         categoryId: newProduct.CategoryId,
-                        onHand : mongoProductFromKiotVietProduct(newProduct).onHand
+                        onHand : convertProduct.onHand,
+                        price : newProduct.BasePrice,
+                        ctvPrice: convertProduct.ctvPrice,
+                        salePrice :convertProduct.salePrice,
                     }
+
                     await mongoProduct.findOneAndUpdate({
                         _id: newProduct.Id
                     }, updateFields)
