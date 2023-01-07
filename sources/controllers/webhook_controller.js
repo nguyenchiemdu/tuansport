@@ -154,6 +154,7 @@ class WebhookController {
                 await Promise.all(listIds.map(async (id)=> {
                    let product = await  KiotVietProduct.getProductById(id)
                    let convertedProduct = mongoProductFromKiotVietProduct(product);
+                   delete convertedProduct['isSynced']
                    let masterId = convertedProduct.masterProductId ?? convertedProduct._id
                    await mongoProduct.findOneAndUpdate({_id : id}, convertedProduct)
                    updateMasterProduct(masterId)
