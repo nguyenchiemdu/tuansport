@@ -35,7 +35,7 @@ let user = document.querySelector('[user]')
 if (item.listSize?.length > 0)
                 for (let size of item.listSize.sort()) {
                         listSizesHTML+= `<div class="col mb-3 p-1">
-                        <div class="bg-light btn  rounded-pill px-2 py-1 162354">
+                        <div class="bg-light btn  rounded-pill px-2 py-1 162354"  style="font-size: 10px;">
                                 ${size}
                        </div>
                 </div>`
