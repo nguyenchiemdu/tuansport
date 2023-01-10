@@ -16,6 +16,30 @@ async function connect() {
         // importAttributes();
         // importProduct();
         // backupSyncedProduct()
+
+        // mongoProduct.updateMany({}, {
+        //     tags: [
+        //         '#tuansport',
+        //         '#tuansportdanang',
+        //         '#tuấnsportđànẵng',
+        //         '#tuanthethao',
+        //         '#tuangiay',
+        //         '#tuấn',
+        //         '#tuấnsport', '#tuansport',
+        //         '#tuansportdn',
+        //         '#tuấnsportdn',
+        //         '#giàydabong',
+        //         '#giàybóngđá',
+        //         '#giaydabong',
+        //         '#giaybongda',
+        //         '#giầyđábóng',
+        //         '#giaythethao',
+        //         '#phukienthethao',
+        //         '#phukiendabong',
+        //         '#phukienbongda',
+        //         '#bong'
+        //     ]
+        // }).then(res=> console.log('ok'))
         if ((process.env.WEBHOOK ?? 'false') == 'true') webhookController.reRegistWebhook()
         console.log('Connect to Mongo DB successfully!');
         // Category.create({
