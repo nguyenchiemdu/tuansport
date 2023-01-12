@@ -169,6 +169,39 @@ $(document).ready(function () {
 		$(`.size-button[value='${size}']`).addClass('btn-primary')
 	});
 })
+
+$(document).ready(function() {
+	
+	var url = new URL(window.location.href)
+	
+	var search_params = url.searchParams;
+
+	switch(search_params.get('order')) {
+		case 'asc': {
+			$('#order-selection').children('option[value="asc"]').prop('selected', true);
+			break;
+		}
+		case 'desc': {
+			$('#order-selection').children('option[value="desc"]').prop('selected', true);
+			break;
+		}
+		default: break
+	}
+	$('#order-selection').change(async function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		let order = $(this).children('option:selected')
+
+		search_params.set('order', order.val());
+		
+		url.search = search_params.toString();
+			
+		window.location.href = url.toString();
+		
+	})
+
+	
+})
 // load more
 var threshold = 1297;
 var isLoading = false;
@@ -184,7 +217,6 @@ window.addEventListener('scroll',async  function() {
     var distanceToBottom = contentHeight - contentScrolled;
     var closeToBottomOfPage = distanceToBottom < threshold;
     var shouldLoadMoreContent = !isLoading && closeToBottomOfPage;
-
     if(shouldLoadMoreContent) {
         isLoading = true;
 		
@@ -196,7 +228,8 @@ window.addEventListener('scroll',async  function() {
 					categoryid: categoryId,
 					sizes:JSON.stringify(selectedSizes),
 					min:inputLeft.value,
-					max:inputRight.value
+					max:inputRight.value,
+					order: uri.searchParams.get('order') ? uri.searchParams.get('order') : 'asc'
 				}
                 pages = await loadMore(queryParams,'.list-product')
                 page+=1;

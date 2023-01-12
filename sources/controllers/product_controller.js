@@ -168,10 +168,25 @@ class ProductController {
             }
             let query = getQueryString(req)
             let page = req.query.page ?? 1;
+            let order = req.query.order ?? 'asc'
+
+            switch(order) {
+                case 'asc': 
+                    order = 'price';
+                    break;
+                case 'desc': 
+                    order = '-price';
+                    break;    
+                default: 
+                    break;
+            }
+
             let response = await getTableDataWithPagination(req, mongoProduct, {
-                findCondition: findCondition
+                findCondition: findCondition,
+                sortCondition: order
             })
             response.docs = await mapRangePrice(response.docs,req)
+
             res.render('product/product_by_category', { user: req.headers.userInfor, ...response, page, query, category: parent })
         } catch (err) {
             console.log(err);

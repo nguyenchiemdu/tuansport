@@ -116,8 +116,6 @@ async function loadMore(query,queryContainer,) {
     .then(response=> {
         if (response.success) {
             //render 
-            
-          
             for (let product of response.data.docs) listAllProducts?.append(renderProductItem(product))
             addListerner()
             pages = parseInt(response.data.pages)
