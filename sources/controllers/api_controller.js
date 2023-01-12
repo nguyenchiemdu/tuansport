@@ -161,6 +161,20 @@ class ApiController {
                 delete findCondition.masterProductId;
             }
             let sortCondition = newest? '-updatedAt': ''
+
+            let order = req.query.order ?? 'asc'
+            switch(order) {
+                case 'asc': 
+                    order = 'price';
+                    break;
+                case 'desc': 
+                    order = '-price';
+                    break;    
+                default: 
+                    break;
+            }
+            sortCondition = sortCondition.concat(order)
+
             ////////////////////////////////
             // console.log(JSON.stringify(findCondition))
             let response = await getTableDataWithPagination(req, mongoProduct, {

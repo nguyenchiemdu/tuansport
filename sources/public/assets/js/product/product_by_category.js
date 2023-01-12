@@ -176,7 +176,6 @@ $(document).ready(function() {
 	
 	var search_params = url.searchParams;
 
-	console.log(search_params.get('order'))
 	switch(search_params.get('order')) {
 		case 'asc': {
 			$('#order-selection').children('option[value="asc"]').prop('selected', true);
@@ -193,7 +192,6 @@ $(document).ready(function() {
 		e.stopPropagation();
 		let order = $(this).children('option:selected')
 
-		console.log(order)
 		search_params.set('order', order.val());
 		
 		url.search = search_params.toString();
@@ -219,7 +217,6 @@ window.addEventListener('scroll',async  function() {
     var distanceToBottom = contentHeight - contentScrolled;
     var closeToBottomOfPage = distanceToBottom < threshold;
     var shouldLoadMoreContent = !isLoading && closeToBottomOfPage;
-
     if(shouldLoadMoreContent) {
         isLoading = true;
 		
@@ -231,7 +228,8 @@ window.addEventListener('scroll',async  function() {
 					categoryid: categoryId,
 					sizes:JSON.stringify(selectedSizes),
 					min:inputLeft.value,
-					max:inputRight.value
+					max:inputRight.value,
+					order: uri.searchParams.get('order') ? uri.searchParams.get('order') : 'asc'
 				}
                 pages = await loadMore(queryParams,'.list-product')
                 page+=1;
