@@ -5,7 +5,7 @@ const mongoCategory = require("../models/mongo/mongo.category");
 const KiotvietAPI = require("../common/kiotviet_api");
 const ApiUrl = require("../common/api_url");
 const mongoProductAttribute = require("../models/mongo/mongo.product_attribute");
-const { updateMasterProduct } = require("../common/model_function");
+const { updateMasterProduct, pushToNewest } = require("../common/model_function");
 const KiotVietWebhook = require("../models/kiotviet/kiotviet.webhook");
 const { response } = require("express");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
@@ -41,10 +41,12 @@ class WebhookController {
                     await mongoProduct.findOneAndUpdate({
                         _id: newProduct.Id
                     }, updateFields)
+                    await pushToNewest(newProduct.Id)
                 } else {
                     newProduct = lowercaseKey(newProduct)
                     let mongoPrd = mongoProductFromKiotVietProduct(newProduct);
                     await mongoProduct.create(mongoPrd)
+                    await pushToNewest(newProduct.Id)
                 }
                 // update total onHand
                 let mongoNewProd = mongoProductFromKiotVietProduct(newProduct)

@@ -90,6 +90,26 @@ async function mapRangePrice(products, req) {
     }));
     return products;
 }
+async function pushToNewest(productId) {
+
+    await mongoProduct.updateOne({_id: productId},{
+        comebackDate: Date.now()
+    })
+}
+async function addcomebackDate() {
+    await mongoProduct.find({
+    }).then((docs)=> {
+        for (let doc of docs) {
+            // console.log(doc.updatedAt)
+           mongoProduct.updateMany({_id: doc._id}, {
+            $set : {comebackDate: doc.updatedAt}
+           }).then(res=> console.log(res))
+        }
+    })
+    console.log('addcomebackDate Completed')
+}
 module.exports.updateSizeToCategory = updateSizeToCategory
 module.exports.updateMasterProduct = updateMasterProduct
 module.exports.mapRangePrice = mapRangePrice
+module.exports.pushToNewest = pushToNewest
+module.exports.addcomebackDate = addcomebackDate

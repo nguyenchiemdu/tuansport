@@ -4,6 +4,7 @@ let {importCategories,importAttributes,importProduct,backupSyncedProduct} = requ
 const mongoProduct = require('../models/mongo/mongo.product');
 const webhookController = require('../controllers/webhook_controller');
 const mongoCategory = require('../models/mongo/mongo.category');
+const { addcomebackDate } = require('../common/model_function');
 async function connect() {
 
     try {        
@@ -16,7 +17,7 @@ async function connect() {
         // importAttributes();
         // importProduct();
         // backupSyncedProduct()
-
+    //    await addcomebackDate()
         // mongoProduct.updateMany({}, {
         //     tags: [
         //         '#tuansport',

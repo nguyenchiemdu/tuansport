@@ -3,7 +3,7 @@ const { mongo } = require("mongoose");
 const { default: axios } = require("axios");
 const AppString = require("../common/app_string");
 const { baseRespond, getQueryString, toPathString, writeFile, removeAccent, sortString } = require("../common/functions");
-const { updateSizeToCategory } = require("../common/model_function")
+const { updateSizeToCategory, pushToNewest } = require("../common/model_function")
 const { getTableDataWithPagination } = require("../common/pagination");
 const KiotVietProduct = require("../models/kiotviet/kiotviet.product");
 const { find } = require("../models/mongo/mongo.product");
@@ -352,6 +352,7 @@ class AdminController {
                 } catch (err) {
                     console.log(err)
                 }
+                await pushToNewest(resProduct._id)
             } else {
                 throw AppString.productNotFound
             }

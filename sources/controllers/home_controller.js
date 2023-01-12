@@ -23,7 +23,7 @@ class HomeController {
         })
         docs = await mapRangePrice(docs,req)
         let { docs: newestProduct } = await getTableDataWithPagination(req, mongoProduct, {
-            sortCondition:'-updatedAt',
+            sortCondition:'-comebackDate',
             findCondition: {
                 masterProductId: null,
                 isSynced: true,
@@ -33,7 +33,7 @@ class HomeController {
         newestProduct = await mapRangePrice(newestProduct,req)
 
         let {docs: newsFeed} = await getTableDataWithPagination(req, mongoPolicy, {
-            sortCondition: "-updatedAt",
+            sortCondition: "-comebackDate",
             totalOnHand : { $gt: 0 },$expr:{$gt:["$totalOnHand", "$totalReserved"]}
         })
         

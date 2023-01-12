@@ -25,6 +25,7 @@ const Product = new Schema({
     description: {type: String, default: ''},
     long_description: {type: String, default: ''},
     isMarked: {type: Boolean, default: false},
+    comebackDate : {type:Date}
 }, {
     timestamps: true,
 }, { collection: 'products' }
